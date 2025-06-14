@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Taller Web I</title>
+
+  <!-- Bootstrap core css -->
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+
+  <!-- Custom style -->
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+</head>
+
+<body>
+<main role="main" class="container">
+  <div class="container">
+    <div class="bar-container">
+      <div class="bar energy">
+        <img class="icon" th:src="@{/img/energy.png}" />
+      </div>
+      <div class="bar happiness">
+        <img class="icon" th:src="@{/img/happiness.png}" />
+      </div>
+    </div>
+
+    <div class="pet-container">
+      <div class="pet">
+        <img th:src="@{/img/huevo.png}" alt="Pet" class="pet-image" />
+      </div>
+    </div>
+
+    <div class="bar-container">
+      <div class="bar hunger">
+        <img class="icon" th:src="@{/img/hunger.png}" />
+      </div>
+      <div class="bar cleanliness">
+        <img class="icon" th:src="@{/img/cleanliness.png}" />
+      </div>
+    </div>
+
+    <div class="button-container">
+      <form action="/ruta1" method="post">
+        <button class="button">
+          <img class="icon" th:src="@{/img/game-black.png}" />
+        </button>
+      </form>
+
+      <form action="/ruta2" method="post">
+        <button class="button">
+          <img class="icon" th:src="@{/img/medicine-black.png}" />
+        </button>
+      </form>
+
+      <form action="/ruta3" method="post">
+        <button class="button">
+          <img class="icon" th:src="@{/img/bath-black.png}" />
+        </button>
+      </form>
+
+      <form action="/ruta4" method="post">
+        <button class="button">
+          <img class="icon" th:src="@{/img/lightOn-black.png}" />
+        </button>
+      </form>
+
+      <form action="/ruta5" method="post">
+        <button class="button">
+          <img class="icon" th:src="@{/img/food-black.png}" />
+        </button>
+      </form>
+
+    </div>
+  </div>
+</main>
+
+  <!-- Bootstrap core js -->
+  <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

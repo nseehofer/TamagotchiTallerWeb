@@ -1,0 +1,119 @@
+.container {
+    width: 60%;
+    height: 900px;
+    margin: auto auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 40px 0 40px 0;
+}
+
+.bar-container {
+    display: flex;
+    width: 100%;
+    gap: 8px;
+}
+
+.bar {
+    height: 54px;
+    width: 100%;
+    border-radius: 500px;
+    display: flex;
+    align-items: center;
+}
+
+.bar img {
+    height: 45px;
+    width: 45px;
+    border-radius: 30px;
+    margin-left: 4px;
+}
+
+.bar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 1;
+    border-radius: 500px;
+    transition: width 0.5s ease;
+}
+
+.pet-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pet {
+}
+
+.pet img {
+    height: 169px;
+    width: 177px;
+}
+
+.button {
+    background-color: #d76c82;
+    height: 72px;
+    width: 72px;
+    border-radius: 20px;
+    border: none;
+}
+
+.button:hover {
+    background-color: #b03052;
+    cursor: pointer;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+}
+
+.icon {
+    height: 40px;
+    width: 48px;
+}
+
+.energy {
+    color: #ffaa33;
+    background-color: #ffaa33;
+}
+
+.energy-secondary {
+    color: #fffaa0;
+    background-color: #fffaa0;
+}
+
+.hunger {
+    color: #4f7942;
+    background-color: #4f7942;
+}
+
+.hunger-secondary {
+    color: #faa0a0;
+    background-color: #faa0a0;
+}
+
+.cleanliness {
+    color: #5f9ea0;
+    background-color: #5f9ea0;
+}
+
+.cleanliness-secondary {
+    color: #a7c7e7;
+    background-color: #a7c7e7;
+}
+
+.happiness {
+    color: #aa4a44;
+    background-color: #aa4a44;
+}
+
+.happiness-secondary {
+    color: #faa0a0;
+    background-color: #faa0a0;
+}
