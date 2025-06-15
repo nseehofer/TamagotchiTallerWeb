@@ -2,10 +2,9 @@
 FROM mysql:5.7
 
 # Establece las variables de entorno para la configuración de MySQL
-ENV MYSQL_ROOT_PASSWORD=rootpassword
+ENV MYSQL_ROOT_PASSWORD=root
 ENV MYSQL_DATABASE=tallerwebi
-ENV MYSQL_USER=user
-ENV MYSQL_PASSWORD=user
+
 
 # Copia cualquier script SQL que desees ejecutar en la inicialización
 #COPY ./init.sql /docker-entrypoint-initdb.d/

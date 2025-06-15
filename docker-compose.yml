@@ -1,0 +1,33 @@
+services:
+  db:
+    build:
+      context: .
+      dockerfile: DockerfileSQL
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tallerwebi
+ 
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      
+  app:
+    build:
+      context: .
+      dockerfile: DockerfileJetty
+    container_name: jetty-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: tallerwebi
+      DB_USER: root
+      DB_PASSWORD: root
+
+volumes:
+  db_data:
