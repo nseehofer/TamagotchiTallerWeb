@@ -4,78 +4,59 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Taller Web I</title>
+  <title>Tamagotchi</title>
 
   <!-- Bootstrap core css -->
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
 
   <!-- Custom style -->
-  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <link rel="stylesheet" th:href="@{/css/inicio.css}"/>
 </head>
 
 <body>
-<main role="main" class="container">
-  <div class="container">
-    <div class="bar-container">
-      <div class="bar energy">
-        <img class="icon" th:src="@{/img/energy.png}" />
+<main role="main" class="container py-5">
+  <div class="form-container mt-5 mb-5">
+    <h1 class="text-center"> Crear nueva mascota</h1>
+    <form th:action="@{'/mascota/crearconpost'}" method="post" class="text-center mt-3">
+      <input name="nombre" type="text" class="form-control mb-3" placeholder="Nombre de tu mascota" required>
+      <button type="submit" class="btn btn-custom">Crear mascota</button>
+    </form>
+  </div>
+
+  <div class="text-center mb-4 mt-5">
+    <span><strong>Bienvenido:</strong> <span th:text="${nombreUsuario}">Nombre</span></span>
+    <h2 class="text-center"> Mis Mascotas </h2>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6" th:each="mascota : ${mascotas}">
+      <div class="card">
+        <div class="card-header text-center">
+          Mascota #<span th:text="${mascota.id}">ID</span>
+        </div>
+        <div class="card-body text-center">
+          <span><strong>Nombre:</strong> <span th:text="${mascota.nombre}">Nombre</span></span>
+
+          <div class="row mb-2">
+            <div class="col-6 text-end"><strong>Energía:</strong> <span th:text="${mascota.energia}">Energía</span></div>
+            <div class="col-6 text-start"><strong>Felicidad:</strong> <span th:text="${mascota.felicidad}">Felicidad</span></div>
+          </div>
+
+          <div class="row mb-2">
+            <div class="col-6 text-end"><strong>Hambre:</strong> <span th:text="${mascota.hambre}">Hambre</span></div>
+            <div class="col-6 text-start"><strong>Higiene:</strong> <span th:text="${mascota.higiene}">Higiene</span></div>
+          </div>
+          <form th:action="@{'/mascota/ver'}" method="post" class="mt-3">
+            <input name="id" type="hidden" th:value="${mascota.id}">
+            <button type="submit" class="btn btn-custom">Ver Mascota</button>
+          </form>
+        </div>
       </div>
-      <div class="bar happiness">
-        <img class="icon" th:src="@{/img/happiness.png}" />
-      </div>
-    </div>
-
-    <div class="pet-container">
-      <div class="pet">
-        <img th:src="@{/img/huevo.png}" alt="Pet" class="pet-image" />
-      </div>
-    </div>
-
-    <div class="bar-container">
-      <div class="bar hunger">
-        <img class="icon" th:src="@{/img/hunger.png}" />
-      </div>
-      <div class="bar cleanliness">
-        <img class="icon" th:src="@{/img/cleanliness.png}" />
-      </div>
-    </div>
-
-    <div class="button-container">
-      <form action="/ruta1" method="post">
-        <button class="button">
-          <img class="icon" th:src="@{/img/game-black.png}" />
-        </button>
-      </form>
-
-      <form action="/ruta2" method="post">
-        <button class="button">
-          <img class="icon" th:src="@{/img/medicine-black.png}" />
-        </button>
-      </form>
-
-      <form action="/ruta3" method="post">
-        <button class="button">
-          <img class="icon" th:src="@{/img/bath-black.png}" />
-        </button>
-      </form>
-
-      <form action="/ruta4" method="post">
-        <button class="button">
-          <img class="icon" th:src="@{/img/lightOn-black.png}" />
-        </button>
-      </form>
-
-      <form action="/ruta5" method="post">
-        <button class="button">
-          <img class="icon" th:src="@{/img/food-black.png}" />
-        </button>
-      </form>
-
     </div>
   </div>
 </main>
 
-  <!-- Bootstrap core js -->
-  <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<!-- Bootstrap core JS -->
+<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 </body>
 </html>

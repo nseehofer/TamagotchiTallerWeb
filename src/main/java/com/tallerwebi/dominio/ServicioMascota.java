@@ -13,10 +13,12 @@ import java.util.List;
 public interface ServicioMascota {
     MascotaDTO crear(MascotaDTO mascota);
     List<Mascota> traerMascotas();
+    List<Mascota> traerMascotasDeUnUsuario(Long idUsuario);
     MascotaDTO traerUnaMascota(Long id);
     void actualizarMascota(MascotaDTO mascota);
 
     MascotaDTO crearMascota(String nombre);
+    MascotaDTO crearMascota(String nombre, Long idUsuario);
     MascotaDTO jugar(MascotaDTO mascota);////A borrar
     MascotaDTO alimentar(MascotaDTO mascota);
 

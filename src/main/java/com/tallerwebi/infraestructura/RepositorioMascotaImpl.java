@@ -41,6 +41,14 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
     }
 
     @Override
+    public List<Mascota> obtenerListaDeMascotasDeUnUsuario(Long idUsuario) {
+        String hql = "FROM Mascota WHERE usuario_id = :usuarioID";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("usuarioID", idUsuario);
+        return query.getResultList();
+    }
+
+    @Override
     public void actualizar(Mascota mascota) {
         String hql = "UPDATE Mascota SET nombre = :nombre, energia = :energia," +
                 "salud = :salud, higiene = :higiene, felicidad = :felicidad, hambre = :hambre, estaVivo = :estaVivo, ultimaAlimentacion = :ultimaAlimentacion, ultimaHigiene = :ultimaHigiene, ultimaSiesta = :ultimaSiesta WHERE id = :id ";

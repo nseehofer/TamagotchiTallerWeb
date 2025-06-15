@@ -37,7 +37,9 @@ public class Mascota {
     @Column
     private LocalDateTime ultimaHigiene;
 
+    private Long usuario_id;
     @ManyToOne
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id", insertable = false, updatable=false)
     Usuario usuario;
 
     public Mascota(){};
@@ -137,5 +139,13 @@ public class Mascota {
 
     public void setUltimaHigiene(LocalDateTime ultimaHigiene) {
         this.ultimaHigiene = ultimaHigiene;
+    }
+
+    public Long getUsuario_id() {
+        return usuario_id;
+    }
+
+    public void setUsuario_id(Long usuario_id) {
+        this.usuario_id = usuario_id;
     }
 }

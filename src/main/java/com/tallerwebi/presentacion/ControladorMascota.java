@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-
 @Controller
 public class ControladorMascota {
 
@@ -32,8 +31,9 @@ public class ControladorMascota {
     }
 
     @RequestMapping(path = "/mascota/crearconpost", method = RequestMethod.POST)
-    public ModelAndView crearMascota(String nombre) {
-        MascotaDTO mascotaAGuardar = servicioMascota.crearMascota(nombre);
+    public ModelAndView crearMascota(String nombre,HttpServletRequest request) {
+        Long idUsuario = (Long) request.getSession().getAttribute("ID");
+        MascotaDTO mascotaAGuardar = servicioMascota.crearMascota(nombre,idUsuario);
 
         //guarda en bd
         MascotaDTO mascotaGuardada = this.servicioMascota.crear(mascotaAGuardar);

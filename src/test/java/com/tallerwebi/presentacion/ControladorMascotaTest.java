@@ -4,10 +4,15 @@ import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
+import org.mockito.Mock;
 import org.springframework.web.servlet.ModelAndView;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -20,6 +25,9 @@ import static org.hamcrest.Matchers.instanceOf;
 import java.time.LocalDateTime;
 
 public class ControladorMascotaTest {
+    @Mock
+    private HttpSession session;
+    @Mock private HttpServletRequest request;
     private ServicioMascota servicioMascotaMock;
     private ControladorMascota controladorMascota;
     private MascotaDTO mascotaDTOMock;
@@ -39,7 +47,7 @@ public class ControladorMascotaTest {
         MascotaDTO mascotaDTOPrueba = new MascotaDTO(nombreMascota);
         when(this.servicioMascotaMock.crearMascota(anyString())).thenReturn(mascotaDTOPrueba);
 
-        ModelAndView modelAndView = controladorMascota.crearMascota(nombreMascota);
+        ModelAndView modelAndView = controladorMascota.crearMascota(nombreMascota,request);
 
         String vistaEsperada = "mascota";
 

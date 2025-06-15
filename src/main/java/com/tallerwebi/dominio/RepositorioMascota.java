@@ -10,6 +10,8 @@ public interface RepositorioMascota {
     Long crear(Mascota obtenerEntidad);
     Mascota obtenerPor(Long id);
     List<Mascota> obtenerListaDeMascotas();
+    List<Mascota> obtenerListaDeMascotasDeUnUsuario(Long idUsuario);
     void actualizar(Mascota mascota);
+
 
 }

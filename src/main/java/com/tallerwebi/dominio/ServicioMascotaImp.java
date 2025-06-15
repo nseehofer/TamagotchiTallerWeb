@@ -35,6 +35,11 @@ public class ServicioMascotaImp implements ServicioMascota {
     }
 
     @Override
+    public List<Mascota> traerMascotasDeUnUsuario(Long idUsuario) {
+        return this.repositorioMascota.obtenerListaDeMascotasDeUnUsuario(idUsuario);
+    }
+
+    @Override
     public MascotaDTO traerUnaMascota(Long id) {
 
         MascotaDTO mascota = new MascotaDTO(this.repositorioMascota.obtenerPor(id));
@@ -46,8 +51,13 @@ public class ServicioMascotaImp implements ServicioMascota {
         this.repositorioMascota.actualizar(mascota.obtenerEntidad());
     }
 
+    @Override
     public MascotaDTO crearMascota(String nombre) {
-        return new MascotaDTO(nombre);
+            return new MascotaDTO(nombre);
+    }
+
+    public MascotaDTO crearMascota(String nombre, Long idUsuario) {
+        return new MascotaDTO(nombre,idUsuario);
     }
 
     public MascotaDTO jugar(MascotaDTO mascota) {

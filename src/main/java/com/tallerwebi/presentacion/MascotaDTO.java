@@ -18,6 +18,9 @@ public class MascotaDTO {
     private LocalDateTime ultimaAlimentacion;
     private LocalDateTime ultimaHigiene;
     private LocalDateTime ultimaSiesta;
+    private Long idUsuario;
+
+
 
     public void setEnergia(Double energia) {
         this.energia = energia;
@@ -42,6 +45,19 @@ public class MascotaDTO {
         this.ultimaSiesta = LocalDateTime.now();
         this.ultimaHigiene = LocalDateTime.now();
         this.ultimaAlimentacion = LocalDateTime.now();
+    }
+    public MascotaDTO(String nombre, Long idUsuario) {
+        this.nombre = nombre;
+        this.energia = 100.00;
+        this.higiene = 100.00;
+        this.salud = 100.00;
+        this.felicidad = 100.00;
+        this.hambre = 100.00;
+        this.estaVivo = true;
+        this.ultimaSiesta = LocalDateTime.now();
+        this.ultimaHigiene = LocalDateTime.now();
+        this.ultimaAlimentacion = LocalDateTime.now();
+        this.idUsuario = idUsuario;
     }
 
     public MascotaDTO(Mascota mascota) {
@@ -121,7 +137,16 @@ public class MascotaDTO {
         mascota.setUltimaSiesta(this.ultimaSiesta);
         mascota.setUltimaAlimentacion(this.ultimaAlimentacion);
         mascota.setUltimaHigiene(this.ultimaHigiene);
+        mascota.setUsuario_id(this.idUsuario);
         return mascota;
+    }
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public void setUltimaSiesta(LocalDateTime ultimaSiesta) {
