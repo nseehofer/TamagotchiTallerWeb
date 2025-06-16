@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.web.servlet.ModelAndView;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +26,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import java.time.LocalDateTime;
 
 public class ControladorMascotaTest {
-    @Mock
-    private HttpSession session;
+    @Mock private HttpSession session;
     @Mock private HttpServletRequest request;
     private ServicioMascota servicioMascotaMock;
     private ControladorMascota controladorMascota;
@@ -34,6 +34,7 @@ public class ControladorMascotaTest {
 
     @BeforeEach
     public void inicializar() {
+        MockitoAnnotations.openMocks(this);
         servicioMascotaMock = mock(ServicioMascota.class);
         controladorMascota = new ControladorMascota(servicioMascotaMock);
         mascotaDTOMock = mock(MascotaDTO.class);
@@ -46,6 +47,9 @@ public class ControladorMascotaTest {
         String nombreMascota = "Firulais";
         MascotaDTO mascotaDTOPrueba = new MascotaDTO(nombreMascota);
         when(this.servicioMascotaMock.crearMascota(anyString())).thenReturn(mascotaDTOPrueba);
+
+        when(request.getSession()).thenReturn(session);
+        when(session.getAttribute("ID")).thenReturn(1L);
 
         ModelAndView modelAndView = controladorMascota.crearMascota(nombreMascota,request);
 
