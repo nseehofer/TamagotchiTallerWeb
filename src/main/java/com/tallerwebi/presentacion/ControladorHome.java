@@ -25,6 +25,9 @@ public class ControladorHome {
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
     public ModelAndView irAHome(HttpServletRequest request) {
+        if(request.getSession().getAttribute("ID") == null){
+            return new ModelAndView("redirect:/login");
+        }
         Long idUsuario = (Long) request.getSession().getAttribute("ID");
         List<Mascota> mascotas = this.servicioMascota.traerMascotasDeUnUsuario(idUsuario);
         modelo.put("mascotas",mascotas);

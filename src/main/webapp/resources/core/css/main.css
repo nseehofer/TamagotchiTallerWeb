@@ -30,10 +30,12 @@
 }
 
 .bar-fill {
+    /*
     position: absolute;
     left: 0;
     top: 0;
     height: 100%;
+    */
     z-index: 1;
     border-radius: 500px;
     transition: width 0.5s ease;

@@ -71,6 +71,11 @@ public class ControladorLogin {
         return new ModelAndView("nuevo-usuario", model);
     }
 
+    @RequestMapping(path = "/cerrar-sesion", method = RequestMethod.GET)
+    public ModelAndView logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        return new ModelAndView("redirect:/login");
+    }
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {

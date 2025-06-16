@@ -32,6 +32,9 @@ public class ControladorMascota {
 
     @RequestMapping(path = "/mascota/crearconpost", method = RequestMethod.POST)
     public ModelAndView crearMascota(String nombre,HttpServletRequest request) {
+        if(request.getSession().getAttribute("ID") == null){
+            return new ModelAndView("redirect:/login");
+        }
         Long idUsuario = (Long) request.getSession().getAttribute("ID");
         MascotaDTO mascotaAGuardar = servicioMascota.crearMascota(nombre,idUsuario);
 
@@ -117,5 +120,13 @@ public class ControladorMascota {
 
         return new ModelAndView("mascota",modelo);
     }
+
+    @RequestMapping(path = "/mascota/cementerio", method = RequestMethod.POST)
+    public ModelAndView verMascotaMuerta(Long id) {
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(id);
+        modelo.put("mascota", mascota);
+        return new ModelAndView("cementerio", modelo);
+    }
+
 
 }
