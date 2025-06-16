@@ -7,6 +7,10 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: tallerwebi
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost","-u","root","-proot"]
+      timeout: 20s
+      retries: 10
  
     ports:
       - "3306:3306"
@@ -21,7 +25,9 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+        restart: true
     environment:
       DB_HOST: db
       DB_PORT: 3306
@@ -29,5 +35,7 @@ services:
       DB_USER: root
       DB_PASSWORD: root
 
+
 volumes:
   db_data:
+
