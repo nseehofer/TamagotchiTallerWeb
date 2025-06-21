@@ -12,6 +12,7 @@ import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.ServicioMascotaImp;
 import com.tallerwebi.dominio.entidades.Mascota;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
+import com.tallerwebi.dominio.excepcion.FelicidadMinima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
 import com.tallerwebi.presentacion.MascotaDTO;
 import org.junit.jupiter.api.BeforeEach;
@@ -135,7 +136,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void cuandoLaMascotaSeDuermeYTieneEnergiaBajaSeLeSuma25() throws EnergiaMaxima{
+    public void cuandoLaMascotaSeDuermeYTieneEnergiaBajaSeLeSuma25() throws EnergiaMaxima,FelicidadMinima{
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -152,7 +153,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void cuandoSeDuermeUnaMascotaConEnergiaMaximaLanzaUnaExcepcion() throws EnergiaMaxima {
+    public void cuandoSeDuermeUnaMascotaConEnergiaMaximaLanzaUnaExcepcion() throws EnergiaMaxima,FelicidadMinima {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -174,7 +175,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void cuandoDuermeYTiene75DeEnergiaSubeSoloHasta100() throws EnergiaMaxima {
+    public void cuandoDuermeYTiene75DeEnergiaSubeSoloHasta100() throws EnergiaMaxima, FelicidadMinima {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -191,4 +192,22 @@ public class ServicioMascotaTest {
         assertThat(mascotaDTO.getEnergia(), equalTo(100.0));
     }
 
+    @Test
+    public void queAlJugarDisminuye25PuntosDeEnergia() {
+        //PREPARACION
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setHigiene(100.0);
+        mascotaEntidad.setEnergia(100.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        //ACCION
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.jugar(mascotaDTO);
+
+        //VERIFICACION
+        assertThat(mascotaDTO.getEnergia(), equalTo(75.0));
+    }
 }

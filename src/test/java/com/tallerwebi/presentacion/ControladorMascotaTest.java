@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
+import com.tallerwebi.dominio.excepcion.FelicidadMinima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -79,6 +80,48 @@ public class ControladorMascotaTest {
 
         assertThat(vistaEsperada, equalTo(modelAndView.getViewName()));
         assertThat(modelAndView.getModel().get("ultimaAlimentacion"), instanceOf(LocalDateTime.class));
+    }
+
+    public void queUnUsuarioPresionaJugarYLaMascotaDisminuyaSuEnergia() throws EnergiaInsuficiente {
+        String nombreMascota = "Firulais";
+        MascotaDTO mascotaDTOPrueba = new MascotaDTO(nombreMascota);
+        mascotaDTOPrueba.setId(1L);
+
+        when(this.servicioMascotaMock.traerUnaMascota(anyLong())).thenReturn(mascotaDTOPrueba);
+
+        doAnswer(invocation -> {
+            MascotaDTO mascota = invocation.getArgument(0);
+            mascota.setEnergia(mascota.getEnergia() - 25.00);
+            return mascota;
+        }).when(this.servicioMascotaMock).jugar(mascotaDTOPrueba);
+
+        ModelAndView modelAndView = controladorMascota.jugar(mascotaDTOPrueba.getId());
+
+        String vistaEsperada = "mascota";
+
+        assertThat(vistaEsperada, equalTo(modelAndView.getViewName()));
+    }
+
+    public void queUnUsuarioPresionaDormirYLaMascotaAumenteSuEnergia() throws EnergiaMaxima {
+        String nombreMascota = "Firulais";
+        MascotaDTO mascotaDTOPrueba = new MascotaDTO(nombreMascota);
+        mascotaDTOPrueba.setId(1L);
+
+        when(this.servicioMascotaMock.traerUnaMascota(anyLong())).thenReturn(mascotaDTOPrueba);
+
+        doAnswer(invocation -> {
+            MascotaDTO mascota = invocation.getArgument(0);
+            mascota.setEnergia(Math.min(100.00, mascota.getEnergia() + 25.00));
+            mascota.setUltimaSiesta(LocalDateTime.now());
+            return mascota;
+        }).when(this.servicioMascotaMock).dormir(mascotaDTOPrueba);
+
+        ModelAndView modelAndView = controladorMascota.dormir(mascotaDTOPrueba.getId());
+
+        String vistaEsperada = "mascota";
+
+        assertThat(vistaEsperada, equalTo(modelAndView.getViewName()));
+        assertThat(modelAndView.getModel().get("ultimaSiesta"), instanceOf(LocalDateTime.class));
     }
 
     @Test
