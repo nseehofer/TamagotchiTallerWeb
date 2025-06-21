@@ -24,7 +24,7 @@
       <div class="bar-container">
         <div class="bar energy">
           <img class="icon" th:src="@{/img/energy.png}" />
-          <div class="bar-fill" style="color: #000000; font-weight: bold;" th:text=" ${mascota.energia} + '%'"></div>
+          <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;" th:text=" ${mascota.energia} + '%'"></div>
         </div>
         <div class="bar happiness">
           <img class="icon" th:src="@{/img/happiness.png}" />
@@ -52,19 +52,17 @@
         </div>
         <div class="bar cleanliness">
           <img class="icon" th:src="@{/img/cleanliness.png}" />
-          <div class="bar-fill" style="color: #000000; font-weight: bold;" th:text=" ${mascota.higiene} + '%'"></div>
+          <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;" th:text=" ${mascota.higiene} + '%'"></div>
 
         </div>
       </div>
 
       <div class="button-container">
-        <form action="/spring/mascota/jugar" method="post">
           <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button">
+          <button class="button" onclick="jugar()">
             <img class="icon" th:src="@{/img/game-black.png}" />
           </button>
 
-        </form>
 
         <form action="/ruta2" method="post">
           <button class="button">
@@ -72,12 +70,11 @@
           </button>
         </form>
 
-        <form action="/spring/mascota/limpiar" method="post">
-          <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button">
+
+          <input name="id"  type="hidden" th:value="${mascota.id}">
+          <button class="button" onclick="limpiarMascota()">
             <img class="icon" th:src="@{/img/bath-black.png}" />
           </button>
-        </form>
 
         <form action="/spring/mascota/dormir" method="post">
           <input name="id" type="hidden" th:value="${mascota.id}">

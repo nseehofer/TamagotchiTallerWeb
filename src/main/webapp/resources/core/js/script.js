@@ -1,3 +1,5 @@
+let mascotaId = document.getElementById("mascota-id").value;
+
 const stompClient = new StompJs.Client({
     brokerURL: 'ws://localhost:8080/spring/wschat'
 });
@@ -9,15 +11,23 @@ stompClient.debug = function(str) {
 stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/messages', (m) => {
-        let valorAcutalizadoDelHambre = JSON.parse(m.body).hambre;
-        console.log("Mensaje recibido:",valorAcutalizadoDelHambre);
+        let valorActualizadoDelHambre = JSON.parse(m.body).hambre;
+        let valorHigieneActualizado = JSON.parse (m.body).higiene;
+        let valorEnergiaActualizado = JSON.parse(m.body).energia;
+        console.log("Mensaje recibido:",valorActualizadoDelHambre);
+        console.log("Mensaje recibido:",valorHigieneActualizado)
+        console.log("Mensaje recibido:",valorEnergiaActualizado)
         /*const messagesContainer = document.getElementById("chat-messages");
         const newMessage = document.createElement("p")
         newMessage.textContent = JSON.parse(m.body).content;
         messagesContainer.appendChild(newMessage);
         */
         const valorHambre = document.getElementById("valor-hambre");
-        valorHambre.textContent = valorAcutalizadoDelHambre + '%';
+        const valorHigiene = document.getElementById("valor-higiene");
+        const valorEnergia = document.getElementById("valor-energia");
+        valorHambre.textContent = valorActualizadoDelHambre + '%';
+        valorHigiene.textContent = valorHigieneActualizado + '%';
+        valorEnergia.textContent = valorEnergiaActualizado + '%';
     });
 };
 
@@ -38,10 +48,25 @@ function alimentarMascota(){
     /*let input = document.getElementById("message");
     let message = input.value;*/
 
-    let mascotaId = document.getElementById("mascota-id").value;
+
 
     stompClient.publish({
-        destination: "/app/chat",
+        destination: "/app/alimentar",
+        body: JSON.stringify({id: mascotaId})
+    });
+
+}
+
+function limpiarMascota() {
+    stompClient.publish({
+        destination: "/app/limpiar",
+        body: JSON.stringify({id: mascotaId})
+    });
+}
+
+function jugar(){
+    stompClient.publish({
+        destination: "/app/jugar",
         body: JSON.stringify({id: mascotaId})
     });
 }
