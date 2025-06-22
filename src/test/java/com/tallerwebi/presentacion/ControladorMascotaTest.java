@@ -3,7 +3,6 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
-import com.tallerwebi.dominio.excepcion.FelicidadMinima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -82,6 +81,7 @@ public class ControladorMascotaTest {
         assertThat(modelAndView.getModel().get("ultimaAlimentacion"), instanceOf(LocalDateTime.class));
     }
 
+    @Test
     public void queUnUsuarioPresionaJugarYLaMascotaDisminuyaSuEnergia() throws EnergiaInsuficiente {
         String nombreMascota = "Firulais";
         MascotaDTO mascotaDTOPrueba = new MascotaDTO(nombreMascota);
@@ -102,16 +102,20 @@ public class ControladorMascotaTest {
         assertThat(vistaEsperada, equalTo(modelAndView.getViewName()));
     }
 
+    @Test
     public void queUnUsuarioPresionaDormirYLaMascotaAumenteSuEnergia() throws EnergiaMaxima {
         String nombreMascota = "Firulais";
         MascotaDTO mascotaDTOPrueba = new MascotaDTO(nombreMascota);
         mascotaDTOPrueba.setId(1L);
+        mascotaDTOPrueba.setEnergia(60.0);
+        mascotaDTOPrueba.setFelicidad(100.0);
 
         when(this.servicioMascotaMock.traerUnaMascota(anyLong())).thenReturn(mascotaDTOPrueba);
 
         doAnswer(invocation -> {
             MascotaDTO mascota = invocation.getArgument(0);
             mascota.setEnergia(Math.min(100.00, mascota.getEnergia() + 25.00));
+            mascota.setFelicidad(Math.max(0.0, mascota.getFelicidad() - 25.00));
             mascota.setUltimaSiesta(LocalDateTime.now());
             return mascota;
         }).when(this.servicioMascotaMock).dormir(mascotaDTOPrueba);
@@ -121,7 +125,9 @@ public class ControladorMascotaTest {
         String vistaEsperada = "mascota";
 
         assertThat(vistaEsperada, equalTo(modelAndView.getViewName()));
-        assertThat(modelAndView.getModel().get("ultimaSiesta"), instanceOf(LocalDateTime.class));
+        MascotaDTO mascotaActualizada = (MascotaDTO) modelAndView.getModel().get("mascota");
+        assertThat(mascotaActualizada.getUltimaSiesta(), instanceOf(LocalDateTime.class));
+
     }
 
     @Test
