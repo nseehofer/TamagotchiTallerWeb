@@ -20,6 +20,20 @@
 <body>
   <main role="main" class="container">
     <h2 th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
+
+    <!-- FORM Y DIV PARA API TEMPERATURA -->
+    <form th:action="@{/obtener-temperatura}" method="post">
+      <label for="code">Latitud: '-34.6' y Longitud '-58.4'</label>
+      <input type="number" id="code" name="latitud" placeholder="latitud" min="-90.0" max="90.0" required>
+      <input type="number" id="code" name="longitud" placeholder="longitud" min="-180.0" max="180.0" required>
+      <button type="submit">Enviar coordenadas</button>
+    </form>
+
+    <div th:if="${temperaturaUrl}">
+      <h2 th:text="'Temperatura: ' + ${temperaturaUrl}"> </h2>
+    </div>
+    <!-- HASTA ACA -->
+
     <div class="container">
       <div class="bar-container">
         <div class="bar energy">
@@ -47,7 +61,8 @@
       <div class="bar-container">
         <div class="bar hunger">
           <img class="icon" th:src="@{/img/hunger.png}" />
-          <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;" th:text=" ${mascota.hambre} + '%'"></div>
+          <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
+            th:text=" ${mascota.hambre} + '%'"></div>
 
         </div>
         <div class="bar cleanliness">
@@ -86,12 +101,12 @@
           </button>
         </form>
 
-        
-          <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
-          <button class="button" onclick="alimentarMascota()">
-            <img class="icon" th:src="@{/img/food-black.png}" />
-          </button>
-        
+
+        <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
+        <button class="button" onclick="alimentarMascota()">
+          <img class="icon" th:src="@{/img/food-black.png}" />
+        </button>
+
 
       </div>
     </div>
@@ -102,8 +117,8 @@
   <!-- WEBSOCKET -->
   <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
   <script type="text/javascript" th:src="@{/js/script.js}"></script>
-  
-  
+
+
 </body>
 
 </html>
