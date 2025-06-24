@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.mapeado.Clima;
+
 public interface ServicioTemperatura {
-    String getTemperatura(Double latitud, Double longitud);
+    Clima getTemperatura(Double latitud, Double longitud);
 }

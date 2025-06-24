@@ -23,14 +23,21 @@
 
     <!-- FORM Y DIV PARA API TEMPERATURA -->
     <form th:action="@{/obtener-temperatura}" method="post">
-      <label for="code">Latitud: '-34.6' y Longitud '-58.4'</label>
-      <input type="number" id="code" name="latitud" placeholder="latitud" min="-90.0" max="90.0" required>
-      <input type="number" id="code" name="longitud" placeholder="longitud" min="-180.0" max="180.0" required>
+      <label for="code">Latitud: '-34.7' y Longitud '-58.5'</label>
+      <input type="number" step="0.1" id="latitud" name="latitud" placeholder="latitud" min="-90.0" max="90.0" required>
+      <input type="number" step="0.1" id="longitud" name="longitud" placeholder="longitud" min="-180.0" max="180.0"
+        required>
       <button type="submit">Enviar coordenadas</button>
     </form>
 
-    <div th:if="${temperaturaUrl}">
-      <h2 th:text="'Temperatura: ' + ${temperaturaUrl}"> </h2>
+    <div th:if="${error}">
+      <p th:text="${error}" style="color:red;"></p>
+    </div>
+
+    <div th:if="${climaUrl}">
+      <p th:text="'Region: ' + ${climaUrl.zonaHoraria}"> </p>
+      <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}"> </p>
+      <p th:text="'Temperatura actual: ' + ${temperaturaActual} + ' °C'"></p>
     </div>
     <!-- HASTA ACA -->
 

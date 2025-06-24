@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tallerwebi.dominio.mapeado.Clima;
 
 @Service
 @Transactional
@@ -27,7 +28,7 @@ public class ServicioTemperaturaImp implements ServicioTemperatura{
     }
 
     @Override
-    public String getTemperatura(Double latitud, Double longitud) {
+    public Clima getTemperatura(Double latitud, Double longitud) {
         // Implementación del método para obtener la temperatura
         // Aquí se puede usar httpClient y objectMapper para hacer una solicitud a una API externa
         // y procesar la respuesta.
@@ -40,9 +41,11 @@ public class ServicioTemperaturaImp implements ServicioTemperatura{
                 .build();
 
         try {
-            HttpResponse<Void> response = httpClient.send(request, HttpResponse.BodyHandlers.discarding());
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 200) {
-                return url;
+                // MAPEO DE DATOS
+                Clima resultado = objectMapper.readValue(response.body(), Clima.class);
+                return resultado != null ? resultado : null;
             } else {
                 return null;
             }
