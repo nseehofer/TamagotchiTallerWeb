@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
 
+import java.time.LocalDateTime;
+
 @Controller
 public class ControladorWebSocket {
 
@@ -102,6 +104,24 @@ public class ControladorWebSocket {
 
         return JSONMascota;
     }
+
+    @MessageMapping("/actualizar")
+    @SendTo("/topic/messages")
+    // RECIBO UN JSON.stringify con el id de la mascota
+    public String actualizarDatosMascotaYPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        mascota = servicioMascota.actualizarHigiene(mascota, LocalDateTime.now());
+
+
+        String JSONMascota = mapper.writeValueAsString(mascota);
+
+        return JSONMascota;
+    }
+
 
 
 

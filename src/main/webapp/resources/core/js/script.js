@@ -1,5 +1,7 @@
 let mascotaId = document.getElementById("mascota-id").value;
 
+setInterval(actualizarDatosMascota, 60000); //actualiza datos cada un minuto
+
 const stompClient = new StompJs.Client({
     brokerURL: 'ws://localhost:8080/spring/wschat'
 });
@@ -11,9 +13,9 @@ stompClient.debug = function(str) {
 stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/messages', (m) => {
-        let valorActualizadoDelHambre = JSON.parse(m.body).hambre;
-        let valorHigieneActualizado = JSON.parse (m.body).higiene;
-        let valorEnergiaActualizado = JSON.parse(m.body).energia;
+        let valorActualizadoDelHambre = JSON.parse(m.body).hambre.toFixed(2);
+        let valorHigieneActualizado = JSON.parse (m.body).higiene.toFixed(2);
+        let valorEnergiaActualizado = JSON.parse(m.body).energia.toFixed(2);
         console.log("Mensaje recibido:",valorActualizadoDelHambre);
         console.log("Mensaje recibido:",valorHigieneActualizado)
         console.log("Mensaje recibido:",valorEnergiaActualizado)
@@ -68,5 +70,12 @@ function jugar(){
     stompClient.publish({
         destination: "/app/jugar",
         body: JSON.stringify({id: mascotaId})
+    });
+}
+
+function actualizarDatosMascota() {
+    stompClient.publish({
+        destination: "/app/actualizar",
+        body:JSON.stringify({id: mascotaId})
     });
 }
