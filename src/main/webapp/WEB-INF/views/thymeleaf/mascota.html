@@ -21,6 +21,13 @@
   <main role="main" class="container">
     <h2 th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
 
+    <!-- SECCION DONDE SE VE LA UBICACION DEL USUARIO -->
+     <div>
+      <p th:text="'Nombre: ' + ${usuario.nombre}"></p><br>
+      <p th:text="'Ubicación: ' + ${usuario.pais} + ', ' + ${usuario.provincia}"></p>
+     </div>
+    <!-- HASTA ACA -->
+
     <!-- FORM Y DIV PARA API TEMPERATURA -->
     <form th:action="@{/obtener-temperatura}" method="post">
       <label for="code">Latitud: '-34.7' y Longitud '-58.5'</label>

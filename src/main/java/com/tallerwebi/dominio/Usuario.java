@@ -16,6 +16,8 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+    private String pais;
+    private String provincia;
 
     public Long getId() {
         return id;
@@ -64,4 +66,18 @@ public class Usuario {
     public void activar() {
         activo = true;
     }
+    public String getPais() {
+        return pais;
+    }
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+    public String getProvincia() {
+        return provincia;
+    }
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
+    }
+
+    
 }
