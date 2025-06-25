@@ -70,7 +70,7 @@ public class ServicioMascotaImp implements ServicioMascota {
 
         if (energiaActual >= energiaADescontarPorJuego) {
             mascota.setEnergia(energiaActual - energiaADescontarPorJuego);
-            mascota.setHigiene(mascota.getHigiene() - 25.0);
+            mascota.setHigiene(higieneActual - 25.0);
             mascota.setFelicidad(Math.min(100.00, felicidadActual + 25.0));
             //actualizamos en base de datos
             this.actualizarMascota(mascota);
@@ -101,10 +101,10 @@ public class ServicioMascotaImp implements ServicioMascota {
     }
 
     public MascotaDTO alimentar(MascotaDTO mascota) {
-        Double hambreADescontarPorJuego = 25.00;
+        Double hambreASumarPorJuego = 25.00;
         Double hambreActual = mascota.getHambre();
-        if (hambreActual >= hambreADescontarPorJuego) {
-            mascota.setHambre(hambreActual - hambreADescontarPorJuego);
+        if (hambreActual < 100.0) {
+            mascota.setHambre(Math.min(100.0, hambreActual + hambreASumarPorJuego));
             mascota.setUltimaAlimentacion(LocalDateTime.now());
             //actualizamos en base de datos
             this.actualizarMascota(mascota);
@@ -128,12 +128,20 @@ public class ServicioMascotaImp implements ServicioMascota {
     }
 
     @Override
-    public MascotaDTO actualizarHigiene(MascotaDTO mascota, LocalDateTime horaActual) {
-        double minutos = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toMinutes();
-        double higienePerdida = minutos * 0.09;
-        double higieneActual = mascota.getHigiene() - higienePerdida;
+    public MascotaDTO actualizarEstadisticas(MascotaDTO mascota, LocalDateTime horaActual) {
+        double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toMinutes() * 12.6;
+        double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toMinutes() * 15.7;
+        double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toMinutes() * 19.8;
+
+        double higieneActual = mascota.getHigiene() - disminucionHigiene;
+        double hambreActual = mascota.getHambre() - disminucionHambre;
+        double energiaActual = mascota.getEnergia() - disminucionEnergia;
+        //double felicidadActual = mascota.getFelicidad() - valorDeDisminucion;
 
         mascota.setHigiene(Math.max(higieneActual, 0.0));
+        mascota.setHambre(Math.max(hambreActual, 0.0));
+        mascota.setEnergia(Math.max(energiaActual, 0.0));
+       // mascota.setFelicidad(Math.max(felicidadActual, 0.0));
 
         this.actualizarMascota(mascota);
 

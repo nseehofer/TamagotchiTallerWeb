@@ -24,7 +24,7 @@ public interface ServicioMascota {
 
     MascotaDTO limpiarMascota(MascotaDTO mascotaDTO) throws LimpiezaMaximaException;
 
-    MascotaDTO actualizarHigiene(MascotaDTO mascotaDTO, LocalDateTime horaActual);
+    MascotaDTO actualizarEstadisticas(MascotaDTO mascotaDTO, LocalDateTime horaActual);
 
     MascotaDTO dormir(MascotaDTO mascota) throws EnergiaMaxima; ////A borrar
 }
