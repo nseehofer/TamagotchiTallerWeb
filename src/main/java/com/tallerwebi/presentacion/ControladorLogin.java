@@ -41,6 +41,8 @@ public class ControladorLogin {
 
             request.getSession().setAttribute("NOMBRE", usuarioBuscado.getNombre());
             request.getSession().setAttribute("ID", usuarioBuscado.getId());
+            // AGREGO EMAIL A LA SESION PARA DESPUES OBTENER EL USUARIO CON EL REPOSITORIO
+            request.getSession().setAttribute("EMAIL", usuarioBuscado.getEmail());
 
             return new ModelAndView("redirect:/home");
         } else {

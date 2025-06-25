@@ -1,7 +1,9 @@
 package com.tallerwebi.dominio;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.tallerwebi.dominio.mapeado.Clima;
 
 public interface ServicioTemperatura {
-    Clima getTemperatura(Double latitud, Double longitud);
+    Clima getTemperatura(HttpServletRequest sessionUsuario);
 }

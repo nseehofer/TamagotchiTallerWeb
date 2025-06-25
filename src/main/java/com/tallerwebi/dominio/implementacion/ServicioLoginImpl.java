@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.implementacion;
 
 import com.tallerwebi.dominio.RepositorioUsuario;
 import com.tallerwebi.dominio.ServicioLogin;
@@ -32,6 +32,11 @@ public class ServicioLoginImpl implements ServicioLogin {
             throw new UsuarioExistente();
         }
         repositorioUsuario.guardar(usuario);
+    }
+
+    @Override
+    public Usuario buscarUsuarioPorEmail(String email) {
+        return repositorioUsuario.buscar(email);
     }
 
 }

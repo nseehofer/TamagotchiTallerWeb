@@ -1,11 +1,14 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.ServicioMascota;
+import com.tallerwebi.dominio.ServicioTemperatura;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.entidades.Mascota;
 import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
 import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
-
+import com.tallerwebi.dominio.mapeado.Clima;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,10 +27,14 @@ public class ControladorMascota {
 
     private ServicioMascota servicioMascota;
     private ModelMap modelo = new ModelMap();
+    private ServicioLogin servicioLogin;
+    private ServicioTemperatura servicioTemperatura;
 
     @Autowired
-    public ControladorMascota(ServicioMascota servicioMascota) {
+    public ControladorMascota(ServicioMascota servicioMascota, ServicioLogin servicioLogin, ServicioTemperatura servicioTemperatura) {
         this.servicioMascota = servicioMascota;
+        this.servicioLogin = servicioLogin;
+        this.servicioTemperatura = servicioTemperatura;
     }
 
     @RequestMapping(path = "/mascota/crearconpost", method = RequestMethod.POST)
@@ -35,12 +42,14 @@ public class ControladorMascota {
         if(request.getSession().getAttribute("ID") == null){
             return new ModelAndView("redirect:/login");
         }
-        Long idUsuario = (Long) request.getSession().getAttribute("ID");
-        MascotaDTO mascotaAGuardar = servicioMascota.crearMascota(nombre,idUsuario);
+        String emailDeUsuarioEnSesion = (String) request.getSession().getAttribute("EMAIL");
+        Usuario usuarioObtenido = this.servicioLogin.buscarUsuarioPorEmail(emailDeUsuarioEnSesion);
+        MascotaDTO mascotaAGuardar = this.servicioMascota.crearMascota(nombre,usuarioObtenido.getId());
 
         //guarda en bd
         MascotaDTO mascotaGuardada = this.servicioMascota.crear(mascotaAGuardar);
         modelo.put("mascota", mascotaGuardada);
+        modelo.put("usuario", usuarioObtenido);
         return new ModelAndView("mascota", modelo);
     }
 
@@ -68,9 +77,20 @@ public class ControladorMascota {
     }
 
     @RequestMapping(path = "/mascota/ver", method = RequestMethod.POST)
-    public ModelAndView verMascota(Long id) {
+    public ModelAndView verMascota(Long id, HttpServletRequest request) {
         MascotaDTO mascota = servicioMascota.traerUnaMascota(id);
+        String emailDeUsuarioEnSesion = (String) request.getSession().getAttribute("EMAIL");
+        Usuario usuarioObtenido = this.servicioLogin.buscarUsuarioPorEmail(emailDeUsuarioEnSesion);
+        Clima climaUrl = this.servicioTemperatura.getTemperatura(request);
+
+        if(climaUrl != null) {
+            modelo.addAttribute("climaUrl", climaUrl);
+            modelo.addAttribute("temperaturaActual", climaUrl.obtenerTemperaturaActual());           
+        } else {
+            modelo.addAttribute("error", "No se pudo obtener la temperatura. Verifique las coordenadas.");
+        }
         modelo.put("mascota", mascota);
+        modelo.put("usuario",usuarioObtenido);
         return new ModelAndView("mascota", modelo);
     }
 
