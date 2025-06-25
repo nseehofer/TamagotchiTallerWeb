@@ -1,0 +1,68 @@
+body {
+    background-color: #fefefe;
+    font-family: 'Press Start 2P', cursive;
+    background-color: #09a1a1;
+    background-size: 20px 20px;
+    margin: 0;
+    padding: 0;
+}
+.tamagotchi-titulo {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 98px;
+    color: #ff007f;
+    text-align: center;
+    margin-top: 80px;
+    letter-spacing: 2px;
+    text-shadow:
+            -4px -4px 0 #000,
+            4px -4px 0 #000,
+            -4px 4px 0 #000,
+            4px 4px 0 #000,
+            0px 4px 0 #000,
+            4px 0px 0 #000,
+            0px -4px 0 #000,
+            -4px 0px 0 #000,
+            0 0 10px #000,
+            0 0 20px #000,
+            0 8px 16px #000;
+}
+
+a {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+    border: 2px solid #000;
+    border-radius: 0;
+    box-shadow: 4px 4px 0px #000;
+    color: #fff;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+    text-decoration: none!important;
+}
+
+a:hover {
+    color: #ffffff !important;
+    background-color: #5a189a;
+    text-decoration: none;
+}
+
+.btn-login {
+    background-color: #8a2be2;
+    color: #fff;
+}
+
+.btn-registrar {
+    background-color: #8a2be2;
+    color: #fff;
+}
+
+.botones-inicio {
+    margin-top: 50px!important;
+}
+
+.pet-image {
+    width: 300px;       /* Tamaño más pequeño */
+    margin: 50px 10px;     /* Espacio horizontal entre imágenes */
+}
