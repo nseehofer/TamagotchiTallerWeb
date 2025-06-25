@@ -137,7 +137,7 @@ public class ControladorWebSocket {
 
         ObjectMapper mapper = new ObjectMapper();
 
-        mascota = servicioMascota.actualizarHigiene(mascota, LocalDateTime.now());
+        mascota = servicioMascota.actualizarEstadisticas(mascota, LocalDateTime.now());
 
 
         String JSONMascota = mapper.writeValueAsString(mascota);

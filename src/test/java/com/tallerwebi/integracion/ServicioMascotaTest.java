@@ -68,11 +68,13 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void queLaHigieneBajeProgresivamenteConElTiempo() throws LimpiezaMaximaException {
+    public void queLasEstadisticasBajenProgresivamenteConElTiempo()  {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
         mascotaEntidad.setHigiene(100.0);
+        mascotaEntidad.setHambre(100.0);
+        mascotaEntidad.setEnergia(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -80,23 +82,33 @@ public class ServicioMascotaTest {
 
         //ACCION
         LocalDateTime ultimaHoraHigiene = LocalDateTime.now().minusHours(3);
-        LocalDateTime horaActualDeHigiene = LocalDateTime.now();
+        LocalDateTime ultimaHoraAlimentacion = LocalDateTime.now().minusHours(3);
+        LocalDateTime ultimaHoraSiesta = LocalDateTime.now().minusHours(3);
+
+
+        LocalDateTime horaActual = LocalDateTime.now();
 
         mascotaDTO.setUltimaHigiene(ultimaHoraHigiene);
+        mascotaDTO.setUltimaAlimentacion(ultimaHoraAlimentacion);
+        mascotaDTO.setUltimaSiesta(ultimaHoraSiesta);
 
-        servicioMascota.actualizarHigiene(mascotaDTO, horaActualDeHigiene);
+        servicioMascota.actualizarEstadisticas(mascotaDTO, horaActual);
 
         //VERIFICACION
         assertThat(mascotaDTO.getHigiene() < 100.0, equalTo(true));
+        assertThat(mascotaDTO.getEnergia() < 100.0, equalTo(true));
+        assertThat(mascotaDTO.getHambre() < 100.0, equalTo(true));
 
     }
 
     @Test
-    public void queAlUnTiempoExcesivamenteLargoLaHigieneNoDisminuyeMenosQueCero() {
+    public void queAlPasarUnTiempoExcesivamenteLargoLasEstadisticasNoDisminuyenMenosQueCero() {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
         mascotaEntidad.setHigiene(100.0);
+        mascotaEntidad.setHambre(100.0);
+        mascotaEntidad.setEnergia(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -104,14 +116,22 @@ public class ServicioMascotaTest {
 
         //ACCION
         LocalDateTime ultimaHoraHigiene = LocalDateTime.now().minusDays(10);
-        LocalDateTime horaActualDeHigiene = LocalDateTime.now();
+        LocalDateTime ultimaHoraAlimentacion = LocalDateTime.now().minusDays(10);
+        LocalDateTime ultimaHoraSiesta = LocalDateTime.now().minusDays(10);
+
+        LocalDateTime horaActual = LocalDateTime.now();
+
 
         mascotaDTO.setUltimaHigiene(ultimaHoraHigiene);
+        mascotaDTO.setUltimaAlimentacion(ultimaHoraAlimentacion);
+        mascotaDTO.setUltimaSiesta(ultimaHoraSiesta);
 
-        servicioMascota.actualizarHigiene(mascotaDTO, horaActualDeHigiene);
+        servicioMascota.actualizarEstadisticas(mascotaDTO, horaActual);
 
         //VERIFICACION
         assertThat(mascotaDTO.getHigiene() == 0.0, equalTo(true));
+        assertThat(mascotaDTO.getHambre() == 0.0, equalTo(true));
+        assertThat(mascotaDTO.getEnergia() == 0.0, equalTo(true));
 
     }
 
