@@ -1,13 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <title>Cementerio</title>
+    <!-- Boostrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <!-- custom style -->
+    <link rel="stylesheet" th:href="@{/css/cementerio.css}"/>
 </head>
 <body>
-  <h1>Este es el cementerio pero, si estas leyendo esto, estas vivo</h1>
-
-  <h2 th:text="'Aqui yace: ' + ${mascota.nombre}"></h2><br>
-  <h3>"Genio y figura hasta la sepultura."</h3>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="../home">Tamagotchi</a>
+    <div class="ms-auto">
+        <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
+    </div>
+</nav>
+<main role="main" class="container">
+    <div id="cementerio-box">
+        <h1>Este es el cementerio pero, si estas leyendo esto, estas vivo</h1>
+        <h2 th:text="'Aqui yace: ' + ${mascota.nombre}"></h2><br>
+        <h3>"Genio y figura hasta la sepultura."</h3>
+        <form action="../home">
+            <button type="submit">VOLVER AL HOGAR</button>
+        </form>
+    </div>
+</main>
+<!-- Boostrap core js -->
+<script type="text/javascript" th:src="@{webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{js/main.js}"></script>
 </body>
 </html>

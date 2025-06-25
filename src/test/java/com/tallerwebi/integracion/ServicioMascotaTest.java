@@ -122,6 +122,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setId(1L);
         mascotaEntidad.setHigiene(100.0);
         mascotaEntidad.setEnergia(100.0);
+        mascotaEntidad.setFelicidad(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -140,6 +141,7 @@ public class ServicioMascotaTest {
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
         mascotaEntidad.setEnergia(60.0);
+        mascotaEntidad.setFelicidad(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -179,6 +181,7 @@ public class ServicioMascotaTest {
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
         mascotaEntidad.setEnergia(75.0);
+        mascotaEntidad.setFelicidad(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -191,4 +194,43 @@ public class ServicioMascotaTest {
         assertThat(mascotaDTO.getEnergia(), equalTo(100.0));
     }
 
+    @Test
+    public void queAlDormirDisminuye25PuntosDeFelicidad() throws EnergiaMaxima {
+        //PREPARACION
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setEnergia(60.0);
+        mascotaEntidad.setFelicidad(100.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        //ACCION
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.dormir(mascotaDTO);
+
+        //VERIFICACION
+        assertThat(mascotaDTO.getFelicidad(), equalTo(75.0));
+    }
+
+
+    @Test
+    public void queAlJugarDisminuye25PuntosDeEnergia() {
+        //PREPARACION
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setHigiene(100.0);
+        mascotaEntidad.setEnergia(100.0);
+        mascotaEntidad.setFelicidad(100.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        //ACCION
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.jugar(mascotaDTO);
+
+        //VERIFICACION
+        assertThat(mascotaDTO.getEnergia(), equalTo(75.0));
+    }
 }

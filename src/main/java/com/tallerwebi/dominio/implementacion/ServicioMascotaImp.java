@@ -65,9 +65,13 @@ public class ServicioMascotaImp implements ServicioMascota {
     public MascotaDTO jugar(MascotaDTO mascota) {
         Double energiaADescontarPorJuego = 25.00;
         Double energiaActual = mascota.getEnergia();
+        Double higieneActual = mascota.getHigiene();
+        Double felicidadActual = mascota.getFelicidad();
+
         if (energiaActual >= energiaADescontarPorJuego) {
             mascota.setEnergia(energiaActual - energiaADescontarPorJuego);
             mascota.setHigiene(mascota.getHigiene() - 25.0);
+            mascota.setFelicidad(Math.min(100.00, felicidadActual + 25.0));
             //actualizamos en base de datos
             this.actualizarMascota(mascota);
         } else {
@@ -81,14 +85,17 @@ public class ServicioMascotaImp implements ServicioMascota {
     public MascotaDTO dormir(MascotaDTO mascota) throws EnergiaMaxima {
         Double energiaASumar = 25.00;
         Double energiaActual = mascota.getEnergia();
-        if (energiaActual < 100.00) {
-            mascota.setEnergia(Math.min(100.00, energiaActual + energiaASumar));
-            mascota.setUltimaSiesta(LocalDateTime.now());
-            //actualizamos en base de datos
-            this.actualizarMascota(mascota);
-        } else {
+        Double felicidadARestar = 25.00;
+        Double felicidadActual = mascota.getFelicidad();
+
+        if (energiaActual >= 100.00)
             throw new EnergiaMaxima("No se puede dormir porque no tiene sueño");
-        }
+
+        mascota.setEnergia(Math.min(100.00, energiaActual + energiaASumar));
+        mascota.setFelicidad(Math.max(0.0, felicidadActual - felicidadARestar));
+        mascota.setUltimaSiesta(LocalDateTime.now());
+        //actualizamos en base de datos
+        this.actualizarMascota(mascota);
 
         return mascota;
     }

@@ -2,19 +2,24 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Taller Web I</title>
+    <title>Taller Web I</title>
 
-  <!-- Bootstrap core css -->
-  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}" />
+    <!-- Bootstrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-  <!-- Custom style -->
-  <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <!-- Custom style -->
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
 </head>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-  <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesion!</a>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="../home">Tamagotchi</a>
+    <div class="ms-auto">
+        <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
+    </div>
 </nav>
 
 <body>
@@ -49,28 +54,31 @@
     <!-- HASTA ACA -->
 
     <div class="container">
-      <div class="bar-container">
-        <div class="bar energy">
-          <img class="icon" th:src="@{/img/energy.png}" />
-          <div class="bar-fill" style="color: #000000; font-weight: bold;" th:text=" ${mascota.energia} + '%'"></div>
+        <h2 th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
+        <div class="bar-container">
+            <div class="bar energy">
+                <img class="icon" th:src="@{/img/energy.png}"/>
+                <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;"
+                     th:text=" ${mascota.energia} + '%'"></div>
+            </div>
+            <div class="bar happiness">
+                <img class="icon" th:src="@{/img/happiness.png}"/>
+                <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;"
+                     th:text=" ${mascota.felicidad} + '%'"></div>
+            </div>
         </div>
-        <div class="bar happiness">
-          <img class="icon" th:src="@{/img/happiness.png}" />
-          <div class="bar-fill" style="color: #000000; font-weight: bold;" th:text=" ${mascota.felicidad} + '%'"></div>
+
+        <div class="pet-container">
+            <div class="pet">
+                <img th:src="@{/img/capybara.png}" alt="Pet" class="pet-image"/>
+            </div>
+            <!--
+          <h2 th:text="'Salud: ' + ${mascota.salud} "></h2><br>
+          <h2 th:text="'Esta vivo?: ' + ${mascota.estaVivo}"></h2>-->
+
+
+            <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
         </div>
-      </div>
-
-      <div class="pet-container">
-        <div class="pet">
-          <img th:src="@{/img/huevo.png}" alt="Pet" class="pet-image" />
-        </div>
-        <!--
-      <h2 th:text="'Salud: ' + ${mascota.salud} "></h2><br>
-      <h2 th:text="'Esta vivo?: ' + ${mascota.estaVivo}"></h2>-->
-
-
-        <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
-      </div>
 
       <div class="bar-container">
         <div class="bar hunger">
@@ -78,35 +86,33 @@
           <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
             th:text=" ${mascota.hambre} + '%'"></div>
 
+            </div>
+            <div class="bar cleanliness">
+                <img class="icon" th:src="@{/img/cleanliness.png}"/>
+                <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;"
+                     th:text=" ${mascota.higiene} + '%'"></div>
+
+            </div>
         </div>
-        <div class="bar cleanliness">
-          <img class="icon" th:src="@{/img/cleanliness.png}" />
-          <div class="bar-fill" style="color: #000000; font-weight: bold;" th:text=" ${mascota.higiene} + '%'"></div>
 
-        </div>
-      </div>
+        <div class="button-container">
+            <input name="id" type="hidden" th:value="${mascota.id}">
+            <button class="button" onclick="jugar()">
+                <img class="icon" th:src="@{/img/game-black.png}"/>
+            </button>
 
-      <div class="button-container">
-        <form action="/spring/mascota/jugar" method="post">
-          <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button">
-            <img class="icon" th:src="@{/img/game-black.png}" />
-          </button>
 
-        </form>
+            <form action="/ruta2" method="post">
+                <button class="button">
+                    <img class="icon" th:src="@{/img/medicine-black.png}"/>
+                </button>
+            </form>
 
-        <form action="/ruta2" method="post">
-          <button class="button">
-            <img class="icon" th:src="@{/img/medicine-black.png}" />
-          </button>
-        </form>
 
-        <form action="/spring/mascota/limpiar" method="post">
-          <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button">
-            <img class="icon" th:src="@{/img/bath-black.png}" />
-          </button>
-        </form>
+            <input name="id" type="hidden" th:value="${mascota.id}">
+            <button class="button" onclick="limpiarMascota()">
+                <img class="icon" th:src="@{/img/bath-black.png}"/>
+            </button>
 
         <form action="/spring/mascota/dormir" method="post">
           <input name="id" type="hidden" th:value="${mascota.id}">
@@ -122,9 +128,9 @@
         </button>
 
 
-      </div>
+        </div>
     </div>
-  </main>
+</main>
 
   <!-- Bootstrap core js -->
   <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
