@@ -114,12 +114,10 @@
                 <img class="icon" th:src="@{/img/bath-black.png}"/>
             </button>
 
-        <form action="/spring/mascota/dormir" method="post">
           <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button">
-            <img class="icon" th:src="@{/img/lightOn-black.png}" />
-          </button>
-        </form>
+            <button class="button" onclick="dormirMascota()">
+                <img class="icon" th:src="@{/img/lightOn-black.png}"/>
+            </button>
 
 
         <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
