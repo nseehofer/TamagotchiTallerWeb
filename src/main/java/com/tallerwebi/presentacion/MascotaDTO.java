@@ -118,6 +118,9 @@ public class MascotaDTO {
         this.ultimaHigiene = ultimaHigiene;
     }
 
+    public LocalDateTime getUltimaSiesta() {return ultimaSiesta;
+    }
+
     public Mascota obtenerEntidad() {
         Mascota mascota = new Mascota();
         return this.obtenerEntidad(mascota);

@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
+import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -29,6 +30,7 @@ public class ControladorWebSocket {
         public MascotaDTOEscalaParaId() {
             // Constructor vacío necesario para la deserialización 
         }
+
         public MascotaDTOEscalaParaId(Long id) {
             this.id = id;
         }
@@ -97,6 +99,27 @@ public class ControladorWebSocket {
         } catch (EnergiaInsuficiente energiaInsuficiente) {
             String error = mapper.writeValueAsString(
                     "No podés jugar, te falta energía");
+            return error;
+        }
+
+        String JSONMascota = mapper.writeValueAsString(mascota);
+
+        return JSONMascota;
+    }
+
+    @MessageMapping("/dormir")
+    @SendTo("/topic/messages")
+    // RECIBO UN JSON.stringify con el id de la mascota
+    public String dormirConMascotaConSocketYPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mascota = servicioMascota.dormir(mascota);
+        } catch (EnergiaMaxima energiaMaxima) {
+            String error = mapper.writeValueAsString(
+                    "No se puede dormir porque no tiene sueño");
             return error;
         }
 

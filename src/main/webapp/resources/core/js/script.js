@@ -13,12 +13,14 @@ stompClient.debug = function(str) {
 stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/messages', (m) => {
+        let valorFelicidadActualizado = JSON.parse(m.body).felicidad;
         let valorActualizadoDelHambre = JSON.parse(m.body).hambre.toFixed(2);
         let valorHigieneActualizado = JSON.parse (m.body).higiene.toFixed(2);
         let valorEnergiaActualizado = JSON.parse(m.body).energia.toFixed(2);
         console.log("Mensaje recibido:",valorActualizadoDelHambre);
         console.log("Mensaje recibido:",valorHigieneActualizado)
         console.log("Mensaje recibido:",valorEnergiaActualizado)
+        console.log("Mensaje recibido:",valorFelicidadActualizado)
         /*const messagesContainer = document.getElementById("chat-messages");
         const newMessage = document.createElement("p")
         newMessage.textContent = JSON.parse(m.body).content;
@@ -27,9 +29,11 @@ stompClient.onConnect = (frame) => {
         const valorHambre = document.getElementById("valor-hambre");
         const valorHigiene = document.getElementById("valor-higiene");
         const valorEnergia = document.getElementById("valor-energia");
+        const valorFelicidad = document.getElementById("valor-felicidad");
         valorHambre.textContent = valorActualizadoDelHambre + '%';
         valorHigiene.textContent = valorHigieneActualizado + '%';
         valorEnergia.textContent = valorEnergiaActualizado + '%';
+        valorFelicidad.textContent = valorFelicidadActualizado + '%';
     });
 };
 
@@ -66,9 +70,16 @@ function limpiarMascota() {
     });
 }
 
-function jugar(){
+function jugar() {
     stompClient.publish({
         destination: "/app/jugar",
+        body: JSON.stringify({id: mascotaId})
+    });
+}
+
+function dormirMascota() {
+    stompClient.publish({
+        destination: "/app/dormir",
         body: JSON.stringify({id: mascotaId})
     });
 }
