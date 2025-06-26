@@ -34,7 +34,7 @@
                    required/>
             <input th:field="*{nombre}" type="text" id="nombre" class="form-control" placeholder="nombre" required/>
         <input th:field="*{pais}" type="text" id="pais" class="form-control" placeholder="pais" required/>
-        <input th:field="*{provincia}" type="text" id="provincia" class="form-control" placeholder="provincia o ciudad (si no es Argentina)" required/>
+        <input th:field="*{provincia}" type="text" id="provincia" class="form-control" placeholder="provincia o ciudad (si no es ARG)" required/>
 
             <button id="btn-registrarme" type="Submit">REGISTRARME</button>
             <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">

@@ -46,6 +46,17 @@ public class ControladorMascota {
         Usuario usuarioObtenido = this.servicioLogin.buscarUsuarioPorEmail(emailDeUsuarioEnSesion);
         MascotaDTO mascotaAGuardar = this.servicioMascota.crearMascota(nombre,usuarioObtenido.getId());
 
+        //
+        Clima climaUrl = this.servicioTemperatura.getTemperatura(request);
+
+        if(climaUrl != null) {
+            modelo.addAttribute("climaUrl", climaUrl);
+            modelo.addAttribute("temperaturaActual", climaUrl.obtenerTemperaturaActual());           
+        } else {
+            modelo.addAttribute("error", "No se pudo obtener la temperatura. Verifique las coordenadas.");
+        }
+        //
+
         //guarda en bd
         MascotaDTO mascotaGuardada = this.servicioMascota.crear(mascotaAGuardar);
         modelo.put("mascota", mascotaGuardada);

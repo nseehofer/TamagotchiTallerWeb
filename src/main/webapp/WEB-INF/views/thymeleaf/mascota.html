@@ -2,141 +2,124 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Taller Web I</title>
+  <title>Taller Web I</title>
 
-    <!-- Bootstrap core css -->
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Bootstrap core css -->
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-    <!-- Custom style -->
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <!-- Custom style -->
+  <link rel="stylesheet" th:href="@{/css/main.css}" />
 </head>
+
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="../home">Tamagotchi</a>
     <div class="ms-auto">
-        <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
+      <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
     </div>
-</nav>
+  </nav>
 
-<body>
-  <main role="main" class="container">
-    <h2 th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
+  <body>
+    <main role="main" class="container">
+      <div th:if="${error}">
+        <p th:text="${error}" style="color:red;"></p>
+      </div>
 
-    <!-- SECCION DONDE SE VE LA UBICACION DEL USUARIO -->
-     <div>
-      <p th:text="'Nombre: ' + ${usuario.nombre}"></p><br>
-      <p th:text="'Ubicación: ' + ${usuario.pais} + ', ' + ${usuario.provincia}"></p>
-     </div>
-    <!-- HASTA ACA -->
+      <div th:if="${climaUrl}" class="d-flex flex-row align-items-center justify-content-center gap-3">
+        <p th:text="'Región: ' + ${climaUrl.zonaHoraria}"> </p>
+        <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}"> </p>
+        <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'"></p>
+      </div>
+      <!-- HASTA ACA -->
 
-    <!-- FORM Y DIV PARA API TEMPERATURA -->
-    <form th:action="@{/obtener-temperatura}" method="post">
-      <label for="code">Latitud: '-34.7' y Longitud '-58.5'</label>
-      <input type="number" step="0.1" id="latitud" name="latitud" placeholder="latitud" min="-90.0" max="90.0" required>
-      <input type="number" step="0.1" id="longitud" name="longitud" placeholder="longitud" min="-180.0" max="180.0"
-        required>
-      <button type="submit">Enviar coordenadas</button>
-    </form>
-
-    <div th:if="${error}">
-      <p th:text="${error}" style="color:red;"></p>
-    </div>
-
-    <div th:if="${climaUrl}">
-      <p th:text="'Region: ' + ${climaUrl.zonaHoraria}"> </p>
-      <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}"> </p>
-      <p th:text="'Temperatura actual: ' + ${temperaturaActual} + ' °C'"></p>
-    </div>
-    <!-- HASTA ACA -->
-
-    <div class="container">
+      <div class="container">
         <h2 th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
         <div class="bar-container">
-            <div class="bar energy">
-                <img class="icon" th:src="@{/img/energy.png}"/>
-                <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;"
-                     th:text=" ${mascota.energia} + '%'"></div>
-            </div>
-            <div class="bar happiness">
-                <img class="icon" th:src="@{/img/happiness.png}"/>
-                <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;"
-                     th:text=" ${mascota.felicidad} + '%'"></div>
-            </div>
+          <div class="bar energy">
+            <img class="icon" th:src="@{/img/energy.png}" />
+            <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.energia} + '%'"></div>
+          </div>
+          <div class="bar happiness">
+            <img class="icon" th:src="@{/img/happiness.png}" />
+            <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.felicidad} + '%'"></div>
+          </div>
         </div>
 
         <div class="pet-container">
-            <div class="pet">
-                <img th:src="@{/img/capybara.png}" alt="Pet" class="pet-image"/>
-            </div>
-            <!--
+          <div class="pet">
+            <img th:src="@{/img/capybara.png}" alt="Pet" class="pet-image" />
+          </div>
+          <!--
           <h2 th:text="'Salud: ' + ${mascota.salud} "></h2><br>
           <h2 th:text="'Esta vivo?: ' + ${mascota.estaVivo}"></h2>-->
 
 
-            <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
+          <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
         </div>
 
-      <div class="bar-container">
-        <div class="bar hunger">
-          <img class="icon" th:src="@{/img/hunger.png}" />
-          <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
-            th:text=" ${mascota.hambre} + '%'"></div>
+        <div class="bar-container">
+          <div class="bar hunger">
+            <img class="icon" th:src="@{/img/hunger.png}" />
+            <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.hambre} + '%'"></div>
 
-            </div>
-            <div class="bar cleanliness">
-                <img class="icon" th:src="@{/img/cleanliness.png}"/>
-                <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;"
-                     th:text=" ${mascota.higiene} + '%'"></div>
+          </div>
+          <div class="bar cleanliness">
+            <img class="icon" th:src="@{/img/cleanliness.png}" />
+            <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.higiene} + '%'"></div>
 
-            </div>
+          </div>
         </div>
 
         <div class="button-container">
-            <input name="id" type="hidden" th:value="${mascota.id}">
-            <button class="button" onclick="jugar()">
-                <img class="icon" th:src="@{/img/game-black.png}"/>
+          <input name="id" type="hidden" th:value="${mascota.id}">
+          <button class="button" onclick="jugar()">
+            <img class="icon" th:src="@{/img/game-black.png}" />
+          </button>
+
+
+          <form action="/ruta2" method="post">
+            <button class="button">
+              <img class="icon" th:src="@{/img/medicine-black.png}" />
             </button>
+          </form>
 
-
-            <form action="/ruta2" method="post">
-                <button class="button">
-                    <img class="icon" th:src="@{/img/medicine-black.png}"/>
-                </button>
-            </form>
-
-
-            <input name="id" type="hidden" th:value="${mascota.id}">
-            <button class="button" onclick="limpiarMascota()">
-                <img class="icon" th:src="@{/img/bath-black.png}"/>
-            </button>
 
           <input name="id" type="hidden" th:value="${mascota.id}">
-            <button class="button" onclick="dormirMascota()">
-                <img class="icon" th:src="@{/img/lightOn-black.png}"/>
-            </button>
+          <button class="button" onclick="limpiarMascota()">
+            <img class="icon" th:src="@{/img/bath-black.png}" />
+          </button>
+
+          <input name="id" type="hidden" th:value="${mascota.id}">
+          <button class="button" onclick="dormirMascota()">
+            <img class="icon" th:src="@{/img/lightOn-black.png}" />
+          </button>
 
 
-        <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
-        <button class="button" onclick="alimentarMascota()">
-          <img class="icon" th:src="@{/img/food-black.png}" />
-        </button>
+          <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
+          <button class="button" onclick="alimentarMascota()">
+            <img class="icon" th:src="@{/img/food-black.png}" />
+          </button>
 
 
         </div>
-    </div>
-</main>
+      </div>
+    </main>
 
-  <!-- Bootstrap core js -->
-  <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
-  <!-- WEBSOCKET -->
-  <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
-  <script type="text/javascript" th:src="@{/js/script.js}"></script>
+    <!-- Bootstrap core js -->
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+    <!-- WEBSOCKET -->
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
 
 
-</body>
+  </body>
 
 </html>
