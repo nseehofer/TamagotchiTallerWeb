@@ -29,6 +29,8 @@ public class Mascota {
     @Column
     private Boolean estaVivo;
     @Column
+    private Boolean estaEnfermo;
+    @Column
     private LocalDateTime ultimaSiesta;
 
     @Column
@@ -43,7 +45,7 @@ public class Mascota {
     Usuario usuario;
 
     public Mascota(){};
-    public Mascota(Long id, String nombre, Double energia, Double higiene,Double salud,Double felicidad,Double hambre,Boolean estaVivo) {
+    public Mascota(Long id, String nombre, Double energia, Double higiene,Double salud,Double felicidad,Double hambre,Boolean estaVivo, Boolean estaEnfermo) {
         this.id = id;
         this.nombre = nombre;
         this.energia = energia;
@@ -52,6 +54,7 @@ public class Mascota {
         this.felicidad=felicidad;
         this.hambre= hambre;
         this.estaVivo=estaVivo;
+        this.estaEnfermo=estaEnfermo;
         this.ultimaAlimentacion = LocalDateTime.now();
         this.ultimaHigiene = LocalDateTime.now();
         this.ultimaSiesta = LocalDateTime.now();
@@ -147,5 +150,13 @@ public class Mascota {
 
     public void setUsuario_id(Long usuario_id) {
         this.usuario_id = usuario_id;
+    }
+
+    public Boolean getEstaEnfermo() {
+        return this.estaEnfermo;
+    }
+
+    public void setEstaEnfermo(Boolean estaEnfermo) {
+        this.estaEnfermo = estaEnfermo;
     }
 }

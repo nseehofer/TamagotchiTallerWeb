@@ -127,23 +127,46 @@ public class ServicioMascotaImp implements ServicioMascota {
 
     @Override
     public MascotaDTO actualizarEstadisticas(MascotaDTO mascota, LocalDateTime horaActual) {
-        double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toMinutes() * 12.6;
-        double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toMinutes() * 15.7;
-        double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toMinutes() * 19.8;
+        double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toMinutes() * 12.87;
+        double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toMinutes() * 15.19;
+        double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toMinutes() * 17.24;
 
         double higieneActual = mascota.getHigiene() - disminucionHigiene;
         double hambreActual = mascota.getHambre() - disminucionHambre;
         double energiaActual = mascota.getEnergia() - disminucionEnergia;
-        //double felicidadActual = mascota.getFelicidad() - valorDeDisminucion;
+        double felicidadActual = (higieneActual + hambreActual + energiaActual) / 3.0;
 
         mascota.setHigiene(Math.max(higieneActual, 0.0));
         mascota.setHambre(Math.max(hambreActual, 0.0));
         mascota.setEnergia(Math.max(energiaActual, 0.0));
-       // mascota.setFelicidad(Math.max(felicidadActual, 0.0));
+        mascota.setFelicidad(Math.max(felicidadActual, 0.0));
 
         this.actualizarMascota(mascota);
 
         return mascota;
 
+    }
+
+    @Override
+    public MascotaDTO chequearSalud(MascotaDTO mascota) {
+        Double hambre = mascota.getHambre();
+        Double energia = mascota.getEnergia();
+        Double felicidad = mascota.getFelicidad();
+        Double higiene = mascota.getHigiene();
+
+        Double promedioEstadisticas = (hambre + energia + felicidad + higiene) / 4.0;
+        Double riesgoAEnfermar = 1.0 - (promedioEstadisticas / 100);
+
+        Double random = obtenerRandom();
+
+        mascota.setEstaEnfermo(random < riesgoAEnfermar);
+
+        this.actualizarMascota(mascota);
+
+        return mascota;
+    }
+
+    public Double obtenerRandom() {
+        return Math.random();
     }
 }

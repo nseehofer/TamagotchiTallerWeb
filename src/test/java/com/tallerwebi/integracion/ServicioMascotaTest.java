@@ -16,6 +16,7 @@ import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
 import com.tallerwebi.presentacion.MascotaDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 
@@ -75,6 +76,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setHigiene(100.0);
         mascotaEntidad.setHambre(100.0);
         mascotaEntidad.setEnergia(100.0);
+        mascotaEntidad.setFelicidad(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -98,6 +100,7 @@ public class ServicioMascotaTest {
         assertThat(mascotaDTO.getHigiene() < 100.0, equalTo(true));
         assertThat(mascotaDTO.getEnergia() < 100.0, equalTo(true));
         assertThat(mascotaDTO.getHambre() < 100.0, equalTo(true));
+        assertThat(mascotaDTO.getFelicidad() < 100.0, equalTo(true));
 
     }
 
@@ -109,6 +112,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setHigiene(100.0);
         mascotaEntidad.setHambre(100.0);
         mascotaEntidad.setEnergia(100.0);
+        mascotaEntidad.setFelicidad(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -132,6 +136,7 @@ public class ServicioMascotaTest {
         assertThat(mascotaDTO.getHigiene() == 0.0, equalTo(true));
         assertThat(mascotaDTO.getHambre() == 0.0, equalTo(true));
         assertThat(mascotaDTO.getEnergia() == 0.0, equalTo(true));
+        assertThat(mascotaDTO.getFelicidad() == 0.0, equalTo(true));
 
     }
 
@@ -253,4 +258,49 @@ public class ServicioMascotaTest {
         //VERIFICACION
         assertThat(mascotaDTO.getEnergia(), equalTo(75.0));
     }
+
+    @Test
+    public void queLaMascotaSeEnfermeSiempreCuandoLasEstadisticasBajanAlMinimo () {
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setHigiene(0.0);
+        mascotaEntidad.setEnergia(0.0);
+        mascotaEntidad.setFelicidad(0.0);
+        mascotaEntidad.setHambre(0.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.chequearSalud(mascotaDTO);
+
+        assertThat(mascotaDTO.getEstaEnfermo(), equalTo(true));
+
+    }
+
+
+    /*
+
+    Pendiente para probar con Mockito Spy
+
+    @Test
+    public void queLaMascotaSePuedaEnfermarConEstadisticasMedias () {
+
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setHigiene(70.0);
+        mascotaEntidad.setEnergia(70.0);
+        mascotaEntidad.setFelicidad(70.0);
+        mascotaEntidad.setHambre(70.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.chequearSalud(mascotaDTO);
+
+        assertThat(mascotaDTO.getEstaEnfermo(), equalTo(true));
+
+    }
+    */
 }
