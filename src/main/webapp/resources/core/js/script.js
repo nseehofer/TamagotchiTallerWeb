@@ -2,8 +2,13 @@ let mascotaId = document.getElementById("mascota-id").value;
 
 setInterval(actualizarDatosMascota, 60000); //actualiza datos cada un minuto
 
+let basePath = window.location.pathname.split('/')[1];
+const brokerPath = `ws://${window.location.hostname}:8080/${basePath}/wschat`;
+
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://localhost:8080/spring/wschat'
+    
+    brokerURL: brokerPath
+
 });
 
 stompClient.debug = function(str) {
