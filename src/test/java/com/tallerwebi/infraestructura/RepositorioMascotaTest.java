@@ -143,7 +143,7 @@ public class RepositorioMascotaTest {
     @Test
     @Rollback
     public void cuandoPidoListadoDeMascotaEntoncesLoObtengo() {
-         Usuario usuario = obtenerUsuarioParaTest();
+        Usuario usuario = obtenerUsuarioParaTest();
         this.repositorioUsuario.guardar(usuario);
         String nombreMascotaUno = "Firulais";
         String nombreMascotaDos = "Toby";
