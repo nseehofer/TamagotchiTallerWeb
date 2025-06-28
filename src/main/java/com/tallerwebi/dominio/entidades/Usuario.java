@@ -1,4 +1,4 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.entidades;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,10 +22,13 @@ public class Usuario {
     public Long getId() {
         return id;
     }
+
+
     public void setId(Long id) {
         this.id = id;
     }
 
+    
     public String getNombre() {
         return nombre;
     }
