@@ -46,7 +46,7 @@ public class VistaLoginE2E {
     @Test
     void deberiaDecirUNLAMEnElNavbar() {
         String texto = vistaLogin.obtenerTextoDeLaBarraDeNavegacion();
-        assertThat("UNLAM", equalToIgnoringCase(texto));
+        assertThat("Tamagotchi", equalToIgnoringCase(texto));
     }
 
     @Test

@@ -27,7 +27,7 @@ public class ControladorLogin {
     public ModelAndView irALogin(HttpServletRequest request) {
 
         if (request.getSession().getAttribute("ID") != null) {
-            return new ModelAndView("redirect:/presentacion");
+            return new ModelAndView("redirect:/home");
         }
         ModelMap modelo = new ModelMap();
         modelo.put("datosLogin", new DatosLogin());
@@ -55,7 +55,10 @@ public class ControladorLogin {
     }
 
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
+    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario,HttpServletRequest request) {
+        if (request.getSession().getAttribute("ID") != null) {
+            return new ModelAndView("redirect:/home");
+        }
         ModelMap model = new ModelMap();
         try {
             // Por defecto el rol es user
@@ -72,7 +75,10 @@ public class ControladorLogin {
     }
 
     @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
-    public ModelAndView nuevoUsuario() {
+    public ModelAndView nuevoUsuario(HttpServletRequest request) {
+        if (request.getSession().getAttribute("ID") != null) {
+            return new ModelAndView("redirect:/home");
+        }
         ModelMap model = new ModelMap();
         model.put("usuario", new Usuario());
         return new ModelAndView("nuevo-usuario", model);
@@ -81,11 +87,15 @@ public class ControladorLogin {
     @RequestMapping(path = "/cerrar-sesion", method = RequestMethod.GET)
     public ModelAndView logout(HttpServletRequest request) {
         request.getSession().invalidate();
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public ModelAndView inicio() {
+    public ModelAndView inicio(HttpServletRequest request) {
+        if (request.getSession().getAttribute("ID") != null) {
+            return new ModelAndView("redirect:/home");
+        }
+
         return new ModelAndView("presentacion");
     }
 
