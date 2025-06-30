@@ -19,13 +19,16 @@ public class ControladorLogin {
     private ServicioLogin servicioLogin;
 
     @Autowired
-    public ControladorLogin(ServicioLogin servicioLogin){
+    public ControladorLogin(ServicioLogin servicioLogin) {
         this.servicioLogin = servicioLogin;
     }
 
     @RequestMapping("/login")
-    public ModelAndView irALogin() {
+    public ModelAndView irALogin(HttpServletRequest request) {
 
+        if (request.getSession().getAttribute("ID") != null) {
+            return new ModelAndView("redirect:/presentacion");
+        }
         ModelMap modelo = new ModelMap();
         modelo.put("datosLogin", new DatosLogin());
         return new ModelAndView("login", modelo);
@@ -37,10 +40,12 @@ public class ControladorLogin {
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
-            //request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
+            // request.getSession().setAttribute("ROL", usuarioBuscado.getRol());
 
             request.getSession().setAttribute("NOMBRE", usuarioBuscado.getNombre());
             request.getSession().setAttribute("ID", usuarioBuscado.getId());
+            // AGREGO EMAIL A LA SESION PARA DESPUES OBTENER EL USUARIO CON EL REPOSITORIO
+            request.getSession().setAttribute("EMAIL", usuarioBuscado.getEmail());
 
             return new ModelAndView("redirect:/home");
         } else {
@@ -52,14 +57,14 @@ public class ControladorLogin {
     @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
     public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
         ModelMap model = new ModelMap();
-        try{
-            //Por defecto el rol es user
+        try {
+            // Por defecto el rol es user
             usuario.setRol("USER");
             servicioLogin.registrar(usuario);
-        } catch (UsuarioExistente e){
+        } catch (UsuarioExistente e) {
             model.put("error", "El usuario ya existe");
             return new ModelAndView("nuevo-usuario", model);
-        } catch (Exception e){
+        } catch (Exception e) {
             model.put("error", "Error al registrar el nuevo usuario");
             return new ModelAndView("nuevo-usuario", model);
         }
@@ -81,7 +86,7 @@ public class ControladorLogin {
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public ModelAndView inicio() {
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("presentacion");
     }
-}
 
+}

@@ -1,6 +1,9 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.ServicioMascota;
+import com.tallerwebi.dominio.ServicioTemperatura;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
@@ -29,6 +32,8 @@ public class ControladorMascotaTest {
     @Mock private HttpSession session;
     @Mock private HttpServletRequest request;
     private ServicioMascota servicioMascotaMock;
+    private ServicioLogin servicioLoginMock;
+    private ServicioTemperatura servicioTemperaturaMock;
     private ControladorMascota controladorMascota;
     private MascotaDTO mascotaDTOMock;
 
@@ -36,7 +41,9 @@ public class ControladorMascotaTest {
     public void inicializar() {
         MockitoAnnotations.openMocks(this);
         servicioMascotaMock = mock(ServicioMascota.class);
-        controladorMascota = new ControladorMascota(servicioMascotaMock);
+        servicioLoginMock = mock(ServicioLogin.class);
+        servicioTemperaturaMock = mock(ServicioTemperatura.class);
+        controladorMascota = new ControladorMascota(servicioMascotaMock,servicioLoginMock,servicioTemperaturaMock);
         mascotaDTOMock = mock(MascotaDTO.class);
     }
 
@@ -48,8 +55,11 @@ public class ControladorMascotaTest {
         MascotaDTO mascotaDTOPrueba = new MascotaDTO(nombreMascota);
         when(this.servicioMascotaMock.crearMascota(anyString())).thenReturn(mascotaDTOPrueba);
 
-        when(request.getSession()).thenReturn(session);
-        when(session.getAttribute("ID")).thenReturn(1L);
+        when(this.request.getSession()).thenReturn(session);
+        when(this.session.getAttribute("ID")).thenReturn(1L);
+        // SE AGREGAN OTROS MOCK PARA CORRER EL TEST 
+        when(this.session.getAttribute("EMAIL")).thenReturn("test@gmail.com");
+        when(this.servicioLoginMock.buscarUsuarioPorEmail(anyString())).thenReturn(new Usuario());
 
         ModelAndView modelAndView = controladorMascota.crearMascota(nombreMascota,request);
 

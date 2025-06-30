@@ -50,12 +50,12 @@ public class ControladorLoginTest {
 
 		MvcResult result = this.mockMvc.perform(get("/"))
 				/*.andDo(print())*/
-				.andExpect(status().is3xxRedirection())
+				.andExpect(status().is2xxSuccessful())
 				.andReturn();
 
 		ModelAndView modelAndView = result.getModelAndView();
         assert modelAndView != null;
-		assertThat("redirect:/login", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
+		assertThat("presentacion", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
 		assertThat(true, is(modelAndView.getModel().isEmpty()));
 	}
 

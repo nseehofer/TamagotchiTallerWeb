@@ -1,7 +1,7 @@
-INSERT INTO Usuario(id, email, password, rol, activo,nombre)
+INSERT INTO Usuario(id, email, password, rol, activo,nombre, pais, provincia)
 VALUES
-    (null, 'test@unlam.edu.ar', 'test', 'ADMIN', true,'SR administrador'),
-    (null, 'user@unlam.edu.ar', 'user', 'USER', true,'User');
+    (null, 'test@unlam.edu.ar', 'test', 'ADMIN', true,'SR administrador','Argentina','Buenos Aires'),
+    (null, 'user@unlam.edu.ar', 'user', 'USER', true,'User','Bolivia','Sucre');
 INSERT INTO  Mascota(id,energia,estaVivo,felicidad,hambre,higiene,nombre,salud,ultimaAlimentacion,ultimaHigiene,ultimaSiesta,usuario_id)
 VALUES
     (null,100,true,100,100,100,'Tamagotcha',100,NOW(),NOW(),NOW(),1),

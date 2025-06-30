@@ -1,65 +1,66 @@
 <!DOCTYPE HTML>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Tamagotchi</title>
+    <title>Tamagotchi</title>
 
-  <!-- Bootstrap core css -->
-  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <!-- Bootstrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-  <!-- Custom style -->
-  <link rel="stylesheet" th:href="@{/css/inicio.css}"/>
+    <!-- Custom style -->
+    <link rel="stylesheet" th:href="@{/css/crear.css}"/>
 </head>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand" href="cerrar-sesion">Cerrar sesion!</a>
-</nav>
+
 <body>
-<main role="main" class="container py-5">
-  <div class="form-container mt-5 mb-5">
-    <h1 class="text-center"> Crear nueva mascota</h1>
-    <form th:action="@{'/mascota/crearconpost'}" method="post" class="text-center mt-3">
-      <input name="nombre" type="text" class="form-control mb-3" placeholder="Nombre de tu mascota" required>
-      <button type="submit" class="btn btn-custom">Crear mascota</button>
-    </form>
-  </div>
-
-  <div class="text-center mb-4 mt-5">
-    <span><strong>Bienvenido:</strong> <span th:text="${nombreUsuario}">Nombre</span></span>
-    <h2 class="text-center"> Mis Mascotas </h2>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6" th:each="mascota : ${mascotas}">
-      <div class="card">
-        <div class="card-header text-center">
-          Mascota #<span th:text="${mascota.id}">ID</span>
-        </div>
-        <div class="card-body text-center">
-          <span><strong>Nombre:</strong> <span th:text="${mascota.nombre}">Nombre</span></span>
-
-          <div class="row mb-2">
-            <div class="col-6 text-end"><strong>Energía:</strong> <span th:text="${mascota.energia}">Energía</span></div>
-            <div class="col-6 text-start"><strong>Felicidad:</strong> <span th:text="${mascota.felicidad}">Felicidad</span></div>
-          </div>
-
-          <div class="row mb-2">
-            <div class="col-6 text-end"><strong>Hambre:</strong> <span th:text="${mascota.hambre}">Hambre</span></div>
-            <div class="col-6 text-start"><strong>Higiene:</strong> <span th:text="${mascota.higiene}">Higiene</span></div>
-          </div>
-          <form th:if="${mascota.estaVivo}" th:action="@{'/mascota/ver'}" method="post" class="mt-3">
-            <input name="id" type="hidden" th:value="${mascota.id}">
-            <button  type="submit" class="btn btn-custom">Jugar</button>
-          </form>
-          <form th:unless="${mascota.estaVivo}" th:action="@{'/mascota/cementerio'}" method="post" class="mt-3">
-            <input name="id" type="hidden" th:value="${mascota.id}">
-            <button th:unless="${mascota.estaVivo}" type="submit" class="btn btn-custom">Ver</button>
-          </form>
-        </div>
-      </div>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="./home">Tamagotchi</a>
+    <div class="ms-auto">
+        <a class="navbar-brand" href="./cerrar-sesion">Cerrar sesión!</a>
     </div>
-  </div>
+</nav>
+<main role="main" class="container py-5" style="margin-top: 100px;">
+    <p class="bienvenida"><strong>Bienvenido:</strong> <span th:text="${nombreUsuario}">Nombre</span></p>
+    <div class="form-container mt-5 mb-5 p-4">
+        <h1 class="titulo text-center">CREAR NUEVA MASCOTA</h1>
+        <form th:action="@{'/mascota/crearconpost'}" method="post" class="text-center mt-4">
+            <input name="nombre" type="text" class="form-control mb-3" placeholder="Nombre de tu mascota" required>
+            <button type="submit" class="btn btn-custom">CREAR</button>
+        </form>
+    </div>
+
+    <div class="text-center mb-4 mt-5">
+        <h2 class="titulo">MIS MASCOTAS</h2>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 mb-4" th:each="mascota : ${mascotas}">
+            <div class="card p-3 pixel-card">
+                <div class="card-header titulo text-center">
+                    Mascota #<span th:text="${mascota.id}">ID</span>
+                </div>
+                <div class="card-body text-start">
+                    <p><strong>Nombre:</strong> <span th:text="${mascota.nombre}">Nombre</span></p>
+                    <p><strong>Energía:</strong> <span th:text="${mascota.energia}">Energía</span></p>
+                    <p><strong>Felicidad:</strong> <span th:text="${mascota.felicidad}">Felicidad</span></p>
+                    <p><strong>Hambre:</strong> <span th:text="${mascota.hambre}">Hambre</span></p>
+                    <p><strong>Higiene:</strong> <span th:text="${mascota.higiene}">Higiene</span></p>
+
+                    <form th:if="${mascota.estaVivo}" th:action="@{'/mascota/ver'}" method="post" class="mt-3">
+                        <input name="id" type="hidden" th:value="${mascota.id}">
+                        <button type="submit" class="btn btn-custom">JUGAR</button>
+                    </form>
+                    <form th:unless="${mascota.estaVivo}" th:action="@{'/mascota/cementerio'}" method="post"
+                          class="mt-3">
+                        <input name="id" type="hidden" th:value="${mascota.id}">
+                        <button type="submit" class="btn btn-custom">VER</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 
 <!-- Bootstrap core JS -->

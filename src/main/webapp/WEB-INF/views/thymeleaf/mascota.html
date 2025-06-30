@@ -9,69 +9,90 @@
 
   <!-- Bootstrap core css -->
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
   <!-- Custom style -->
   <link rel="stylesheet" th:href="@{/css/main.css}" />
 </head>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-  <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesion!</a>
-</nav>
 
 <body>
-  <main role="main" class="container">
-    <h2 th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
-    <div class="container">
-      <div class="bar-container">
-        <div class="bar energy">
-          <img class="icon" th:src="@{/img/energy.png}" />
-          <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;" th:text=" ${mascota.energia} + '%'"></div>
-        </div>
-        <div class="bar happiness">
-          <img class="icon" th:src="@{/img/happiness.png}" />
-          <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;" th:text=" ${mascota.felicidad} + '%'"></div>
-        </div>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="../home">Tamagotchi</a>
+    <div class="ms-auto">
+      <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
+    </div>
+  </nav>
+
+  <body>
+    <main role="main" class="container">
+      <div th:if="${error}">
+        <p th:text="${error}" style="color:red;"></p>
       </div>
 
-      <div class="pet-container">
-        <div class="pet">
-          <img th:src="@{/img/huevo.png}" alt="Pet" class="pet-image" />
-        </div>
-        <!--
-      <h2 th:text="'Salud: ' + ${mascota.salud} "></h2><br>
-      <h2 th:text="'Esta vivo?: ' + ${mascota.estaVivo}"></h2>-->
-
-
-        <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
+      <div th:if="${climaUrl}" class="d-flex flex-row align-items-center justify-content-center gap-3">
+        <p th:text="'Región: ' + ${climaUrl.zonaHoraria}"> </p>
+        <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}"> </p>
+        <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'"></p>
       </div>
+      <!-- HASTA ACA -->
 
-      <div class="bar-container">
-        <div class="bar hunger">
-          <img class="icon" th:src="@{/img/hunger.png}" />
-          <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;" th:text=" ${mascota.hambre} + '%'"></div>
-
+      <div class="container">
+        <h2 th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
+        <div class="bar-container">
+          <div class="bar energy">
+            <img class="icon" th:src="@{/img/energy.png}" />
+            <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.energia} + '%'"></div>
+          </div>
+          <div class="bar happiness">
+            <img class="icon" th:src="@{/img/happiness.png}" />
+            <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.felicidad} + '%'"></div>
+          </div>
         </div>
-        <div class="bar cleanliness">
-          <img class="icon" th:src="@{/img/cleanliness.png}" />
-          <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;" th:text=" ${mascota.higiene} + '%'"></div>
 
+        <div class="pet-container">
+          <div class="pet">
+            <img th:src="@{/img/capybara.png}" alt="Pet" class="pet-image" />
+          </div>
+          <!--
+          <h2 th:text="'Salud: ' + ${mascota.salud} "></h2><br>
+          <h2 th:text="'Esta vivo?: ' + ${mascota.estaVivo}"></h2>-->
+
+
+          <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
         </div>
-      </div>
 
-      <div class="button-container">
+        <div class="bar-container">
+          <div class="bar hunger">
+            <img class="icon" th:src="@{/img/hunger.png}" />
+            <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.hambre} + '%'"></div>
+
+          </div>
+          <div class="bar cleanliness">
+            <img class="icon" th:src="@{/img/cleanliness.png}" />
+            <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.higiene} + '%'"></div>
+
+          </div>
+        </div>
+
+        <div class="button-container">
           <input name="id" type="hidden" th:value="${mascota.id}">
           <button class="button" onclick="jugar()">
             <img class="icon" th:src="@{/img/game-black.png}" />
           </button>
 
 
-        <form action="/ruta2" method="post">
-          <button class="button">
-            <img class="icon" th:src="@{/img/medicine-black.png}" />
-          </button>
-        </form>
+          <form action="/ruta2" method="post">
+            <button class="button">
+              <img class="icon" th:src="@{/img/medicine-black.png}" />
+            </button>
+          </form>
 
 
-          <input name="id"  type="hidden" th:value="${mascota.id}">
+          <input name="id" type="hidden" th:value="${mascota.id}">
           <button class="button" onclick="limpiarMascota()">
             <img class="icon" th:src="@{/img/bath-black.png}" />
           </button>
@@ -81,23 +102,24 @@
             <img class="icon" th:src="@{/img/lightOn-black.png}" />
           </button>
 
+
           <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
           <button class="button" onclick="alimentarMascota()">
             <img class="icon" th:src="@{/img/food-black.png}" />
           </button>
-        
 
+
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
 
-  <!-- Bootstrap core js -->
-  <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
-  <!-- WEBSOCKET -->
-  <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
-  <script type="text/javascript" th:src="@{/js/script.js}"></script>
-  
-  
-</body>
+    <!-- Bootstrap core js -->
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+    <!-- WEBSOCKET -->
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
+
+
+  </body>
 
 </html>

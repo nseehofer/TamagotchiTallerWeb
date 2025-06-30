@@ -9,10 +9,10 @@ import static org.mockito.Mockito.*;
 
 import com.tallerwebi.dominio.RepositorioMascota;
 import com.tallerwebi.dominio.ServicioMascota;
-import com.tallerwebi.dominio.ServicioMascotaImp;
 import com.tallerwebi.dominio.entidades.Mascota;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
+import com.tallerwebi.dominio.implementacion.ServicioMascotaImp;
 import com.tallerwebi.presentacion.MascotaDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
