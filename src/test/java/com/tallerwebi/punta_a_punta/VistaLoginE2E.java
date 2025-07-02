@@ -1,7 +1,11 @@
 package com.tallerwebi.punta_a_punta;
 
 import com.microsoft.playwright.*;
+import com.tallerwebi.punta_a_punta.vistas.VistaHome;
 import com.tallerwebi.punta_a_punta.vistas.VistaLogin;
+import com.tallerwebi.punta_a_punta.vistas.VistaMascota;
+import com.tallerwebi.punta_a_punta.vistas.VistaPresentacion;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,12 +21,15 @@ public class VistaLoginE2E {
     static Browser browser;
     BrowserContext context;
     VistaLogin vistaLogin;
+    VistaHome vistaHome;
+    VistaMascota vistaMascota;
+    VistaPresentacion vistaPresentacion;
 
     @BeforeAll
     static void abrirNavegador() {
         playwright = Playwright.create();
         browser = playwright.chromium().launch();
-        //browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(50));
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(4000));
 
     }
 
@@ -33,9 +40,16 @@ public class VistaLoginE2E {
 
     @BeforeEach
     void crearContextoYPagina() {
+        ReiniciarDB.limpiarBaseDeDatos();
+
         context = browser.newContext();
         Page page = context.newPage();
+        
+        vistaPresentacion = new VistaPresentacion(page);
         vistaLogin = new VistaLogin(page);
+        // PUEDO USAR LA MISMA PAGINA PARA VARIAS VISTAS? 
+        vistaHome = new VistaHome(page);
+        vistaMascota = new VistaMascota(page);
     }
 
     @AfterEach
@@ -60,10 +74,28 @@ public class VistaLoginE2E {
 
     @Test
     void deberiaNavegarAlHomeSiElUsuarioExiste() {
+        vistaLogin.irALogin();
         vistaLogin.escribirEMAIL("test@unlam.edu.ar");
         vistaLogin.escribirClave("test");
         vistaLogin.darClickEnIniciarSesion();
         String url = vistaLogin.obtenerURLActual();
         assertThat(url, containsStringIgnoringCase("/spring/home"));
+    }
+
+    @Test
+    void debeIngresarUsuarioRegistradoYCrearMascota() {
+        vistaPresentacion.irAPresentacion();
+        vistaPresentacion.darClickEnLogin();
+        vistaLogin.irALogin();
+        vistaLogin.escribirEMAIL("test@unlam.edu.ar");
+        vistaLogin.escribirClave("test");
+        vistaLogin.darClickEnIniciarSesion();
+        vistaHome.irAHome();
+        vistaHome.escribirNombreMascota("Firulero");
+        vistaHome.darClickEnCrearMascota();
+
+        String urlMascota = vistaMascota.obtenerURLActual();
+        assertThat(urlMascota, containsStringIgnoringCase("/spring/mascota"));      
+        assertThat(vistaMascota.obtenerNombreMascota(), containsStringIgnoringCase("Firulero"));
     }
 }

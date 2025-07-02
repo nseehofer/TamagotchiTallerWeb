@@ -26,8 +26,8 @@
     <div class="form-container mt-5 mb-5 p-4">
         <h1 class="titulo text-center">CREAR NUEVA MASCOTA</h1>
         <form th:action="@{'/mascota/crearconpost'}" method="post" class="text-center mt-4">
-            <input name="nombre" type="text" class="form-control mb-3" placeholder="Nombre de tu mascota" required>
-            <button type="submit" class="btn btn-custom">CREAR</button>
+            <input id ="nombre-mascota" name="nombre" type="text" class="form-control mb-3" placeholder="Nombre de tu mascota" required>
+            <button type="submit" id="btn-crear-mascota" class="btn btn-custom">CREAR</button>
         </form>
     </div>
 
