@@ -44,12 +44,11 @@ public class VistaLoginE2E {
 
         context = browser.newContext();
         Page page = context.newPage();
-        
+
         vistaPresentacion = new VistaPresentacion(page);
         vistaLogin = new VistaLogin(page);
         // PUEDO USAR LA MISMA PAGINA PARA VARIAS VISTAS? 
-        vistaHome = new VistaHome(page);
-        vistaMascota = new VistaMascota(page);
+
     }
 
     @AfterEach
@@ -60,7 +59,7 @@ public class VistaLoginE2E {
     @Test
     void deberiaDecirUNLAMEnElNavbar() {
         String texto = vistaLogin.obtenerTextoDeLaBarraDeNavegacion();
-        assertThat("UNLAM", equalToIgnoringCase(texto));
+        assertThat("tamagotchi", equalToIgnoringCase(texto));
     }
 
     @Test
@@ -84,6 +83,9 @@ public class VistaLoginE2E {
 
     @Test
     void debeIngresarUsuarioRegistradoYCrearMascota() {
+        Page page = context.newPage();
+        vistaHome = new VistaHome(page);
+        vistaMascota = new VistaMascota(page);
         vistaPresentacion.irAPresentacion();
         vistaPresentacion.darClickEnLogin();
         vistaLogin.irALogin();
@@ -95,7 +97,7 @@ public class VistaLoginE2E {
         vistaHome.darClickEnCrearMascota();
 
         String urlMascota = vistaMascota.obtenerURLActual();
-        assertThat(urlMascota, containsStringIgnoringCase("/spring/mascota"));      
+        assertThat(urlMascota, containsStringIgnoringCase("/spring/mascota"));
         assertThat(vistaMascota.obtenerNombreMascota(), containsStringIgnoringCase("Firulero"));
     }
 }
