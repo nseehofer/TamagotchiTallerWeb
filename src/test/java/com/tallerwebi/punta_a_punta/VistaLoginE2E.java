@@ -100,4 +100,23 @@ public class VistaLoginE2E {
         assertThat(urlMascota, containsStringIgnoringCase("/spring/mascota"));
         assertThat(vistaMascota.obtenerNombreMascota(), containsStringIgnoringCase("Firulero"));
     }
+
+    @Test
+    void debeIngresarUsuarioRegistradoInteractuarConMascotaConElBotonJugar(){
+        Page page = context.newPage();
+        vistaHome = new VistaHome(page);
+        vistaMascota = new VistaMascota(page);
+        vistaPresentacion.irAPresentacion();
+        vistaPresentacion.darClickEnLogin();
+        vistaLogin.irALogin();
+        vistaLogin.escribirEMAIL("test@unlam.edu.ar");
+        vistaLogin.escribirClave("test");
+        vistaLogin.darClickEnIniciarSesion();
+        vistaHome.irAHome();
+        vistaHome.escribirNombreMascota("Firulero");
+        vistaHome.darClickEnCrearMascota();
+        vistaMascota.darClickEnJugar();
+
+        assertThat(vistaMascota.obtenerEnergiaMascota(), containsStringIgnoringCase("75.0"));
+    }
 }

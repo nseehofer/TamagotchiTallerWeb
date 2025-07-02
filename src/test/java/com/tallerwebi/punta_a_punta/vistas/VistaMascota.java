@@ -16,4 +16,12 @@ public class VistaMascota extends VistaWeb {
     public String obtenerNombreMascota() {
         return this.obtenerTextoDelElemento("#nombre-mascota");
     }
+
+    public String obtenerEnergiaMascota() {
+        return this.obtenerTextoDelElemento("#valor-energia");
+    }
+
+    public void darClickEnJugar(){
+        this.darClickEnElElemento("#jugar");
+    }
 }
