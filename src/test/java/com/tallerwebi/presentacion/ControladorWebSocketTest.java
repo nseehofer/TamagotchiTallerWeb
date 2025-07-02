@@ -1,0 +1,160 @@
+package com.tallerwebi.presentacion;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tallerwebi.dominio.ServicioMascota;
+import com.tallerwebi.dominio.excepcion.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import com.tallerwebi.presentacion.ControladorWebSocket.MascotaDTOEscalaParaId;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDateTime;
+
+
+public class ControladorWebSocketTest {
+    private ServicioMascota servicioMascotaMock;
+    private ControladorWebSocket controladorWebSocket;
+
+    @BeforeEach
+    public void inicializar() {
+        servicioMascotaMock = mock(ServicioMascota.class);
+        controladorWebSocket = new ControladorWebSocket(servicioMascotaMock);
+    }
+    ObjectMapper mapper = new ObjectMapper();
+
+    @Test
+    public void queSePuedaAlimentarConWebSocketYPersistencia() throws Exception {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.alimentar(mascota)).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.alimentarMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString(mascota), respuesta);
+    }
+
+    @Test
+    public void queNoSePuedaAlimentarConWebSocketYPersistenciaSiEstaSatisfecha() throws Exception {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.alimentar(mascota)).thenThrow(new MascotaSatisfecha("Tu mascota está satisfecha"));
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.alimentarMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString("Tu mascota está satisfecha"), respuesta);
+    }
+
+    @Test
+    public void queSePuedaLimpiarConWebSocketYPersistencia() throws Exception, LimpiezaMaximaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.limpiarMascota(mascota)).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.limpiarMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString(mascota), respuesta);
+    }
+
+    @Test
+    public void queNoSePuedaLimpiarConWebSocketYPersistenciaSiEstaLimpia() throws Exception, LimpiezaMaximaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.limpiarMascota(mascota)).thenThrow(new LimpiezaMaximaException("La higiene ya se encuentra al máximo"));
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.limpiarMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString("La higiene ya se encuentra al máximo"), respuesta);
+    }
+
+    @Test
+    public void queSePuedaJugarConWebSocketYPersistencia() throws Exception {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.jugar(mascota)).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.jugarConMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString(mascota), respuesta);
+    }
+
+    @Test
+    public void queNoSePuedaJugarConWebSocketYPersistenciaSiEstaCansada() throws Exception {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.jugar(mascota)).thenThrow(new EnergiaInsuficiente("No podés jugar, te falta energía"));
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.jugarConMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString("No podés jugar, te falta energía"), respuesta);
+    }
+
+    @Test
+    public void queSePuedaDormirConWebSocketYPersistencia() throws Exception, EnergiaMaxima {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.dormir(mascota)).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.dormirConMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString(mascota), respuesta);
+    }
+
+    @Test
+    public void queNoSePuedaDormirConWebSocketYPersistenciaSiEstaDescansada() throws Exception, EnergiaMaxima {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.dormir(mascota)).thenThrow(new EnergiaMaxima("No se puede dormir porque no tiene sueño"));
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.dormirConMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString("No se puede dormir porque no tiene sueño"), respuesta);
+    }
+
+    @Test
+    public void queSePuedaActualizarDatosMascotaYPersistencia() throws Exception {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.actualizarEstadisticas(mascota, LocalDateTime.now())).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.actualizarDatosMascotaYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString(mascota), respuesta);
+    }
+}
