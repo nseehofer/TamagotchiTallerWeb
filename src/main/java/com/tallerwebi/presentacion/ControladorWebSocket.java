@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
@@ -144,10 +145,5 @@ public class ControladorWebSocket {
 
         return JSONMascota;
     }
-
-
-
-
-
 
 }

@@ -26,7 +26,9 @@ public interface ServicioMascota {
 
     MascotaDTO actualizarEstadisticas(MascotaDTO mascotaDTO, LocalDateTime horaActual);
 
-    MascotaDTO dormir(MascotaDTO mascota) throws EnergiaMaxima; ////A borrar
+    MascotaDTO dormir(MascotaDTO mascota) throws EnergiaMaxima;
+
+    Boolean chequearSiLaMascotaSeEnferma(MascotaDTO mascota);
 }
 
 

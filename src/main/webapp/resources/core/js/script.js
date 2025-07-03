@@ -1,6 +1,8 @@
 let mascotaId = document.getElementById("mascota-id").value;
 
-setInterval(actualizarDatosMascota, 60000); //actualiza datos cada un minuto
+
+//actualiza datos cada un minuto
+setInterval(actualizarDatosMascota, 60000);
 
 let basePath = window.location.pathname.split('/')[1];
 const brokerPath = `ws://${window.location.hostname}:8080/${basePath}/wschat`;
@@ -22,10 +24,14 @@ stompClient.onConnect = (frame) => {
         let valorActualizadoDelHambre = JSON.parse(m.body).hambre.toFixed(2);
         let valorHigieneActualizado = JSON.parse (m.body).higiene.toFixed(2);
         let valorEnergiaActualizado = JSON.parse(m.body).energia.toFixed(2);
+        let valorSaludActual = JSON.parse(m.body).salud.toFixed(2);
+        let estaEnfermo = JSON.parse(m.body).estaEnfermo;
         console.log("Mensaje recibido:",valorActualizadoDelHambre);
-        console.log("Mensaje recibido:",valorHigieneActualizado)
-        console.log("Mensaje recibido:",valorEnergiaActualizado)
-        console.log("Mensaje recibido:",valorFelicidadActualizado)
+        console.log("Mensaje recibido:",valorHigieneActualizado);
+        console.log("Mensaje recibido:",valorEnergiaActualizado);
+        console.log("Mensaje recibido:",valorFelicidadActualizado);
+        console.log("salud actual: ", valorSaludActual);
+        console.log("La mascota se enfermo: ", estaEnfermo);
         /*const messagesContainer = document.getElementById("chat-messages");
         const newMessage = document.createElement("p")
         newMessage.textContent = JSON.parse(m.body).content;
@@ -93,3 +99,4 @@ function actualizarDatosMascota() {
         body:JSON.stringify({id: mascotaId})
     });
 }
+

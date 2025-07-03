@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio.implementacion;
 
+import com.tallerwebi.dominio.RandomProvider;
+import com.tallerwebi.dominio.RandomProviderImpl;
 import com.tallerwebi.dominio.RepositorioMascota;
 import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.entidades.Mascota;
@@ -19,11 +21,14 @@ import java.util.List;
 public class ServicioMascotaImp implements ServicioMascota {
 
     private RepositorioMascota repositorioMascota;
+    private RandomProvider randomProvider;
 
     @Autowired
-    public ServicioMascotaImp(RepositorioMascota repositorioMascota) {
+    public ServicioMascotaImp(RepositorioMascota repositorioMascota, RandomProvider randomProvider) {
         this.repositorioMascota = repositorioMascota;
+        this.randomProvider = randomProvider;
     }
+
 
     @Override
     public MascotaDTO crear(MascotaDTO mascota) {
@@ -129,23 +134,53 @@ public class ServicioMascotaImp implements ServicioMascota {
 
     @Override
     public MascotaDTO actualizarEstadisticas(MascotaDTO mascota, LocalDateTime horaActual) {
-        double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toMinutes() * 12.6;
-        double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toMinutes() * 15.7;
-        double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toMinutes() * 19.8;
+        double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toMinutes() * 12.87;
+        double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toMinutes() * 15.19;
+        double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toMinutes() * 17.24;
 
         double higieneActual = mascota.getHigiene() - disminucionHigiene;
         double hambreActual = mascota.getHambre() - disminucionHambre;
         double energiaActual = mascota.getEnergia() - disminucionEnergia;
-        //double felicidadActual = mascota.getFelicidad() - valorDeDisminucion;
+        double felicidadActual = (higieneActual + hambreActual + energiaActual) / 3.0; //promedio de higiene, hambre y energia
+        double saludActual = (higieneActual + hambreActual + energiaActual + felicidadActual) / 4.0; //promedio de todos los stats
 
         mascota.setHigiene(Math.max(higieneActual, 0.0));
         mascota.setHambre(Math.max(hambreActual, 0.0));
         mascota.setEnergia(Math.max(energiaActual, 0.0));
-       // mascota.setFelicidad(Math.max(felicidadActual, 0.0));
+        mascota.setFelicidad(Math.max(felicidadActual, 0.0));
+        mascota.setSalud(Math.max(saludActual, 0.0));
+        mascota.setEstaEnfermo(this.chequearSiLaMascotaSeEnferma(mascota));
 
         this.actualizarMascota(mascota);
 
         return mascota;
 
     }
+
+    @Override
+    public Boolean chequearSiLaMascotaSeEnferma(MascotaDTO mascota) {
+
+        //Si ya esta enferma, no recorre el metodo para evitar que se cure aleatoriamente.
+        if (Boolean.TRUE.equals(mascota.getEstaEnfermo())) {
+            return mascota.getEstaEnfermo();
+        }
+
+        Double salud = mascota.getSalud();
+        Double random = randomProvider.obtenerRandom();
+        Boolean seEnferma;
+
+        if (salud < 10.0) {
+            seEnferma = true;
+        } else if (salud >= 10.0 && salud < 35.0) {
+            seEnferma = random < 0.666;
+        } else if (salud >= 35.0 && salud < 75.0) {
+            seEnferma = random < 0.333;
+        } else if (salud >= 75.0 && salud < 95.0) {
+            seEnferma = random < 0.050;
+        } else {
+            seEnferma = false;
+        }
+        return seEnferma;
+    }
+
 }

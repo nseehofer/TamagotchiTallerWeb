@@ -27,6 +27,8 @@ public class Mascota {
     @Column
     private Boolean estaVivo;
     @Column
+    private Boolean estaEnfermo;
+    @Column
     private LocalDateTime ultimaSiesta;
 
     @Column
@@ -41,7 +43,7 @@ public class Mascota {
     Usuario usuario;
 
     public Mascota(){};
-    public Mascota(Long id, String nombre, Double energia, Double higiene,Double salud,Double felicidad,Double hambre,Boolean estaVivo) {
+    public Mascota(Long id, String nombre, Double energia, Double higiene,Double salud,Double felicidad,Double hambre,Boolean estaVivo, Boolean estaEnfermo) {
         this.id = id;
         this.nombre = nombre;
         this.energia = energia;
@@ -147,7 +149,7 @@ public class Mascota {
         this.usuario_id = usuario_id;
     }
 
-    // SOBREESCIBO HASHCODE & EQUALS TENIENDO EN CUENTA, ID, NOMBE, ID_USUARIO 
+    // SOBREESCIBO HASHCODE & EQUALS TENIENDO EN CUENTA, ID, NOMBE, ID_USUARIO
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -185,8 +187,16 @@ public class Mascota {
         return true;
     }
 
-    
-    
-    
 
+
+
+
+
+    public Boolean getEstaEnfermo() {
+        return this.estaEnfermo;
+    }
+
+    public void setEstaEnfermo(Boolean estaEnfermo) {
+        this.estaEnfermo = estaEnfermo;
+    }
 }
