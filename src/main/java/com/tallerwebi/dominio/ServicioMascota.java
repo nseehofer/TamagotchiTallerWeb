@@ -28,8 +28,7 @@ public interface ServicioMascota {
 
     MascotaDTO dormir(MascotaDTO mascota) throws EnergiaMaxima;
 
-    MascotaDTO chequearSalud(MascotaDTO mascotaDTO);
-
+    Boolean chequearSiLaMascotaSeEnferma(MascotaDTO mascota);
 }
 
 

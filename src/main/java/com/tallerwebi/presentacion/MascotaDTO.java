@@ -141,6 +141,7 @@ public class MascotaDTO {
         mascota.setFelicidad(this.felicidad);
         mascota.setHambre(this.hambre);
         mascota.setEstaVivo(this.estaVivo);
+        mascota.setEstaEnfermo(this.estaEnfermo);
         mascota.setUltimaSiesta(this.ultimaSiesta);
         mascota.setUltimaAlimentacion(this.ultimaAlimentacion);
         mascota.setUltimaHigiene(this.ultimaHigiene);
@@ -178,5 +179,9 @@ public class MascotaDTO {
 
     public void setEstaEnfermo(Boolean estaEnfermo) {
         this.estaEnfermo = estaEnfermo;
+    }
+
+    public void setSalud(double salud) {
+        this.salud = salud;
     }
 }

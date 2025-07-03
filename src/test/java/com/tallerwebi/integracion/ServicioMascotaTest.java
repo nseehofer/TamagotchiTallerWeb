@@ -1,34 +1,42 @@
 package com.tallerwebi.integracion;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
+import com.tallerwebi.dominio.RandomProvider;
 import com.tallerwebi.dominio.RepositorioMascota;
 import com.tallerwebi.dominio.ServicioMascota;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.entidades.Mascota;
+import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
+import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
 import com.tallerwebi.dominio.implementacion.ServicioMascotaImp;
 import com.tallerwebi.presentacion.MascotaDTO;
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServicioMascotaTest {
 
     private RepositorioMascota repositorioMascota;
     private ServicioMascota servicioMascota;
+    private RandomProvider randomProvider;
 
     @BeforeEach
     public void inicializar() {
         this.repositorioMascota = mock(RepositorioMascota.class);
-        this.servicioMascota = new ServicioMascotaImp(this.repositorioMascota);
+        this.randomProvider = mock(RandomProvider.class);
+        this.servicioMascota = new ServicioMascotaImp(this.repositorioMascota, this.randomProvider);
     }
 
     @Test
@@ -113,6 +121,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setHambre(100.0);
         mascotaEntidad.setEnergia(100.0);
         mascotaEntidad.setFelicidad(100.0);
+        mascotaEntidad.setSalud(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -137,6 +146,7 @@ public class ServicioMascotaTest {
         assertThat(mascotaDTO.getHambre() == 0.0, equalTo(true));
         assertThat(mascotaDTO.getEnergia() == 0.0, equalTo(true));
         assertThat(mascotaDTO.getFelicidad() == 0.0, equalTo(true));
+        assertThat(mascotaDTO.getSalud() == 0.0, equalTo(true));
 
     }
 
@@ -159,6 +169,7 @@ public class ServicioMascotaTest {
         //VERIFICACION
         assertThat(mascotaDTO.getHigiene(), equalTo(75.0));
     }
+
 
     @Test
     public void cuandoLaMascotaSeDuermeYTieneEnergiaBajaSeLeSuma25() throws EnergiaMaxima{
@@ -267,40 +278,308 @@ public class ServicioMascotaTest {
         mascotaEntidad.setEnergia(0.0);
         mascotaEntidad.setFelicidad(0.0);
         mascotaEntidad.setHambre(0.0);
+        mascotaEntidad.setSalud(0.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
         MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
 
-        servicioMascota.chequearSalud(mascotaDTO);
+        Boolean resultadoObtenido = servicioMascota.chequearSiLaMascotaSeEnferma(mascotaDTO);
 
-        assertThat(mascotaDTO.getEstaEnfermo(), equalTo(true));
+        assertThat(resultadoObtenido, equalTo(true));
 
     }
 
+    @Test
+    public void queSePuedaCrearUnaMascotaConNombre() {
 
-    /*
+        MascotaDTO mascotaCreada = servicioMascota.crearMascota("firu");
 
-    Pendiente para probar con Mockito Spy
+        assertThat(mascotaCreada, notNullValue());
+        assertThat(mascotaCreada.getNombre(), equalTo("firu"));
+
+    }
 
     @Test
-    public void queLaMascotaSePuedaEnfermarConEstadisticasMedias () {
+    public void queSePuedaCrearUnaMascotaConNombreYUsuario(){
+
+        MascotaDTO mascotaCreada = servicioMascota.crearMascota("firu", 1L);
+
+        assertThat(mascotaCreada, notNullValue());
+        assertThat(mascotaCreada.getNombre(), equalTo("firu"));
+        assertThat(mascotaCreada.getIdUsuario(), equalTo(1L));
+    }
+
+    @Test
+    public void queAlJugarConEnergiaInsuficienteLanceEnergiaInsuficienteException(){
+        //PREPARACION
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setHigiene(100.0);
+        mascotaEntidad.setEnergia(0.0);
+        mascotaEntidad.setFelicidad(100.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        try {
+            servicioMascota.jugar(mascotaDTO);
+        } catch (EnergiaInsuficiente e) {
+            assertThat(e.getMessage(), equalTo("No podés jugar, te falta energía"));
+        }
+
+    }
+
+    @Test
+    public void queAlAlimentarseSeAumenteElNivelDeHambreYSeGuardeHoraDeUltimaAlimentacion() {
+        //PREPARACION
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setHambre(50.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.alimentar(mascotaDTO);
+
+        assertThat(mascotaDTO.getHambre(), equalTo(75.0));
+        assertThat(mascotaDTO.getUltimaAlimentacion(), notNullValue());
+
+    }
+
+    @Test
+    public void queAlIntentarAlimentarConHambreAlMaximoLanceMascotaSatisfechaException() {
+        //PREPARACION
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setHambre(100.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        try {
+            servicioMascota.alimentar(mascotaDTO);
+        } catch (MascotaSatisfecha e){
+            assertThat(e.getMessage(), equalTo("Tu mascota está satisfecha"));
+        }
+    }
+
+    @Test
+    public void queUnaMascotaQueYaEstaEnfermaNoChequeeSiSePuedeEnfermar() {
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setEstaEnfermo(true);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.chequearSiLaMascotaSeEnferma(mascotaDTO);
+
+        assertThat(mascotaDTO.getEstaEnfermo(), equalTo(true));
+    }
+
+    @Test
+    public void queSePuedaCrearUnaMascotaYPersista() {
+        // MascotaDTO que quiero crear
+        MascotaDTO mascotaDTO = new MascotaDTO("firulais");
+
+        // Mascota que simula lo que devuelve el repositorio (ya con ID)
+        Mascota mascotaGuardada = mascotaDTO.obtenerEntidad();
+        mascotaGuardada.setId(1L);
+
+        // Configurar mocks
+        when(repositorioMascota.crear(any())).thenReturn(1L);
+        when(repositorioMascota.obtenerPor(1L)).thenReturn(mascotaGuardada);
+
+        // Ejecutar
+        MascotaDTO resultado = servicioMascota.crear(mascotaDTO);
+
+        // Verificar
+        assertThat(resultado.getId(), equalTo(1L));
+        assertThat(resultado.getNombre(), equalTo("firulais"));
+    }
+
+    @Test
+    public void queSePuedaObtenerUnaListaDeTodasLasMascotas() {
+        Mascota mascota1 = new Mascota();
+        mascota1.setId(1L);
+        mascota1.setNombre("Firu");
+
+        Mascota mascota2 = new Mascota();
+        mascota2.setId(2L);
+        mascota2.setNombre("Luna");
+
+        List<Mascota> listaMascota = new ArrayList <>();
+
+        listaMascota.add(mascota1);
+        listaMascota.add(mascota2);
+
+        when(repositorioMascota.obtenerListaDeMascotas()).thenReturn(listaMascota);
+
+        List <Mascota> resultado = servicioMascota.traerMascotas();
+
+        assertThat(resultado.size(), equalTo(2));
+        assertThat(resultado.get(0).getNombre(), equalTo("Firu"));
+        assertThat(resultado.get(1).getNombre(), equalTo("Luna"));
+
+
+    }
+
+    @Test
+    public void queSePuedanOBtenerLaListaDeMascotasDeUnUsuario() {
+        Mascota mascota1 = new Mascota();
+        mascota1.setId(1L);
+        mascota1.setNombre("Firu");
+
+        Mascota mascota2 = new Mascota();
+        mascota2.setId(2L);
+        mascota2.setNombre("Luna");
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+
+        List<Mascota> listaMascotasUsuario = new ArrayList <>();
+        listaMascotasUsuario.add(mascota1);
+        listaMascotasUsuario.add(mascota2);
+
+        when(repositorioMascota.obtenerListaDeMascotasDeUnUsuario(usuario.getId())).thenReturn(listaMascotasUsuario);
+
+        List <Mascota> resultado = servicioMascota.traerMascotasDeUnUsuario(usuario.getId());
+
+        assertThat(resultado.size(), equalTo(2));
+        assertThat(resultado.get(0).getNombre(), equalTo("Firu"));
+        assertThat(resultado.get(1).getNombre(), equalTo("Luna"));
+    }
+
+   @Test
+    public void queLaMascotaSeEnfermeSiTiene30DeSalud() {
+
 
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
-        mascotaEntidad.setHigiene(70.0);
-        mascotaEntidad.setEnergia(70.0);
-        mascotaEntidad.setFelicidad(70.0);
-        mascotaEntidad.setHambre(70.0);
+        mascotaEntidad.setSalud(30.0);
+
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+        when(randomProvider.obtenerRandom()).thenReturn(0.0);
 
-        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+        MascotaDTO mascotaDTO  = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
 
-        servicioMascota.chequearSalud(mascotaDTO);
+        Boolean resultado = servicioMascota.chequearSiLaMascotaSeEnferma(mascotaDTO);
 
-        assertThat(mascotaDTO.getEstaEnfermo(), equalTo(true));
-
+        assertThat(resultado, equalTo(true));
     }
-    */
+
+    @Test
+    public void queLaMascotaSeEnfermeSiTiene50DeSalud() {
+
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setSalud(50.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+        when(randomProvider.obtenerRandom()).thenReturn(0.0);
+
+        MascotaDTO mascotaDTO  = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        Boolean resultado = servicioMascota.chequearSiLaMascotaSeEnferma(mascotaDTO);
+
+        assertThat(resultado, equalTo(true));
+    }
+
+
+    @Test
+    public void queLaMascotaSeEnfermeSiTiene80DeSalud() {
+
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setSalud(80.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+        when(randomProvider.obtenerRandom()).thenReturn(0.0);
+
+        MascotaDTO mascotaDTO  = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        Boolean resultado = servicioMascota.chequearSiLaMascotaSeEnferma(mascotaDTO);
+
+        assertThat(resultado, equalTo(true));
+    }
+
+    @Test
+    public void queLaMascotaNoSeEnfermeSiTiene100DeSalud() {
+
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setSalud(100.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+        when(randomProvider.obtenerRandom()).thenReturn(0.0);
+
+        MascotaDTO mascotaDTO  = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        Boolean resultado = servicioMascota.chequearSiLaMascotaSeEnferma(mascotaDTO);
+
+        assertThat(resultado, equalTo(false));
+    }
+
+    @Test
+    public void queLaMascotaNoSeEnfermeSiTiene30DeSalud() {
+
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setSalud(30.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+        when(randomProvider.obtenerRandom()).thenReturn(0.999);
+
+        MascotaDTO mascotaDTO  = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        Boolean resultado = servicioMascota.chequearSiLaMascotaSeEnferma(mascotaDTO);
+
+        assertThat(resultado, equalTo(false));
+    }
+
+    @Test
+    public void queLaMascotaNoSeEnfermeSiTiene50DeSalud() {
+
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setSalud(50.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+        when(randomProvider.obtenerRandom()).thenReturn(0.999);
+
+        MascotaDTO mascotaDTO  = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        Boolean resultado = servicioMascota.chequearSiLaMascotaSeEnferma(mascotaDTO);
+
+        assertThat(resultado, equalTo(false));
+    }
+
+    @Test
+    public void queLaMascotaNoSeEnfermeSiTiene80DeSalud() {
+
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setSalud(80.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+        when(randomProvider.obtenerRandom()).thenReturn(0.999);
+
+        MascotaDTO mascotaDTO  = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        Boolean resultado = servicioMascota.chequearSiLaMascotaSeEnferma(mascotaDTO);
+
+        assertThat(resultado, equalTo(false));
+    }
+
 }
+
+
+
+
+

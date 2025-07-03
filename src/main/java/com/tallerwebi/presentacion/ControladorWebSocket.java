@@ -146,9 +146,4 @@ public class ControladorWebSocket {
         return JSONMascota;
     }
 
-
-
-
-
-
 }
