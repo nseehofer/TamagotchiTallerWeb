@@ -149,7 +149,7 @@ public class ControladorWebSocketTest {
         mascota.setId(1L);
 
         when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
-        when(servicioMascotaMock.actualizarEstadisticas(mascota, LocalDateTime.now())).thenReturn(mascota);
+        when(servicioMascotaMock.actualizarEstadisticas(eq(mascota), any(LocalDateTime.class))).thenReturn(mascota);
 
         MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
 
