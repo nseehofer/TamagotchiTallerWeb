@@ -3,6 +3,7 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.entidades.Mascota;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
+import com.tallerwebi.dominio.excepcion.MascotaSanaException;
 import com.tallerwebi.presentacion.MascotaDTO;
 
 import javax.transaction.Transactional;
@@ -29,6 +30,8 @@ public interface ServicioMascota {
     MascotaDTO dormir(MascotaDTO mascota) throws EnergiaMaxima;
 
     Boolean chequearSiLaMascotaSeEnferma(MascotaDTO mascota);
+
+    MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException;
 }
 
 

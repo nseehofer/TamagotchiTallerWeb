@@ -1,9 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
-import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
-import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
+import com.tallerwebi.dominio.excepcion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tallerwebi.dominio.ServicioMascota;
-import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
 
 import java.time.LocalDateTime;
 
@@ -121,6 +118,27 @@ public class ControladorWebSocket {
         } catch (EnergiaMaxima energiaMaxima) {
             String error = mapper.writeValueAsString(
                     "No se puede dormir porque no tiene sueño");
+            return error;
+        }
+
+        String JSONMascota = mapper.writeValueAsString(mascota);
+
+        return JSONMascota;
+    }
+
+    @MessageMapping("/curarMascota")
+    @SendTo("/topic/messages")
+    // RECIBO UN JSON.stringify con el id de la mascota
+    public String curarConMascotaConSocketYPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mascota = servicioMascota.curarMascota(mascota);
+        } catch (MascotaSanaException mascotaSana) {
+            String error = mapper.writeValueAsString(
+                    "La mascota no esta enferma");
             return error;
         }
 

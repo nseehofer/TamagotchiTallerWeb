@@ -1,21 +1,20 @@
 package com.tallerwebi.dominio.implementacion;
 
 import com.tallerwebi.dominio.RandomProvider;
-import com.tallerwebi.dominio.RandomProviderImpl;
 import com.tallerwebi.dominio.RepositorioMascota;
 import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.entidades.Mascota;
-import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
-import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
-import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
-import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.presentacion.MascotaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class ServicioMascotaImp implements ServicioMascota {
@@ -71,12 +70,12 @@ public class ServicioMascotaImp implements ServicioMascota {
         Double energiaADescontarPorJuego = 25.00;
         Double energiaActual = mascota.getEnergia();
         Double higieneActual = mascota.getHigiene();
-        Double felicidadActual = mascota.getFelicidad();
+        Double hambreActual = mascota.getHambre();
 
         if (energiaActual >= energiaADescontarPorJuego) {
             mascota.setEnergia(energiaActual - energiaADescontarPorJuego);
             mascota.setHigiene(higieneActual - 25.0);
-            mascota.setFelicidad(Math.min(100.00, felicidadActual + 25.0));
+            mascota.setFelicidad(this.acotarDecimal((hambreActual + energiaActual + higieneActual) / 3.0));
             //actualizamos en base de datos
             this.actualizarMascota(mascota);
         } else {
@@ -90,14 +89,14 @@ public class ServicioMascotaImp implements ServicioMascota {
     public MascotaDTO dormir(MascotaDTO mascota) throws EnergiaMaxima {
         Double energiaASumar = 25.00;
         Double energiaActual = mascota.getEnergia();
-        Double felicidadARestar = 25.00;
-        Double felicidadActual = mascota.getFelicidad();
+        Double higieneActual = mascota.getHigiene();
+        Double hambreActual = mascota.getHambre();
 
         if (energiaActual >= 100.00)
             throw new EnergiaMaxima("No se puede dormir porque no tiene sueño");
 
         mascota.setEnergia(Math.min(100.00, energiaActual + energiaASumar));
-        mascota.setFelicidad(Math.max(0.0, felicidadActual - felicidadARestar));
+        mascota.setFelicidad(this.acotarDecimal((hambreActual + energiaActual + higieneActual) / 3.0));
         mascota.setUltimaSiesta(LocalDateTime.now());
         //actualizamos en base de datos
         this.actualizarMascota(mascota);
@@ -108,9 +107,13 @@ public class ServicioMascotaImp implements ServicioMascota {
     public MascotaDTO alimentar(MascotaDTO mascota) {
         Double hambreASumarPorJuego = 25.00;
         Double hambreActual = mascota.getHambre();
+        Double higieneActual = mascota.getHigiene();
+        Double energiaActual = mascota.getEnergia();
+
         if (hambreActual < 100.0) {
             mascota.setHambre(Math.min(100.0, hambreActual + hambreASumarPorJuego));
             mascota.setUltimaAlimentacion(LocalDateTime.now());
+            mascota.setFelicidad(this.acotarDecimal((hambreActual + energiaActual + higieneActual) / 3.0));
             //actualizamos en base de datos
             this.actualizarMascota(mascota);
         } else {
@@ -126,6 +129,7 @@ public class ServicioMascotaImp implements ServicioMascota {
             throw new LimpiezaMaximaException("La higiene ya se encuentra al máximo");
         } else {
             mascota.setHigiene(100.0);
+            mascota.setFelicidad(this.acotarDecimal((mascota.getHambre() + mascota.getEnergia() + mascota.getHigiene()) / 3.0));
             mascota.setUltimaHigiene(LocalDateTime.now());
             this.actualizarMascota(mascota);
             return mascota;
@@ -133,16 +137,34 @@ public class ServicioMascotaImp implements ServicioMascota {
     }
 
     @Override
+    public MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException {
+        if (!mascota.getEstaEnfermo()) {
+            throw new MascotaSanaException("La mascota no esta enferma");
+        } else {
+            mascota.setEstaEnfermo(false);
+            this.actualizarMascota(mascota);
+            return mascota;
+        }
+
+    }
+
+    @Override
     public MascotaDTO actualizarEstadisticas(MascotaDTO mascota, LocalDateTime horaActual) {
-        double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toMinutes() * 12.87;
-        double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toMinutes() * 15.19;
-        double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toMinutes() * 17.24;
+        double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toSeconds() * 0.21;
+        double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toSeconds() * 0.25;
+        double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toSeconds() * 0.28;
 
         double higieneActual = mascota.getHigiene() - disminucionHigiene;
         double hambreActual = mascota.getHambre() - disminucionHambre;
         double energiaActual = mascota.getEnergia() - disminucionEnergia;
-        double felicidadActual = (higieneActual + hambreActual + energiaActual) / 3.0; //promedio de higiene, hambre y energia
-        double saludActual = (higieneActual + hambreActual + energiaActual + felicidadActual) / 4.0; //promedio de todos los stats
+
+        double promedioDeEstadisticas = (higieneActual + hambreActual + energiaActual) / 3.0;
+        double fluctuacionSalud = ThreadLocalRandom.current().nextDouble(-5.0, 5.0);
+
+        double felicidadActual = this.acotarDecimal(promedioDeEstadisticas); //promedio de higiene, hambre y energia
+
+        double saludActual = this.acotarDecimal(promedioDeEstadisticas + fluctuacionSalud); //promedio + o - una fluctuacion random de 5.0
+
 
         mascota.setHigiene(Math.max(higieneActual, 0.0));
         mascota.setHambre(Math.max(hambreActual, 0.0));
@@ -182,5 +204,14 @@ public class ServicioMascotaImp implements ServicioMascota {
         }
         return seEnferma;
     }
+
+    private double acotarDecimal(double valor) {
+        BigDecimal bd = new BigDecimal(valor);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        valor = bd.doubleValue();
+        return valor;
+    }
+
+
 
 }
