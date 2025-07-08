@@ -28,4 +28,9 @@ public class VistaLogin extends VistaWeb {
     public void darClickEnIniciarSesion(){
         this.darClickEnElElemento("#btn-login");
     }
+
+    public void irALogin() {
+    page.navigate("http://localhost:8080/spring/login");
+}
+
 }

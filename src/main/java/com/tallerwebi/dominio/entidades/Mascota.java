@@ -189,6 +189,10 @@ public class Mascota {
     }
 
 
+
+
+
+
     public Boolean getEstaEnfermo() {
         return this.estaEnfermo;
     }

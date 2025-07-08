@@ -37,7 +37,7 @@
       <!-- HASTA ACA -->
 
       <div class="container">
-        <h2 th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
+        <h2 id="nombre-mascota" th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
         <div class="bar-container">
           <div class="bar energy">
             <img class="icon" th:src="@{/img/energy.png}" />
@@ -80,7 +80,7 @@
 
         <div class="button-container">
           <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button" onclick="jugar()">
+          <button class="button" id="jugar" onclick="jugar()">
             <img class="icon" th:src="@{/img/game-black.png}" />
           </button>
 
