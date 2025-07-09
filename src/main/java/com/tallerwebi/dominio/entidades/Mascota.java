@@ -27,6 +27,8 @@ public class Mascota {
     @Column
     private Boolean estaVivo;
     @Column
+    private Boolean estaEnfermo;
+    @Column
     private LocalDateTime ultimaSiesta;
 
     @Column
@@ -35,13 +37,17 @@ public class Mascota {
     @Column
     private LocalDateTime ultimaHigiene;
 
+    @Column
+    private Boolean estaAbrigada;
+
+
     private Long usuario_id;
     @ManyToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "id", insertable = false, updatable=false)
     Usuario usuario;
 
     public Mascota(){};
-    public Mascota(Long id, String nombre, Double energia, Double higiene,Double salud,Double felicidad,Double hambre,Boolean estaVivo) {
+    public Mascota(Long id, String nombre, Double energia, Double higiene,Double salud,Double felicidad,Double hambre,Boolean estaVivo, Boolean estaEnfermo, Boolean estaAbrigada) {
         this.id = id;
         this.nombre = nombre;
         this.energia = energia;
@@ -50,9 +56,11 @@ public class Mascota {
         this.felicidad=felicidad;
         this.hambre= hambre;
         this.estaVivo=estaVivo;
+        this.estaEnfermo=estaEnfermo;
         this.ultimaAlimentacion = LocalDateTime.now();
         this.ultimaHigiene = LocalDateTime.now();
         this.ultimaSiesta = LocalDateTime.now();
+        this.estaAbrigada = false;
     }
 
     public Long getId() {
@@ -147,7 +155,7 @@ public class Mascota {
         this.usuario_id = usuario_id;
     }
 
-    // SOBREESCIBO HASHCODE & EQUALS TENIENDO EN CUENTA, ID, NOMBE, ID_USUARIO 
+    // SOBREESCIBO HASHCODE & EQUALS TENIENDO EN CUENTA, ID, NOMBE, ID_USUARIO
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -185,8 +193,23 @@ public class Mascota {
         return true;
     }
 
-    
-    
-    
+
+
+    public Boolean getEstaEnfermo() {
+        return this.estaEnfermo;
+    }
+
+    public void setEstaEnfermo(Boolean estaEnfermo) {
+        this.estaEnfermo = estaEnfermo;
+    }
+    public Boolean getEstaAbrigada() {
+        return estaAbrigada;
+    }
+    public void setEstaAbrigada(Boolean estaAbrigada) {
+        this.estaAbrigada = estaAbrigada;
+    }
+
+
+
 
 }

@@ -30,14 +30,25 @@
       </div>
 
       <div th:if="${climaUrl}" class="d-flex flex-row align-items-center justify-content-center gap-3">
-        <p th:text="'Región: ' + ${climaUrl.zonaHoraria}"> </p>
-        <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}"> </p>
-        <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'"></p>
+        <p th:text="'Región: ' + ${climaUrl.zonaHoraria}"style="margin-bottom:0%"> </p>
+        <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}" style="margin-bottom:0%"> </p>
+        <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'" style="margin-bottom:0%"></p>
+      <!-- "&lt" es igual que usar "<", es para que el editor no chille --> 
+        <div th:if="${temperaturaActual &lt 25.0}" class="imagen-glow">
+          <img class="icon icon-cold" th:src="@{/img/otroCopo.png}"/>
+          <button id="btn-abrigar" class="button" onclick="abrigarMascota()">
+          <img class="icon icon-cold" th:src="@{/img/calefaccion.png}"/>
+          </button>
+        </div>
       </div>
       <!-- HASTA ACA -->
 
+      <div id="mensaje-enfermedad" class="alert alert-danger d-none text-center mt-3">
+        ¡Oh no! ¡<span th:text="${mascota.nombre}"></span> está enfermo! Curalo antes de que sea tarde...
+      </div>
+
       <div class="container">
-        <h2 th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
+        <h2 id="nombre-mascota" th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
         <div class="bar-container">
           <div class="bar energy">
             <img class="icon" th:src="@{/img/energy.png}" />
@@ -80,16 +91,15 @@
 
         <div class="button-container">
           <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button" onclick="jugar()">
+          <button class="button" id="jugar" onclick="jugar()">
             <img class="icon" th:src="@{/img/game-black.png}" />
           </button>
 
 
-          <form action="/ruta2" method="post">
-            <button class="button">
+          <input name="id" type="hidden" th:value="${mascota.id}">
+          <button class="button" onclick="curarMascota()">
               <img class="icon" th:src="@{/img/medicine-black.png}" />
-            </button>
-          </form>
+          </button>
 
 
           <input name="id" type="hidden" th:value="${mascota.id}">

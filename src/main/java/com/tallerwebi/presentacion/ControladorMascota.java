@@ -46,12 +46,14 @@ public class ControladorMascota {
         Usuario usuarioObtenido = this.servicioLogin.buscarUsuarioPorEmail(emailDeUsuarioEnSesion);
         MascotaDTO mascotaAGuardar = this.servicioMascota.crearMascota(nombre,usuarioObtenido.getId());
 
-        //
+        
         Clima climaUrl = this.servicioTemperatura.getTemperatura(request);
+      
 
         if(climaUrl != null) {
             modelo.addAttribute("climaUrl", climaUrl);
-            modelo.addAttribute("temperaturaActual", climaUrl.obtenerTemperaturaActual());           
+            modelo.addAttribute("temperaturaActual",climaUrl.obtenerTemperaturaActual());
+            this.servicioMascota.siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(climaUrl, mascotaAGuardar);         
         } else {
             modelo.addAttribute("error", "No se pudo obtener la temperatura. Verifique las coordenadas.");
         }
@@ -94,9 +96,12 @@ public class ControladorMascota {
         Usuario usuarioObtenido = this.servicioLogin.buscarUsuarioPorEmail(emailDeUsuarioEnSesion);
         Clima climaUrl = this.servicioTemperatura.getTemperatura(request);
 
+
         if(climaUrl != null) {
             modelo.addAttribute("climaUrl", climaUrl);
-            modelo.addAttribute("temperaturaActual", climaUrl.obtenerTemperaturaActual());           
+            modelo.addAttribute("temperaturaActual", climaUrl.obtenerTemperaturaActual());
+            
+            this.servicioMascota.siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(climaUrl, mascota);           
         } else {
             modelo.addAttribute("error", "No se pudo obtener la temperatura. Verifique las coordenadas.");
         }
@@ -152,9 +157,13 @@ public class ControladorMascota {
         return new ModelAndView("mascota",modelo);
     }
 
-    @RequestMapping(path = "/mascota/cementerio", method = RequestMethod.POST)
+    @RequestMapping(path = "/mascota/cementerio", method = RequestMethod.GET)
     public ModelAndView verMascotaMuerta(Long id) {
         MascotaDTO mascota = servicioMascota.traerUnaMascota(id);
+        if (mascota == null || mascota.getEstaVivo()) {
+
+            return new ModelAndView("redirect:/home");
+        }
         modelo.put("mascota", mascota);
         return new ModelAndView("cementerio", modelo);
     }

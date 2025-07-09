@@ -343,6 +343,7 @@ public class ControladorMascotaTest {
         Long idMascota = 1L;
         MascotaDTO mascotaDePrueba = new MascotaDTO("Firulais");
         mascotaDePrueba.setId(idMascota);
+        mascotaDePrueba.setEstaVivo(false);
 
         when(this.servicioMascotaMock.traerUnaMascota(anyLong())).thenReturn(mascotaDePrueba);
 
@@ -350,6 +351,20 @@ public class ControladorMascotaTest {
 
         assertThat(modelAndView.getViewName(), equalTo("cementerio"));
         assertThat(modelAndView.getModel().get("mascota"), equalTo(mascotaDePrueba));
+    }
+
+    @Test
+    public void queAlVerUnaMascotaVivaSeRedirijaAlHome() {
+        Long idMascota = 1L;
+        MascotaDTO mascotaDePrueba = new MascotaDTO("Firulais");
+        mascotaDePrueba.setId(idMascota);
+        mascotaDePrueba.setEstaVivo(true);
+
+        when(this.servicioMascotaMock.traerUnaMascota(anyLong())).thenReturn(mascotaDePrueba);
+
+        ModelAndView modelAndView = controladorMascota.verMascotaMuerta(idMascota);
+
+        assertThat(modelAndView.getViewName(), equalTo("redirect:/home"));
     }
 
     @Test
