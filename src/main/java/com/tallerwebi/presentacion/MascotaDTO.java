@@ -184,4 +184,13 @@ public class MascotaDTO {
     public void setSalud(double salud) {
         this.salud = salud;
     }
+
+    public boolean getEstavivo() {
+        return this.estaVivo;
+    }
+
+
+    public void setEstaVivo(boolean estaVivo) {
+        this.estaVivo = estaVivo;
+    }
 }

@@ -152,9 +152,13 @@ public class ControladorMascota {
         return new ModelAndView("mascota",modelo);
     }
 
-    @RequestMapping(path = "/mascota/cementerio", method = RequestMethod.POST)
+    @RequestMapping(path = "/mascota/cementerio", method = RequestMethod.GET)
     public ModelAndView verMascotaMuerta(Long id) {
         MascotaDTO mascota = servicioMascota.traerUnaMascota(id);
+        if (mascota == null || mascota.getEstaVivo()) {
+
+            return new ModelAndView("redirect:/home");
+        }
         modelo.put("mascota", mascota);
         return new ModelAndView("cementerio", modelo);
     }

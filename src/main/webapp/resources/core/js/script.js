@@ -24,25 +24,31 @@ stompClient.onConnect = (frame) => {
         let valorActualizadoDelHambre = JSON.parse(m.body).hambre.toFixed(2);
         let valorHigieneActualizado = JSON.parse (m.body).higiene.toFixed(2);
         let valorEnergiaActualizado = JSON.parse(m.body).energia.toFixed(2);
-        let valorSaludActual = JSON.parse(m.body).salud.toFixed(2);
         let estaEnfermo = JSON.parse(m.body).estaEnfermo;
+        let estaVivo = JSON.parse(m.body).estaVivo;
 
-        const valorHambre = document.getElementById("valor-hambre");
-        const valorHigiene = document.getElementById("valor-higiene");
-        const valorEnergia = document.getElementById("valor-energia");
-        const valorFelicidad = document.getElementById("valor-felicidad");
-
-        valorHambre.textContent = valorActualizadoDelHambre + '%';
-        valorHigiene.textContent = valorHigieneActualizado + '%';
-        valorEnergia.textContent = valorEnergiaActualizado + '%';
-        valorFelicidad.textContent = valorFelicidadActualizado + '%';
-
-        const mensajeEnfermedad = document.getElementById("mensaje-enfermedad");
-        if(estaEnfermo){
-            mensajeEnfermedad.classList.remove("d-none");
+        if(!estaVivo){
+            window.location.href = `/${basePath}/mascota/cementerio?id=${mascotaId}`;
         } else {
-            mensajeEnfermedad.classList.add("d-none");
+            const valorHambre = document.getElementById("valor-hambre");
+            const valorHigiene = document.getElementById("valor-higiene");
+            const valorEnergia = document.getElementById("valor-energia");
+            const valorFelicidad = document.getElementById("valor-felicidad");
+
+            valorHambre.textContent = valorActualizadoDelHambre + '%';
+            valorHigiene.textContent = valorHigieneActualizado + '%';
+            valorEnergia.textContent = valorEnergiaActualizado + '%';
+            valorFelicidad.textContent = valorFelicidadActualizado + '%';
+
+            const mensajeEnfermedad = document.getElementById("mensaje-enfermedad");
+            if(estaEnfermo){
+                mensajeEnfermedad.classList.remove("d-none");
+            } else {
+                mensajeEnfermedad.classList.add("d-none");
+            }
         }
+
+
     });
 };
 

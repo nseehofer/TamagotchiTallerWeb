@@ -190,9 +190,6 @@ public class Mascota {
 
 
 
-
-
-
     public Boolean getEstaEnfermo() {
         return this.estaEnfermo;
     }
@@ -200,4 +197,6 @@ public class Mascota {
     public void setEstaEnfermo(Boolean estaEnfermo) {
         this.estaEnfermo = estaEnfermo;
     }
+
+
 }

@@ -150,7 +150,7 @@ public class ControladorWebSocket {
     @MessageMapping("/actualizar")
     @SendTo("/topic/messages")
     // RECIBO UN JSON.stringify con el id de la mascota
-    public String actualizarDatosMascotaYPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+    public String actualizarDatosMascotaYPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception, MascotaMuertaException {
 
         MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
 

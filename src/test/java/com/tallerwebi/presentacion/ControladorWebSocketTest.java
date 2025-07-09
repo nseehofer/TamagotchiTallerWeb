@@ -144,7 +144,7 @@ public class ControladorWebSocketTest {
     }
 
     @Test
-    public void queSePuedaActualizarDatosMascotaYPersistencia() throws Exception {
+    public void queSePuedaActualizarDatosMascotaYPersistencia() throws Exception, MascotaMuertaException {
         MascotaDTO mascota = new MascotaDTO("Firulais");
         mascota.setId(1L);
 

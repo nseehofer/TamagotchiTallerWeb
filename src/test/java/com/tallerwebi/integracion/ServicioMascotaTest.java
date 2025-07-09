@@ -76,7 +76,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void queLasEstadisticasBajenProgresivamenteConElTiempo()  {
+    public void queLasEstadisticasBajenProgresivamenteConElTiempo() throws MascotaMuertaException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -84,6 +84,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setHambre(100.0);
         mascotaEntidad.setEnergia(100.0);
         mascotaEntidad.setFelicidad(100.0);
+        mascotaEntidad.setEstaVivo(true);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -112,7 +113,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void queAlPasarUnTiempoExcesivamenteLargoLasEstadisticasNoDisminuyenMenosQueCero() {
+    public void queAlPasarUnTiempoExcesivamenteLargoLasEstadisticasNoDisminuyenMenosQueCero() throws MascotaMuertaException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -121,6 +122,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setEnergia(100.0);
         mascotaEntidad.setFelicidad(100.0);
         mascotaEntidad.setSalud(100.0);
+        mascotaEntidad.setEstaVivo(true);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 

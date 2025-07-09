@@ -149,7 +149,7 @@ public class ServicioMascotaImp implements ServicioMascota {
     }
 
     @Override
-    public MascotaDTO actualizarEstadisticas(MascotaDTO mascota, LocalDateTime horaActual) {
+    public MascotaDTO actualizarEstadisticas(MascotaDTO mascota, LocalDateTime horaActual) throws MascotaMuertaException {
         double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toSeconds() * 0.21;
         double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toSeconds() * 0.25;
         double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toSeconds() * 0.28;
@@ -172,6 +172,8 @@ public class ServicioMascotaImp implements ServicioMascota {
         mascota.setFelicidad(Math.max(felicidadActual, 0.0));
         mascota.setSalud(Math.max(saludActual, 0.0));
         mascota.setEstaEnfermo(this.chequearSiLaMascotaSeEnferma(mascota));
+
+        this.chequearSiLaMascotaSigueViva(mascota);
 
         this.actualizarMascota(mascota);
 
@@ -203,6 +205,25 @@ public class ServicioMascotaImp implements ServicioMascota {
             seEnferma = false;
         }
         return seEnferma;
+    }
+
+    @Override
+    public MascotaDTO chequearSiLaMascotaSigueViva(MascotaDTO mascota) throws MascotaMuertaException {
+        Double random = randomProvider.obtenerRandom();
+        Double saludActual = mascota.getSalud();
+        Double probabilidadDeMuerte = 0.05 + ((100.0 - saludActual) / 120.0);
+        if (!mascota.getEstavivo()) {
+            throw new MascotaMuertaException("La mascota ya esta muerta");
+        }  else if(!mascota.getEstaEnfermo()){
+            return mascota;
+        } else {
+            if(random < probabilidadDeMuerte) {
+                mascota.setEstaVivo(false);
+                return mascota;
+            } else {
+                return mascota;
+            }
+        }
     }
 
     private double acotarDecimal(double valor) {
