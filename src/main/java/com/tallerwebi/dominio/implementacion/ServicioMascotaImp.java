@@ -198,7 +198,7 @@ public class ServicioMascotaImp implements ServicioMascota {
         if (temperaturaActual <= Clima.temperaturaFria
                 && !(mascota.getEstaAbrigada())) {
             Double saludADisminuir = mascota.getSalud() - 25.0;
-            mascota.setSalud(saludADisminuir);
+            mascota.setSalud(Math.max(0.0, saludADisminuir));
             this.actualizarMascota(mascota);
         } 
 
@@ -212,7 +212,7 @@ public class ServicioMascotaImp implements ServicioMascota {
         }
 
         Double reestablecerSalud = mascota.getSalud() + 25.0;
-        mascota.setSalud(reestablecerSalud);
+        mascota.setSalud(Math.min(reestablecerSalud,100.0));
         mascota.setEstaAbrigada(true);
         this.actualizarMascota(mascota);
 
