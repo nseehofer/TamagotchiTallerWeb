@@ -5,6 +5,8 @@ import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,6 +16,7 @@ import javax.transaction.Transactional;
 public class ServicioLoginImpl implements ServicioLogin {
 
     private RepositorioUsuario repositorioUsuario;
+    private PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     public ServicioLoginImpl(RepositorioUsuario repositorioUsuario){
@@ -22,7 +25,19 @@ public class ServicioLoginImpl implements ServicioLogin {
 
     @Override
     public Usuario consultarUsuario (String email, String password) {
-        return repositorioUsuario.buscarUsuario(email, password);
+        Boolean usuarioYcontraseniaValidos=false;
+
+        Usuario usuario = this.buscarUsuarioPorEmail(email);
+
+        if (usuario != null) {
+            usuarioYcontraseniaValidos = encoder.matches(password, usuario.getPassword());
+            //usuarioYcontraseniaValidos=true;
+        }
+        if(usuarioYcontraseniaValidos) {
+            //return repositorioUsuario.buscarUsuario(email, password);
+            return usuario;
+        }
+        return null;
     }
 
     @Override
@@ -31,6 +46,7 @@ public class ServicioLoginImpl implements ServicioLogin {
         if(usuarioEncontrado != null){
             throw new UsuarioExistente();
         }
+        usuario.setPassword(encoder.encode(usuario.getPassword()));
         repositorioUsuario.guardar(usuario);
     }
 

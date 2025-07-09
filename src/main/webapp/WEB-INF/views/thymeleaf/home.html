@@ -22,7 +22,7 @@
     </div>
 </nav>
 <main role="main" class="container py-5" style="margin-top: 100px;">
-    <p class="bienvenida"><strong>Bienvenido:</strong> <span th:text="${nombreUsuario}">Nombre</span></p>
+    <p class="bienvenida"><strong>Bienvenido:</strong> <span th:text="${nombreUsuario}">Nombre</span>
     <div class="form-container mt-5 mb-5 p-4">
         <h1 class="titulo text-center">CREAR NUEVA MASCOTA</h1>
         <form th:action="@{'/mascota/crearconpost'}" method="post" class="text-center mt-4">
