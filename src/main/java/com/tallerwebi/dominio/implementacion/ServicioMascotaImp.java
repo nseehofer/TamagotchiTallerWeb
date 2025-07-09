@@ -81,7 +81,7 @@ public class ServicioMascotaImp implements ServicioMascota {
 
         if (energiaActual >= energiaADescontarPorJuego) {
             mascota.setEnergia(energiaActual - energiaADescontarPorJuego);
-            mascota.setHigiene(higieneActual - 25.0);
+            mascota.setHigiene(Math.max((higieneActual - 25.0), 0.0));
             mascota.setFelicidad(this.acotarDecimal((hambreActual + energiaActual + higieneActual) / 3.0));
             //actualizamos en base de datos
             mascota.setFelicidad(Math.min(100.00, felicidadActual + 25.0));
