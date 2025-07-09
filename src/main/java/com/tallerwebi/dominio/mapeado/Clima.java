@@ -18,6 +18,8 @@ public class Clima {
     @JsonProperty("hourly")
     private TemperaturaPorHora temperaturaPorHora;
 
+    public static final Double temperaturaFria = 10.0;
+
     public String getZonaHoraria() {
         return zonaHoraria;
     }

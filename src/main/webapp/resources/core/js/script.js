@@ -100,3 +100,15 @@ function actualizarDatosMascota() {
     });
 }
 
+function abrigarMascota() {
+  /*const nodeBtnToWrapUp = document.getElementById("btn-abrigar");
+  
+  nodeBtnToWrapUp.disabled = true;*/
+
+  stompClient.publish({
+    destination: "/app/abrigar",
+    body: JSON.stringify({ id: mascotaId })
+  });
+}
+
+

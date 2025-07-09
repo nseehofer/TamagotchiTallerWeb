@@ -7,7 +7,10 @@ import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.entidades.Mascota;
 import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
 import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
+import com.tallerwebi.dominio.mapeado.Clima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
+import com.tallerwebi.dominio.excepcion.MascotaAbrigadaException;
+import com.tallerwebi.dominio.excepcion.MascotaDesabrigadaException;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.presentacion.MascotaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +31,6 @@ public class ServicioMascotaImp implements ServicioMascota {
         this.repositorioMascota = repositorioMascota;
         this.randomProvider = randomProvider;
     }
-
 
     @Override
     public MascotaDTO crear(MascotaDTO mascota) {
@@ -60,11 +62,11 @@ public class ServicioMascotaImp implements ServicioMascota {
 
     @Override
     public MascotaDTO crearMascota(String nombre) {
-            return new MascotaDTO(nombre);
+        return new MascotaDTO(nombre);
     }
 
     public MascotaDTO crearMascota(String nombre, Long idUsuario) {
-        return new MascotaDTO(nombre,idUsuario);
+        return new MascotaDTO(nombre, idUsuario);
     }
 
     public MascotaDTO jugar(MascotaDTO mascota) {
@@ -77,7 +79,7 @@ public class ServicioMascotaImp implements ServicioMascota {
             mascota.setEnergia(energiaActual - energiaADescontarPorJuego);
             mascota.setHigiene(higieneActual - 25.0);
             mascota.setFelicidad(Math.min(100.00, felicidadActual + 25.0));
-            //actualizamos en base de datos
+            // actualizamos en base de datos
             this.actualizarMascota(mascota);
         } else {
             throw new EnergiaInsuficiente("No podés jugar, te falta energía");
@@ -99,7 +101,7 @@ public class ServicioMascotaImp implements ServicioMascota {
         mascota.setEnergia(Math.min(100.00, energiaActual + energiaASumar));
         mascota.setFelicidad(Math.max(0.0, felicidadActual - felicidadARestar));
         mascota.setUltimaSiesta(LocalDateTime.now());
-        //actualizamos en base de datos
+        // actualizamos en base de datos
         this.actualizarMascota(mascota);
 
         return mascota;
@@ -111,7 +113,7 @@ public class ServicioMascotaImp implements ServicioMascota {
         if (hambreActual < 100.0) {
             mascota.setHambre(Math.min(100.0, hambreActual + hambreASumarPorJuego));
             mascota.setUltimaAlimentacion(LocalDateTime.now());
-            //actualizamos en base de datos
+            // actualizamos en base de datos
             this.actualizarMascota(mascota);
         } else {
             throw new MascotaSatisfecha("Tu mascota está satisfecha");
@@ -122,7 +124,7 @@ public class ServicioMascotaImp implements ServicioMascota {
 
     @Override
     public MascotaDTO limpiarMascota(MascotaDTO mascota) throws LimpiezaMaximaException {
-        if(mascota.getHigiene() == 100.0) {
+        if (mascota.getHigiene() == 100.0) {
             throw new LimpiezaMaximaException("La higiene ya se encuentra al máximo");
         } else {
             mascota.setHigiene(100.0);
@@ -134,15 +136,20 @@ public class ServicioMascotaImp implements ServicioMascota {
 
     @Override
     public MascotaDTO actualizarEstadisticas(MascotaDTO mascota, LocalDateTime horaActual) {
-        double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toMinutes() * 12.87;
-        double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toMinutes() * 15.19;
-        double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toMinutes() * 17.24;
+        double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toMinutes()
+                * 12.87;
+        double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toMinutes()
+                * 15.19;
+        double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toMinutes()
+                * 17.24;
 
         double higieneActual = mascota.getHigiene() - disminucionHigiene;
         double hambreActual = mascota.getHambre() - disminucionHambre;
         double energiaActual = mascota.getEnergia() - disminucionEnergia;
-        double felicidadActual = (higieneActual + hambreActual + energiaActual) / 3.0; //promedio de higiene, hambre y energia
-        double saludActual = (higieneActual + hambreActual + energiaActual + felicidadActual) / 4.0; //promedio de todos los stats
+        double felicidadActual = (higieneActual + hambreActual + energiaActual) / 3.0; // promedio de higiene, hambre y
+                                                                                       // energia
+        double saludActual = (higieneActual + hambreActual + energiaActual + felicidadActual) / 4.0; // promedio de
+                                                                                                     // todos los stats
 
         mascota.setHigiene(Math.max(higieneActual, 0.0));
         mascota.setHambre(Math.max(hambreActual, 0.0));
@@ -160,7 +167,8 @@ public class ServicioMascotaImp implements ServicioMascota {
     @Override
     public Boolean chequearSiLaMascotaSeEnferma(MascotaDTO mascota) {
 
-        //Si ya esta enferma, no recorre el metodo para evitar que se cure aleatoriamente.
+        // Si ya esta enferma, no recorre el metodo para evitar que se cure
+        // aleatoriamente.
         if (Boolean.TRUE.equals(mascota.getEstaEnfermo())) {
             return mascota.getEstaEnfermo();
         }
@@ -182,5 +190,44 @@ public class ServicioMascotaImp implements ServicioMascota {
         }
         return seEnferma;
     }
+    
+    @Override
+    public void siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(Clima clima,
+            MascotaDTO mascota) {
+        Double temperaturaActual = clima.obtenerTemperaturaActual();
+        if (temperaturaActual <= Clima.temperaturaFria
+                && !(mascota.getEstaAbrigada())) {
+            Double saludADisminuir = mascota.getSalud() - 25.0;
+            mascota.setSalud(saludADisminuir);
+            this.actualizarMascota(mascota);
+        } 
 
+    }
+
+    @Override
+    public MascotaDTO abrigar (MascotaDTO mascota) throws MascotaAbrigadaException {
+        
+        if(mascota.getEstaAbrigada()) {
+            throw new MascotaAbrigadaException("La mascota ya esta abrigada");
+        }
+
+        Double reestablecerSalud = mascota.getSalud() + 25.0;
+        mascota.setSalud(reestablecerSalud);
+        mascota.setEstaAbrigada(true);
+        this.actualizarMascota(mascota);
+
+        return mascota;
+    }
+
+    @Override
+    public MascotaDTO desabrigar (MascotaDTO mascota) throws MascotaDesabrigadaException {
+        
+        if(!mascota.getEstaAbrigada()) {
+            throw new MascotaDesabrigadaException("La mascota ya esta desabrigada");
+        }
+        mascota.setEstaAbrigada(false);
+        this.actualizarMascota(mascota);
+
+        return mascota;
+    }
 }

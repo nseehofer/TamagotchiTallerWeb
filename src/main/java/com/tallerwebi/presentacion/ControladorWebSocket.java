@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
+import com.tallerwebi.dominio.excepcion.MascotaAbrigadaException;
+import com.tallerwebi.dominio.excepcion.MascotaDesabrigadaException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -145,5 +148,27 @@ public class ControladorWebSocket {
 
         return JSONMascota;
     }
+
+    @MessageMapping("/abrigar")
+    @SendTo("/topic/messages")
+    // RECIBO UN JSON.stringify con el id de la mascota
+    public String abrigarMascotaConPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mascota = servicioMascota.abrigar(mascota);
+        } catch (MascotaAbrigadaException mascotaAbrigadaException) {
+            String error = mapper.writeValueAsString(
+                    "La mascota ya esta abrigada");
+            return error;
+        }
+
+        String JSONMascota = mapper.writeValueAsString(mascota);
+
+        return JSONMascota;
+    }
+
 
 }
