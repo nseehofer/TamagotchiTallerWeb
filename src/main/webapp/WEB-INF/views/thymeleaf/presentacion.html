@@ -9,6 +9,9 @@
     <link rel="stylesheet" th:href="@{/css/presentacion.css}"/>
 </head>
 <body>
+<audio id="audio-player" autoplay loop>
+    <source th:src="@{/audio/musica.mp3}" type="audio/mpeg">
+</audio>
 <main role="main" class="container text-center py-5">
     <h1 class="tamagotchi-titulo">TAMAGOTCHI</h1>
 
@@ -21,8 +24,12 @@
         <a th:href="@{/nuevo-usuario}" class="btn-registrar">REGISTRARME</a>
     </div>
 
-
+    <div class="container text-center" style="padding-top: 1em;">
+        <button id="play-btn" class="botones btn">Play</button>
+        <button id="pause-btn" class="botones btn">Pause</button>
+    </div>
 </main>
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/musica.js}"></script>
 </body>
 </html>
