@@ -63,7 +63,7 @@ public class ControladorMascota {
         MascotaDTO mascotaGuardada = this.servicioMascota.crear(mascotaAGuardar);
         modelo.put("mascota", mascotaGuardada);
         modelo.put("usuario", usuarioObtenido);
-        return new ModelAndView("mascota", modelo);
+        return new ModelAndView("elegirTipoMascota", modelo);
     }
 
     @RequestMapping(path = "/mascota/jugar", method = RequestMethod.POST)
@@ -167,6 +167,18 @@ public class ControladorMascota {
         modelo.put("mascota", mascota);
         return new ModelAndView("cementerio", modelo);
     }
+
+    @RequestMapping(path = "/mascota/asignar-tipo", method = RequestMethod.POST)
+    public ModelAndView asignarTipoDeMascota(Long id, String tipo) {
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(id);
+        mascota.setTipo(tipo);
+        servicioMascota.actualizarMascota(mascota);
+
+        modelo.put("mascota", mascota);
+        return new ModelAndView("mascota", modelo);
+    }
+
+
 
 
 }

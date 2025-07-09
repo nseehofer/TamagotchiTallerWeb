@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Elegir Mascota</title>
+
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/elegirTipo.css}" />
+</head>
+
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="./home">Tamagotchi</a>
+    <div class="ms-auto">
+        <a class="navbar-brand" href="./cerrar-sesion">Cerrar sesión</a>
+    </div>
+</nav>
+
+<main class="container" style="margin-top: 100px;">
+    <div class="form-container text-center">
+        <h2 class="titulo">ELIGE TU MASCOTA</h2>
+        <form th:action="@{/mascota/ver}" method="post">
+            <!-- ID de la mascota -->
+            <input type="hidden" name="id" th:value="${mascota.id}" />
+            <!-- Tipo de mascota -->
+            <input type="hidden" name="tipoMascota" id="tipoMascotaSeleccionada" />
+
+            <div class="d-flex justify-content-center gap-4 my-4 flex-wrap">
+                <label class="pet-option" id="option-perro">
+                    <input type="radio" name="tipoMascota" value="perro" hidden required>
+                    <img th:src="@{/img/perro.png}" alt="Perro" class="pet-image"/>
+                    <div>Perro</div>
+                </label>
+                <label class="pet-option" id="option-gato">
+                    <input type="radio" name="tipoMascota" value="gato" hidden>
+                    <img th:src="@{/img/gato.png}" alt="Gato" class="pet-image"/>
+                    <div>Gato</div>
+                </label>
+                <label class="pet-option" id="option-capybara">
+                    <input type="radio" name="tipoMascota" value="capybara" hidden>
+                    <img th:src="@{/img/capybara.png}" alt="Capybara" class="pet-image"/>
+                    <div>Capybara</div>
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-custom">CREAR MASCOTA</button>
+        </form>
+    </div>
+</main>
+
+<script>
+    document.querySelectorAll('.pet-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.pet-option').forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            this.querySelector('input[type=radio]').checked = true;
+            document.getElementById('tipoMascotaSeleccionada').value = this.querySelector('input[type=radio]').value;
+        });
+    });
+</script>
+</body>
+</html>

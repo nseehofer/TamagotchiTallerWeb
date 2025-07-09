@@ -40,6 +40,9 @@ public class Mascota {
     @Column
     private Boolean estaAbrigada;
 
+    @Column
+    private String tipo;
+
 
     private Long usuario_id;
     @ManyToOne
@@ -47,7 +50,7 @@ public class Mascota {
     Usuario usuario;
 
     public Mascota(){};
-    public Mascota(Long id, String nombre, Double energia, Double higiene,Double salud,Double felicidad,Double hambre,Boolean estaVivo, Boolean estaEnfermo, Boolean estaAbrigada) {
+    public Mascota(Long id, String nombre, Double energia, Double higiene,Double salud,Double felicidad,Double hambre,Boolean estaVivo, Boolean estaEnfermo, Boolean estaAbrigada, String tipo) {
         this.id = id;
         this.nombre = nombre;
         this.energia = energia;
@@ -61,6 +64,7 @@ public class Mascota {
         this.ultimaHigiene = LocalDateTime.now();
         this.ultimaSiesta = LocalDateTime.now();
         this.estaAbrigada = false;
+        this.tipo = tipo;
     }
 
     public Long getId() {
@@ -193,6 +197,13 @@ public class Mascota {
         return true;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 
 
     public Boolean getEstaEnfermo() {

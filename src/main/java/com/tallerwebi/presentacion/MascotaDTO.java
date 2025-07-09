@@ -21,7 +21,7 @@ public class MascotaDTO {
     private LocalDateTime ultimaSiesta;
     private Long idUsuario;
     private Boolean estaAbrigada;
-
+    private String tipo;
 
 
 
@@ -50,6 +50,7 @@ public class MascotaDTO {
         this.ultimaHigiene = LocalDateTime.now();
         this.ultimaAlimentacion = LocalDateTime.now();
         this.estaAbrigada = false;
+        this.tipo = "desconocido";
     }
     public MascotaDTO(String nombre, Long idUsuario) {
         this.nombre = nombre;
@@ -65,6 +66,7 @@ public class MascotaDTO {
         this.ultimaAlimentacion = LocalDateTime.now();
         this.idUsuario = idUsuario;
         this.estaAbrigada = false;
+        this.tipo = null;
     }
 
     public MascotaDTO(Mascota mascota) {
@@ -81,6 +83,7 @@ public class MascotaDTO {
         this.ultimaHigiene = mascota.getUltimaHigiene();
         this.ultimaAlimentacion = mascota.getUltimaAlimentacion();
         this.estaAbrigada = mascota.getEstaAbrigada();
+        this.tipo = mascota.getTipo();
     }
 
     public Long getId() {
@@ -152,6 +155,7 @@ public class MascotaDTO {
         mascota.setUltimaHigiene(this.ultimaHigiene);
         mascota.setUsuario_id(this.idUsuario);
         mascota.setEstaAbrigada(this.estaAbrigada);
+        mascota.setTipo(this.tipo);
         return mascota;
     }
 
@@ -206,4 +210,13 @@ public class MascotaDTO {
     public void setEstaVivo(boolean estaVivo) {
         this.estaVivo = estaVivo;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
 }
