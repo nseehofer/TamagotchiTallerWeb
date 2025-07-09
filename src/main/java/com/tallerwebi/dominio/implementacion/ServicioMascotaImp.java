@@ -5,6 +5,13 @@ import com.tallerwebi.dominio.RepositorioMascota;
 import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.entidades.Mascota;
 import com.tallerwebi.dominio.excepcion.*;
+import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
+import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
+import com.tallerwebi.dominio.mapeado.Clima;
+import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
+import com.tallerwebi.dominio.excepcion.MascotaAbrigadaException;
+import com.tallerwebi.dominio.excepcion.MascotaDesabrigadaException;
+import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.presentacion.MascotaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +34,6 @@ public class ServicioMascotaImp implements ServicioMascota {
         this.repositorioMascota = repositorioMascota;
         this.randomProvider = randomProvider;
     }
-
 
     @Override
     public MascotaDTO crear(MascotaDTO mascota) {
@@ -59,11 +65,11 @@ public class ServicioMascotaImp implements ServicioMascota {
 
     @Override
     public MascotaDTO crearMascota(String nombre) {
-            return new MascotaDTO(nombre);
+        return new MascotaDTO(nombre);
     }
 
     public MascotaDTO crearMascota(String nombre, Long idUsuario) {
-        return new MascotaDTO(nombre,idUsuario);
+        return new MascotaDTO(nombre, idUsuario);
     }
 
     public MascotaDTO jugar(MascotaDTO mascota) {
@@ -71,12 +77,15 @@ public class ServicioMascotaImp implements ServicioMascota {
         Double energiaActual = mascota.getEnergia();
         Double higieneActual = mascota.getHigiene();
         Double hambreActual = mascota.getHambre();
+        Double felicidadActual = mascota.getFelicidad();
 
         if (energiaActual >= energiaADescontarPorJuego) {
             mascota.setEnergia(energiaActual - energiaADescontarPorJuego);
             mascota.setHigiene(higieneActual - 25.0);
             mascota.setFelicidad(this.acotarDecimal((hambreActual + energiaActual + higieneActual) / 3.0));
             //actualizamos en base de datos
+            mascota.setFelicidad(Math.min(100.00, felicidadActual + 25.0));
+            // actualizamos en base de datos
             this.actualizarMascota(mascota);
         } else {
             throw new EnergiaInsuficiente("No podés jugar, te falta energía");
@@ -208,6 +217,18 @@ public class ServicioMascotaImp implements ServicioMascota {
     }
 
     @Override
+    public void siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(Clima clima,
+            MascotaDTO mascota) {
+        Double temperaturaActual = clima.obtenerTemperaturaActual();
+        if (temperaturaActual <= Clima.temperaturaFria
+                && !(mascota.getEstaAbrigada())) {
+            Double saludADisminuir = mascota.getSalud() - 25.0;
+            mascota.setSalud(saludADisminuir);
+            this.actualizarMascota(mascota);
+        }
+    }
+
+    @Override
     public MascotaDTO chequearSiLaMascotaSigueViva(MascotaDTO mascota) throws MascotaMuertaException {
         Double random = randomProvider.obtenerRandom();
         Double saludActual = mascota.getSalud();
@@ -234,5 +255,30 @@ public class ServicioMascotaImp implements ServicioMascota {
     }
 
 
+    @Override
+    public MascotaDTO abrigar (MascotaDTO mascota) throws MascotaAbrigadaException {
 
+        if(mascota.getEstaAbrigada()) {
+            throw new MascotaAbrigadaException("La mascota ya esta abrigada");
+        }
+
+        Double reestablecerSalud = mascota.getSalud() + 25.0;
+        mascota.setSalud(reestablecerSalud);
+        mascota.setEstaAbrigada(true);
+        this.actualizarMascota(mascota);
+
+        return mascota;
+    }
+
+    @Override
+    public MascotaDTO desabrigar (MascotaDTO mascota) throws MascotaDesabrigadaException {
+
+        if(!mascota.getEstaAbrigada()) {
+            throw new MascotaDesabrigadaException("La mascota ya esta desabrigada");
+        }
+        mascota.setEstaAbrigada(false);
+        this.actualizarMascota(mascota);
+
+        return mascota;
+    }
 }

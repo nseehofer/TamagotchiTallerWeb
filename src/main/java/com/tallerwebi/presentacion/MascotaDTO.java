@@ -20,6 +20,8 @@ public class MascotaDTO {
     private LocalDateTime ultimaHigiene;
     private LocalDateTime ultimaSiesta;
     private Long idUsuario;
+    private Boolean estaAbrigada;
+
 
 
 
@@ -47,6 +49,7 @@ public class MascotaDTO {
         this.ultimaSiesta = LocalDateTime.now();
         this.ultimaHigiene = LocalDateTime.now();
         this.ultimaAlimentacion = LocalDateTime.now();
+        this.estaAbrigada = false;
     }
     public MascotaDTO(String nombre, Long idUsuario) {
         this.nombre = nombre;
@@ -61,6 +64,7 @@ public class MascotaDTO {
         this.ultimaHigiene = LocalDateTime.now();
         this.ultimaAlimentacion = LocalDateTime.now();
         this.idUsuario = idUsuario;
+        this.estaAbrigada = false;
     }
 
     public MascotaDTO(Mascota mascota) {
@@ -76,6 +80,7 @@ public class MascotaDTO {
         this.ultimaSiesta = mascota.getUltimaSiesta();
         this.ultimaHigiene = mascota.getUltimaHigiene();
         this.ultimaAlimentacion = mascota.getUltimaAlimentacion();
+        this.estaAbrigada = mascota.getEstaAbrigada();
     }
 
     public Long getId() {
@@ -146,6 +151,7 @@ public class MascotaDTO {
         mascota.setUltimaAlimentacion(this.ultimaAlimentacion);
         mascota.setUltimaHigiene(this.ultimaHigiene);
         mascota.setUsuario_id(this.idUsuario);
+        mascota.setEstaAbrigada(this.estaAbrigada);
         return mascota;
     }
 
@@ -181,8 +187,15 @@ public class MascotaDTO {
         this.estaEnfermo = estaEnfermo;
     }
 
-    public void setSalud(double salud) {
+    public void setSalud(Double salud) {
         this.salud = salud;
+    }
+
+    public Boolean getEstaAbrigada() {
+        return estaAbrigada;
+    }
+    public void setEstaAbrigada(Boolean estaAbrigada) {
+        this.estaAbrigada = estaAbrigada;
     }
 
     public boolean getEstavivo() {

@@ -30,9 +30,16 @@
       </div>
 
       <div th:if="${climaUrl}" class="d-flex flex-row align-items-center justify-content-center gap-3">
-        <p th:text="'Región: ' + ${climaUrl.zonaHoraria}"> </p>
-        <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}"> </p>
-        <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'"></p>
+        <p th:text="'Región: ' + ${climaUrl.zonaHoraria}"style="margin-bottom:0%"> </p>
+        <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}" style="margin-bottom:0%"> </p>
+        <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'" style="margin-bottom:0%"></p>
+      <!-- "&lt" es igual que usar "<", es para que el editor no chille --> 
+        <div th:if="${temperaturaActual &lt 25.0}" class="imagen-glow">
+          <img class="icon icon-cold" th:src="@{/img/otroCopo.png}"/>
+          <button id="btn-abrigar" class="button" onclick="abrigarMascota()">
+          <img class="icon icon-cold" th:src="@{/img/calefaccion.png}"/>
+          </button>
+        </div>
       </div>
       <!-- HASTA ACA -->
 

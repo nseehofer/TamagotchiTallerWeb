@@ -2,6 +2,9 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidades.Mascota;
 import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
+import com.tallerwebi.dominio.excepcion.MascotaAbrigadaException;
+import com.tallerwebi.dominio.excepcion.MascotaDesabrigadaException;
+import com.tallerwebi.dominio.mapeado.Clima;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import com.tallerwebi.dominio.excepcion.MascotaMuertaException;
 import com.tallerwebi.dominio.excepcion.MascotaSanaException;
@@ -35,6 +38,11 @@ public interface ServicioMascota {
     MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException;
 
     MascotaDTO chequearSiLaMascotaSigueViva(MascotaDTO mascota) throws MascotaMuertaException;
+
+    MascotaDTO abrigar (MascotaDTO mascota) throws MascotaAbrigadaException;
+    MascotaDTO desabrigar (MascotaDTO mascota) throws MascotaDesabrigadaException;
+
+    void siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(Clima clima, MascotaDTO mascota);
 }
 
 
