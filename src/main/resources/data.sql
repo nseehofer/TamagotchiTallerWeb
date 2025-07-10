@@ -6,4 +6,4 @@ INSERT INTO  Mascota(id,energia,estaVivo, estaEnfermo, felicidad,hambre,higiene,
 VALUES
     (null,100,true, false, 100,100,100,'Tamagotcha',100,NOW(),NOW(),NOW(),1,false, 'perro'),
     (null,100,false, false,100,100,100,'Elk Adaver',100,NOW(),NOW(),NOW(),1,false, 'capybara'),
-    (null,100,true, false,100,100,100,'Mascota de usuario',100,NOW(),NOW(),NOW(),2,false, 'gato'),;
+    (null,100,true, false,100,100,100,'Mascota de usuario',100,NOW(),NOW(),NOW(),2,false, 'gato');
