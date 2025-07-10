@@ -30,14 +30,14 @@
       </div>
 
       <div th:if="${climaUrl}" class="d-flex flex-row align-items-center justify-content-center gap-3">
-        <p th:text="'Región: ' + ${climaUrl.zonaHoraria}"style="margin-bottom:0%"> </p>
+        <p th:text="'Región: ' + ${climaUrl.zonaHoraria}" style="margin-bottom:0%"> </p>
         <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}" style="margin-bottom:0%"> </p>
         <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'" style="margin-bottom:0%"></p>
-      <!-- "&lt" es igual que usar "<", es para que el editor no chille --> 
+        <!-- "&lt" es igual que usar "<", es para que el editor no chille -->
         <div th:if="${temperaturaActual &lt 25.0}" class="d-flex align-items-center">
-          <img class="icon icon-cold" th:src="@{/img/otroCopo.png}"/>
+          <img class="icon icon-cold" th:src="@{/img/otroCopo.png}" />
           <button id="btn-abrigar" class="button" onclick="abrigarMascota()">
-          <img class="icon icon-heat" th:src="@{/img/calefaccion.png}"/>
+            <img class="icon icon-heat" th:src="@{/img/calefaccion.png}" />
           </button>
         </div>
       </div>
@@ -98,7 +98,7 @@
 
           <input name="id" type="hidden" th:value="${mascota.id}">
           <button class="button" onclick="curarMascota()">
-              <img class="icon" th:src="@{/img/medicine-black.png}" />
+            <img class="icon" th:src="@{/img/medicine-black.png}" />
           </button>
 
 
@@ -121,6 +121,24 @@
 
         </div>
       </div>
+
+      <div id="modal-error" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content text-center"
+            style="background-color: #fefefe; font-family: 'Press Start 2P', cursive;">
+            <div class="modal-header border-0 justify-content-center">
+              <h5 class="modal-title w-100" style="color: #09a1a1;">¡Ups!</h5>
+              <button type="button" class="btn-close position-absolute end-0 me-3" data-bs-dismiss="modal"
+                aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body py-3">
+              <p id="modal-error-mensaje" class="mb-0" style="font-size: 0.6rem;">Error desconocido.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </main>
 
     <!-- Bootstrap core js -->
