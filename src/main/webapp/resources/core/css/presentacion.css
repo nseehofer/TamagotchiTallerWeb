@@ -63,6 +63,6 @@ a:hover {
 }
 
 .pet-image {
-    width: 300px;       /* Tamaño más pequeño */
-    margin: 50px 10px;     /* Espacio horizontal entre imágenes */
+    width: 300px;
+    margin: 50px 10px;
 }

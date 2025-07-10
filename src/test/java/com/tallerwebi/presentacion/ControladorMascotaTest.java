@@ -51,7 +51,7 @@ public class ControladorMascotaTest {
         servicioMascotaMock = mock(ServicioMascota.class);
         servicioLoginMock = mock(ServicioLogin.class);
         servicioTemperaturaMock = mock(ServicioTemperatura.class);
-        controladorMascota = new ControladorMascota(servicioMascotaMock,servicioLoginMock,servicioTemperaturaMock);
+        controladorMascota = new ControladorMascota(servicioMascotaMock, servicioLoginMock, servicioTemperaturaMock);
         mascotaDTOMock = mock(MascotaDTO.class);
     }
 
@@ -69,9 +69,9 @@ public class ControladorMascotaTest {
         when(this.session.getAttribute("EMAIL")).thenReturn("test@gmail.com");
         when(this.servicioLoginMock.buscarUsuarioPorEmail(anyString())).thenReturn(new Usuario());
 
-        ModelAndView modelAndView = controladorMascota.crearMascota(nombreMascota,request);
+        ModelAndView modelAndView = controladorMascota.crearMascota(nombreMascota, request);
 
-        String vistaEsperada = "mascota";
+        String vistaEsperada = "elegirTipoMascota";
 
         assertThat(vistaEsperada, equalTo(modelAndView.getViewName()));
     }
@@ -128,7 +128,7 @@ public class ControladorMascotaTest {
 
         ModelAndView modelAndView = controladorMascota.crearMascota(nombreMascota, request);
 
-        assertEquals("mascota", modelAndView.getViewName());
+        assertEquals("elegirTipoMascota", modelAndView.getViewName());
         assertEquals(climaMock, modelAndView.getModel().get("climaUrl"));
         assertEquals(23.0, modelAndView.getModel().get("temperaturaActual"));
         assertNull(modelAndView.getModel().get("error"));
@@ -409,4 +409,18 @@ public class ControladorMascotaTest {
         assertEquals(mascotas, modelAndView.getModel().get("mascotas"));
     }
 
+    @Test
+    public void queSePuedaAsignarUnTipoDeMascota() {
+        String tipoMascota = "Perro";
+        MascotaDTO mascotaDTOPrueba = new MascotaDTO("Firulais");
+        mascotaDTOPrueba.setId(1L);
+        mascotaDTOPrueba.setTipo(tipoMascota);
+
+        when(this.servicioMascotaMock.traerUnaMascota(anyLong())).thenReturn(mascotaDTOPrueba);
+
+        ModelAndView modelAndView = controladorMascota.asignarTipoDeMascota(mascotaDTOPrueba.getId(), tipoMascota);
+
+        assertThat(modelAndView.getViewName(), equalTo("mascota"));
+        assertThat(modelAndView.getModel().get("mascota"), equalTo(mascotaDTOPrueba));
+    }
 }

@@ -38,22 +38,22 @@ public class ControladorMascota {
     }
 
     @RequestMapping(path = "/mascota/crearconpost", method = RequestMethod.POST)
-    public ModelAndView crearMascota(String nombre,HttpServletRequest request) {
-        if(request.getSession().getAttribute("ID") == null){
+    public ModelAndView crearMascota(String nombre, HttpServletRequest request) {
+        if (request.getSession().getAttribute("ID") == null) {
             return new ModelAndView("redirect:/login");
         }
         String emailDeUsuarioEnSesion = (String) request.getSession().getAttribute("EMAIL");
         Usuario usuarioObtenido = this.servicioLogin.buscarUsuarioPorEmail(emailDeUsuarioEnSesion);
-        MascotaDTO mascotaAGuardar = this.servicioMascota.crearMascota(nombre,usuarioObtenido.getId());
+        MascotaDTO mascotaAGuardar = this.servicioMascota.crearMascota(nombre, usuarioObtenido.getId());
 
-        
+
         Clima climaUrl = this.servicioTemperatura.getTemperatura(request);
-      
 
-        if(climaUrl != null) {
+
+        if (climaUrl != null) {
             modelo.addAttribute("climaUrl", climaUrl);
-            modelo.addAttribute("temperaturaActual",climaUrl.obtenerTemperaturaActual());
-            this.servicioMascota.siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(climaUrl, mascotaAGuardar);         
+            modelo.addAttribute("temperaturaActual", climaUrl.obtenerTemperaturaActual());
+            this.servicioMascota.siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(climaUrl, mascotaAGuardar);
         } else {
             modelo.addAttribute("error", "No se pudo obtener la temperatura. Verifique las coordenadas.");
         }
@@ -63,29 +63,29 @@ public class ControladorMascota {
         MascotaDTO mascotaGuardada = this.servicioMascota.crear(mascotaAGuardar);
         modelo.put("mascota", mascotaGuardada);
         modelo.put("usuario", usuarioObtenido);
-        return new ModelAndView("mascota", modelo);
+        return new ModelAndView("elegirTipoMascota", modelo);
     }
 
     @RequestMapping(path = "/mascota/jugar", method = RequestMethod.POST)
     public ModelAndView jugar(Long id) {
-        MascotaDTO mascota= servicioMascota.traerUnaMascota(id);
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(id);
         try {
             mascota = servicioMascota.jugar(mascota);
         } catch (EnergiaInsuficiente energiaInsuficiente) {
-            modelo.put("error","No podés jugar, te falta energía");
+            modelo.put("error", "No podés jugar, te falta energía");
         }
 
         //actualiza en bd
         //this.servicioMascota.actualizarMascota(mascota);
         modelo.put("mascota", mascota);
 
-        return new ModelAndView("mascota",modelo);
+        return new ModelAndView("mascota", modelo);
     }
 
     @RequestMapping(path = "/mascota/traerlistado", method = RequestMethod.GET)
     public ModelAndView mostrarListadoDeMascotas() {
         List<Mascota> mascotas = this.servicioMascota.traerMascotas();
-        modelo.put("mascotas",mascotas);
+        modelo.put("mascotas", mascotas);
         return new ModelAndView("inicio", modelo);
     }
 
@@ -97,16 +97,16 @@ public class ControladorMascota {
         Clima climaUrl = this.servicioTemperatura.getTemperatura(request);
 
 
-        if(climaUrl != null) {
+        if (climaUrl != null) {
             modelo.addAttribute("climaUrl", climaUrl);
             modelo.addAttribute("temperaturaActual", climaUrl.obtenerTemperaturaActual());
-            
-            this.servicioMascota.siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(climaUrl, mascota);           
+
+            this.servicioMascota.siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(climaUrl, mascota);
         } else {
             modelo.addAttribute("error", "No se pudo obtener la temperatura. Verifique las coordenadas.");
         }
         modelo.put("mascota", mascota);
-        modelo.put("usuario",usuarioObtenido);
+        modelo.put("usuario", usuarioObtenido);
         return new ModelAndView("mascota", modelo);
     }
 
@@ -127,34 +127,34 @@ public class ControladorMascota {
 
     @RequestMapping(path = "/mascota/alimentar", method = RequestMethod.POST)
     public ModelAndView alimentar(Long id) {
-       MascotaDTO mascota= servicioMascota.traerUnaMascota(id);
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(id);
 
         try {
             mascota = servicioMascota.alimentar(mascota);
         } catch (MascotaSatisfecha mascotaSatisfecha) {
-            modelo.put("error","Tu mascota está satisfecha");
+            modelo.put("error", "Tu mascota está satisfecha");
         }
 
         modelo.put("ultimaAlimentacion", mascota.getUltimaAlimentacion());
         modelo.put("mascota", mascota);
 
-        return new ModelAndView("mascota",modelo);
+        return new ModelAndView("mascota", modelo);
     }
 
     @RequestMapping(path = "/mascota/dormir", method = RequestMethod.POST)
     public ModelAndView dormir(Long id) {
-        MascotaDTO mascota= servicioMascota.traerUnaMascota(id);
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(id);
         try {
             mascota = servicioMascota.dormir(mascota);
         } catch (EnergiaMaxima energiaMaxima) {
-            modelo.put("error","No se puede dormir porque no tiene sueño");
+            modelo.put("error", "No se puede dormir porque no tiene sueño");
         }
 
         //actualiza en bd
         //this.servicioMascota.actualizarMascota(mascota);
         modelo.put("mascota", mascota);
 
-        return new ModelAndView("mascota",modelo);
+        return new ModelAndView("mascota", modelo);
     }
 
     @RequestMapping(path = "/mascota/cementerio", method = RequestMethod.GET)
@@ -166,6 +166,16 @@ public class ControladorMascota {
         }
         modelo.put("mascota", mascota);
         return new ModelAndView("cementerio", modelo);
+    }
+
+    @RequestMapping(path = "/mascota/asignar-tipo", method = RequestMethod.POST)
+    public ModelAndView asignarTipoDeMascota(Long id, String tipoMascota) {
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(id);
+        mascota.setTipo(tipoMascota);
+        servicioMascota.actualizarMascota(mascota);
+
+        modelo.put("mascota", mascota);
+        return new ModelAndView("mascota", modelo);
     }
 
 

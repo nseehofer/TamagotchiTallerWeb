@@ -161,3 +161,32 @@ body {
     filter: brightness(40%);
     transition: filter 0.5s ease;
 }
+
+/*
+.clima-info {
+      position: fixed;
+      top: 70px;
+      right: 20px;
+      padding: 12px;
+      font-size: 12px;
+      z-index: 1000;
+      text-align: center;
+  }
+
+.clima-info p {
+    margin: 4px 0;
+    font-size: 12px;
+}
+
+.icon-cold {
+    height: 5rem;
+    width: 5rem;
+}
+
+.iconos-clima {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+*/
