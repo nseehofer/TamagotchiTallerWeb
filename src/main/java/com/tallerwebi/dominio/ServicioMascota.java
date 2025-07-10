@@ -1,13 +1,8 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.entidades.Mascota;
-import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
-import com.tallerwebi.dominio.excepcion.MascotaAbrigadaException;
-import com.tallerwebi.dominio.excepcion.MascotaDesabrigadaException;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.mapeado.Clima;
-import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
-import com.tallerwebi.dominio.excepcion.MascotaMuertaException;
-import com.tallerwebi.dominio.excepcion.MascotaSanaException;
 import com.tallerwebi.presentacion.MascotaDTO;
 
 import javax.transaction.Transactional;
@@ -29,7 +24,7 @@ public interface ServicioMascota {
 
     MascotaDTO limpiarMascota(MascotaDTO mascotaDTO) throws LimpiezaMaximaException;
 
-    MascotaDTO actualizarEstadisticas(MascotaDTO mascotaDTO, LocalDateTime horaActual) throws MascotaMuertaException;
+    MascotaDTO actualizarEstadisticas(MascotaDTO mascotaDTO, LocalDateTime horaActual) throws MascotaMuertaException, MascotaDespiertaException;
 
     MascotaDTO dormir(MascotaDTO mascota) throws EnergiaMaxima;
 
@@ -43,6 +38,8 @@ public interface ServicioMascota {
     MascotaDTO desabrigar (MascotaDTO mascota) throws MascotaDesabrigadaException;
 
     void siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(Clima clima, MascotaDTO mascota);
+
+    MascotaDTO despertar(MascotaDTO mascota) throws MascotaDespiertaException;
 }
 
 

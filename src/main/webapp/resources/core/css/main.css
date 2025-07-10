@@ -156,3 +156,8 @@ body {
 .div-conteiner-cold{
     width: 40%;
 }
+
+.modo-noche {
+    filter: brightness(40%);
+    transition: filter 0.5s ease;
+}

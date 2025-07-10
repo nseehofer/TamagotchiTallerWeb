@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio.entidades;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.*;
@@ -40,6 +41,10 @@ public class Mascota {
     @Column
     private Boolean estaAbrigada;
 
+    @Column
+    private Boolean estaDormido;
+
+
 
     private Long usuario_id;
     @ManyToOne
@@ -47,7 +52,7 @@ public class Mascota {
     Usuario usuario;
 
     public Mascota(){};
-    public Mascota(Long id, String nombre, Double energia, Double higiene,Double salud,Double felicidad,Double hambre,Boolean estaVivo, Boolean estaEnfermo, Boolean estaAbrigada) {
+    public Mascota(Long id, String nombre, Double energia, Double higiene, Double salud, Double felicidad, Double hambre, Boolean estaVivo, Boolean estaEnfermo, Boolean estaAbrigada, Boolean estaDormido) {
         this.id = id;
         this.nombre = nombre;
         this.energia = energia;
@@ -61,6 +66,7 @@ public class Mascota {
         this.ultimaHigiene = LocalDateTime.now();
         this.ultimaSiesta = LocalDateTime.now();
         this.estaAbrigada = false;
+        this.estaDormido = estaDormido;
     }
 
     public Long getId() {
@@ -209,7 +215,20 @@ public class Mascota {
         this.estaAbrigada = estaAbrigada;
     }
 
+    public Boolean getEstaDormido() {
+        return estaDormido;
+    }
+
+    public void setEstaDormido(Boolean estaDormido) {
+        this.estaDormido = estaDormido;
+    }
 
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }

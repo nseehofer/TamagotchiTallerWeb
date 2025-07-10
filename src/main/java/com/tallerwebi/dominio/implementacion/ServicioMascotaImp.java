@@ -96,15 +96,14 @@ public class ServicioMascotaImp implements ServicioMascota {
 
     @Override
     public MascotaDTO dormir(MascotaDTO mascota) throws EnergiaMaxima {
-        Double energiaASumar = 25.00;
         Double energiaActual = mascota.getEnergia();
         Double higieneActual = mascota.getHigiene();
         Double hambreActual = mascota.getHambre();
 
-        if (energiaActual >= 100.00)
+        if (energiaActual >= 100.00) {
             throw new EnergiaMaxima("No se puede dormir porque no tiene sueño");
-
-        mascota.setEnergia(Math.min(100.00, energiaActual + energiaASumar));
+        }
+        mascota.setEstaDormido(true);
         mascota.setFelicidad(this.acotarDecimal((hambreActual + energiaActual + higieneActual) / 3.0));
         mascota.setUltimaSiesta(LocalDateTime.now());
         //actualizamos en base de datos
@@ -158,35 +157,66 @@ public class ServicioMascotaImp implements ServicioMascota {
     }
 
     @Override
-    public MascotaDTO actualizarEstadisticas(MascotaDTO mascota, LocalDateTime horaActual) throws MascotaMuertaException {
-        double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toSeconds() * 0.21;
-        double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toSeconds() * 0.25;
-        double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toSeconds() * 0.28;
+    public MascotaDTO actualizarEstadisticas(MascotaDTO mascota, LocalDateTime horaActual) throws MascotaMuertaException, MascotaDespiertaException {
+        if(mascota.getEstaDormido()){
+            double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toSeconds() * 0.10;
+            double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toSeconds() * 0.12;
+            double aumentoEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toSeconds() * 0.69;
 
-        double higieneActual = mascota.getHigiene() - disminucionHigiene;
-        double hambreActual = mascota.getHambre() - disminucionHambre;
-        double energiaActual = mascota.getEnergia() - disminucionEnergia;
+            double higieneActual = mascota.getHigiene() - disminucionHigiene;
+            double hambreActual = mascota.getHambre() - disminucionHambre;
+            double energiaActual = mascota.getEnergia() + aumentoEnergia;
 
-        double promedioDeEstadisticas = (higieneActual + hambreActual + energiaActual) / 3.0;
-        double fluctuacionSalud = ThreadLocalRandom.current().nextDouble(-5.0, 5.0);
+            double promedioDeEstadisticas = (higieneActual + hambreActual + energiaActual) / 3.0;
+            double fluctuacionSalud = ThreadLocalRandom.current().nextDouble(-5.0, 5.0);
+            double saludActual = this.acotarDecimal(promedioDeEstadisticas + fluctuacionSalud); //
 
-        double felicidadActual = this.acotarDecimal(promedioDeEstadisticas); //promedio de higiene, hambre y energia
+            double felicidadActual = this.acotarDecimal(promedioDeEstadisticas); //promedio de higiene, hambre y energia
 
-        double saludActual = this.acotarDecimal(promedioDeEstadisticas + fluctuacionSalud); //promedio + o - una fluctuacion random de 5.0
+            mascota.setHigiene(Math.max(higieneActual, 0.0));
+            mascota.setHambre(Math.max(hambreActual, 0.0));
+            mascota.setEnergia(Math.min(energiaActual, 100.0));
+            mascota.setFelicidad(Math.max(felicidadActual, 0.0));
+            mascota.setSalud(Math.max(saludActual, 0.0));
+
+            if(mascota.getEnergia() >= 100.0){
+                this.despertar(mascota);
+            }
+
+            this.actualizarMascota(mascota);
+
+            return mascota;
+
+        } else {
+            double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toSeconds() * 0.21;
+            double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toSeconds() * 0.25;
+            double disminucionEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toSeconds() * 0.28;
+
+            double higieneActual = mascota.getHigiene() - disminucionHigiene;
+            double hambreActual = mascota.getHambre() - disminucionHambre;
+            double energiaActual = mascota.getEnergia() - disminucionEnergia;
+
+            double promedioDeEstadisticas = (higieneActual + hambreActual + energiaActual) / 3.0;
+            double fluctuacionSalud = ThreadLocalRandom.current().nextDouble(-5.0, 5.0);
+
+            double felicidadActual = this.acotarDecimal(promedioDeEstadisticas); //promedio de higiene, hambre y energia
+
+            double saludActual = this.acotarDecimal(promedioDeEstadisticas + fluctuacionSalud); //promedio + o - una fluctuacion random de 5.0
 
 
-        mascota.setHigiene(Math.max(higieneActual, 0.0));
-        mascota.setHambre(Math.max(hambreActual, 0.0));
-        mascota.setEnergia(Math.max(energiaActual, 0.0));
-        mascota.setFelicidad(Math.max(felicidadActual, 0.0));
-        mascota.setSalud(Math.max(saludActual, 0.0));
-        mascota.setEstaEnfermo(this.chequearSiLaMascotaSeEnferma(mascota));
+            mascota.setHigiene(Math.max(higieneActual, 0.0));
+            mascota.setHambre(Math.max(hambreActual, 0.0));
+            mascota.setEnergia(Math.max(energiaActual, 0.0));
+            mascota.setFelicidad(Math.max(felicidadActual, 0.0));
+            mascota.setSalud(Math.max(saludActual, 0.0));
+            mascota.setEstaEnfermo(this.chequearSiLaMascotaSeEnferma(mascota));
 
-        this.chequearSiLaMascotaSigueViva(mascota);
+            this.chequearSiLaMascotaSigueViva(mascota);
 
-        this.actualizarMascota(mascota);
+            this.actualizarMascota(mascota);
 
-        return mascota;
+            return mascota;
+        }
 
     }
 
@@ -281,5 +311,17 @@ public class ServicioMascotaImp implements ServicioMascota {
         this.actualizarMascota(mascota);
 
         return mascota;
+    }
+
+    @Override
+    public MascotaDTO despertar(MascotaDTO mascota) throws MascotaDespiertaException {
+        if(mascota.getEstaDormido()) {
+            mascota.setEstaDormido(false);
+            mascota.setUltimaSiesta(LocalDateTime.now());
+            this.actualizarMascota(mascota);
+            return mascota;
+        } else {
+            throw new MascotaDespiertaException ("La mascota ya esta derpierta");
+        }
     }
 }

@@ -1,4 +1,7 @@
 let mascotaId = document.getElementById("mascota-id").value;
+const mensajeEnfermedad = document.getElementById("mensaje-enfermedad");
+const mainContainer = document.getElementById("main-container");
+let estaDormido = false;
 
 
 //actualiza datos cada un minuto
@@ -26,6 +29,7 @@ stompClient.onConnect = (frame) => {
         let valorEnergiaActualizado = JSON.parse(m.body).energia.toFixed(2);
         let estaEnfermo = JSON.parse(m.body).estaEnfermo;
         let estaVivo = JSON.parse(m.body).estaVivo;
+        estaDormido= JSON.parse(m.body).estaDormido;
 
         if(!estaVivo){
             window.location.href = `/${basePath}/mascota/cementerio?id=${mascotaId}`;
@@ -40,12 +44,38 @@ stompClient.onConnect = (frame) => {
             valorEnergia.textContent = valorEnergiaActualizado + '%';
             valorFelicidad.textContent = valorFelicidadActualizado + '%';
 
-            const mensajeEnfermedad = document.getElementById("mensaje-enfermedad");
+
             if(estaEnfermo){
                 mensajeEnfermedad.classList.remove("d-none");
             } else {
                 mensajeEnfermedad.classList.add("d-none");
             }
+
+            if(estaDormido){
+                mainContainer.classList.add("modo-noche");
+            } else {
+                mainContainer.classList.remove("modo-noche");
+            }
+
+            const botones = document.querySelectorAll('.button');
+            botones.forEach(boton => {
+                if (boton.getAttribute('onclick') === 'cambiarEstadoDormidoODespierto()') {
+                    boton.disabled = false;
+                    boton.style.cursor = 'pointer';
+                    boton.style.opacity = '1';
+                } else {
+                    if (estaDormido) {
+                        boton.disabled = true;
+                        boton.style.cursor = 'not-allowed';
+                        boton.style.opacity = '0.5';
+                    } else {
+                        boton.disabled = false;
+                        boton.style.cursor = 'pointer';
+                        boton.style.opacity = '1';
+                    }
+                }
+            });
+
         }
 
 
@@ -97,11 +127,20 @@ function curarMascota() {
     });
 }
 
-function dormirMascota() {
-    stompClient.publish({
-        destination: "/app/dormir",
-        body: JSON.stringify({id: mascotaId})
-    });
+function cambiarEstadoDormidoODespierto() {
+    if(estaDormido){
+        stompClient.publish({
+            destination: "/app/despertar",
+            body: JSON.stringify({id: mascotaId})
+        });
+    }
+    if(!estaDormido){
+        stompClient.publish({
+            destination: "/app/dormir",
+            body: JSON.stringify({id: mascotaId})
+        });
+    }
+
 }
 
 function actualizarDatosMascota() {

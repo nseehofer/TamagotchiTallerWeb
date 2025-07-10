@@ -163,7 +163,7 @@ public class ControladorWebSocket {
     @SendTo("/topic/messages")
     // RECIBO UN JSON.stringify con el id de la mascota
     public String actualizarDatosMascotaYPersistencia(MascotaDTOEscalaParaId mascotaParaId)
-            throws Exception, MascotaMuertaException {
+            throws Exception, MascotaMuertaException, MascotaDespiertaException {
 
         MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
 
@@ -210,6 +210,27 @@ public class ControladorWebSocket {
         } catch (MascotaAbrigadaException mascotaAbrigadaException) {
             String error = mapper.writeValueAsString(
                     "La mascota ya esta abrigada");
+            return error;
+        }
+
+        String JSONMascota = mapper.writeValueAsString(mascota);
+
+        return JSONMascota;
+    }
+
+    @MessageMapping("/despertar")
+    @SendTo("/topic/messages")
+    // RECIBO UN JSON.stringify con el id de la mascota
+    public String despertarMascotaConPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mascota = servicioMascota.despertar(mascota);
+        } catch (MascotaDespiertaException mascotaDespiertaException) {
+            String error = mapper.writeValueAsString(
+                    "La mascota ya esta despierta");
             return error;
         }
 

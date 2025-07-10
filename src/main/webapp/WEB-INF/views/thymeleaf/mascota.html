@@ -24,7 +24,7 @@
   </nav>
 
   <body>
-    <main role="main" class="container">
+    <main id="main-container" role="main" class="container">
       <div th:if="${error}">
         <p th:text="${error}" style="color:red;"></p>
       </div>
@@ -110,7 +110,7 @@
           </button>
 
           <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button" onclick="dormirMascota()">
+          <button class="button" onclick="cambiarEstadoDormidoODespierto()">
             <img class="icon" th:src="@{/img/lightOn-black.png}" />
           </button>
 

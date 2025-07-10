@@ -51,7 +51,7 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
     @Override
     public void actualizar(Mascota mascota) {
         String hql = "UPDATE Mascota SET nombre = :nombre, energia = :energia," +
-                "salud = :salud, higiene = :higiene, felicidad = :felicidad, hambre = :hambre, estaVivo = :estaVivo, estaEnfermo = :estaEnfermo, ultimaAlimentacion = :ultimaAlimentacion, ultimaHigiene = :ultimaHigiene, ultimaSiesta = :ultimaSiesta, estaAbrigada = :estaAbrigada WHERE id = :id ";
+                "salud = :salud, higiene = :higiene, felicidad = :felicidad, hambre = :hambre, estaVivo = :estaVivo, estaEnfermo = :estaEnfermo, ultimaAlimentacion = :ultimaAlimentacion, ultimaHigiene = :ultimaHigiene, ultimaSiesta = :ultimaSiesta, estaAbrigada = :estaAbrigada, estaDormido = :estaDormido WHERE id = :id ";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
 
         query.setParameter("id", mascota.getId());
@@ -67,6 +67,7 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
         query.setParameter("ultimaAlimentacion", mascota.getUltimaAlimentacion());
         query.setParameter("ultimaSiesta", mascota.getUltimaSiesta());
         query.setParameter("estaAbrigada" , mascota.getEstaAbrigada());
+        query.setParameter("estaDormido", mascota.getEstaDormido());
         int cantidadDeActualizaciones = query.executeUpdate();
 
         if(cantidadDeActualizaciones > 1){

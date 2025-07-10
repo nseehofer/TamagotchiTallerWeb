@@ -76,7 +76,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void queLasEstadisticasBajenProgresivamenteConElTiempo() throws MascotaMuertaException {
+    public void queLasEstadisticasBajenProgresivamenteConElTiempo() throws MascotaMuertaException, MascotaDespiertaException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -113,7 +113,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void queAlPasarUnTiempoExcesivamenteLargoLasEstadisticasNoDisminuyenMenosQueCero() throws MascotaMuertaException {
+    public void queAlPasarUnTiempoExcesivamenteLargoLasEstadisticasNoDisminuyenMenosQueCero() throws MascotaMuertaException, MascotaDespiertaException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
