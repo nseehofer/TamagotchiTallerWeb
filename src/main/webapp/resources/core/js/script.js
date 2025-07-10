@@ -34,10 +34,11 @@ stompClient.onConnect = (frame) => {
             modalBootstrap.show();
 
             setTimeout(() => {
+                document.activeElement.blur(); 
                 modalBootstrap.hide();
             }, 3000);
-
             return;
+
         }
 
         let valorFelicidadActualizado = contenido.felicidad.toFixed(2);
@@ -46,10 +47,11 @@ stompClient.onConnect = (frame) => {
         let valorEnergiaActualizado = contenido.energia.toFixed(2);
         let estaEnfermo = contenido.estaEnfermo;
         let estaVivo = contenido.estaVivo;
+        estaDormido = contenido.estaDormido;
 
 
 
-        
+
 
         if (!estaVivo) {
             window.location.href = `/${basePath}/mascota/cementerio?id=${mascotaId}`;
@@ -64,14 +66,14 @@ stompClient.onConnect = (frame) => {
             valorEnergia.textContent = valorEnergiaActualizado + '%';
             valorFelicidad.textContent = valorFelicidadActualizado + '%';
 
-            const mensajeEnfermedad = document.getElementById("mensaje-enfermedad");
+           
             if (estaEnfermo) {
                 mensajeEnfermedad.classList.remove("d-none");
             } else {
                 mensajeEnfermedad.classList.add("d-none");
             }
 
-            if(estaDormido){
+            if (estaDormido) {
                 mainContainer.classList.add("modo-noche");
             } else {
                 mainContainer.classList.remove("modo-noche");
@@ -162,14 +164,40 @@ function actualizarDatosMascota() {
 }
 
 function abrigarMascota() {
+    const btn = document.getElementById('btn-abrigar');
     /*const nodeBtnToWrapUp = document.getElementById("btn-abrigar");
     
     nodeBtnToWrapUp.disabled = true;*/
+
+    if (btn.classList.contains('pressed')) {
+        stompClient.publish({
+            destination: "/app/desabrigar",
+            body: JSON.stringify({ id: mascotaId })
+        });
+    }
+
+
+    btn.classList.toggle('pressed');
 
     stompClient.publish({
         destination: "/app/abrigar",
         body: JSON.stringify({ id: mascotaId })
     });
+}
+
+function cambiarEstadoDormidoODespierto() {
+    if (estaDormido) {
+        stompClient.publish({
+            destination: "/app/despertar",
+            body: JSON.stringify({ id: mascotaId })
+        });
+    }
+    if (!estaDormido) {
+        stompClient.publish({
+            destination: "/app/dormir",
+            body: JSON.stringify({ id: mascotaId })
+        });
+    }
 }
 
 
