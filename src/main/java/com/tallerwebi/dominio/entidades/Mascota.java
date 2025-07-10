@@ -46,8 +46,6 @@ public class Mascota {
     @JoinColumn(name = "usuario_id", referencedColumnName = "id", insertable = false, updatable=false)
     Usuario usuario;
 
-    
-
     public Mascota(){};
     public Mascota(Long id, String nombre, Double energia, Double higiene,Double salud,Double felicidad,Double hambre,Boolean estaVivo, Boolean estaEnfermo, Boolean estaAbrigada) {
         this.id = id;
@@ -58,6 +56,7 @@ public class Mascota {
         this.felicidad=felicidad;
         this.hambre= hambre;
         this.estaVivo=estaVivo;
+        this.estaEnfermo=estaEnfermo;
         this.ultimaAlimentacion = LocalDateTime.now();
         this.ultimaHigiene = LocalDateTime.now();
         this.ultimaSiesta = LocalDateTime.now();
@@ -196,9 +195,6 @@ public class Mascota {
 
 
 
-
-
-
     public Boolean getEstaEnfermo() {
         return this.estaEnfermo;
     }
@@ -213,5 +209,7 @@ public class Mascota {
         this.estaAbrigada = estaAbrigada;
     }
 
-    
+
+
+
 }

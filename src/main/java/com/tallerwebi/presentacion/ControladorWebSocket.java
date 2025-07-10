@@ -7,6 +7,7 @@ import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
 import com.tallerwebi.dominio.excepcion.MascotaAbrigadaException;
 import com.tallerwebi.dominio.excepcion.MascotaDesabrigadaException;
 
+import com.tallerwebi.dominio.excepcion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tallerwebi.dominio.ServicioMascota;
-import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
 
 import java.time.LocalDateTime;
 
@@ -32,7 +32,7 @@ public class ControladorWebSocket {
         private Long id;
 
         public MascotaDTOEscalaParaId() {
-            // Constructor vacío necesario para la deserialización 
+            // Constructor vacío necesario para la deserialización
         }
 
         public MascotaDTOEscalaParaId(Long id) {
@@ -47,7 +47,6 @@ public class ControladorWebSocket {
             this.id = id;
         }
     }
-
 
     @MessageMapping("/alimentar")
     @SendTo("/topic/messages")
@@ -93,13 +92,20 @@ public class ControladorWebSocket {
     @MessageMapping("/jugar")
     @SendTo("/topic/messages")
     // RECIBO UN JSON.stringify con el id de la mascota
-    public String jugarConMascotaConSocketYPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+
+    // AGREGARLE EL PARAMETRO RESULTADO PARA EL JUEGO "Integer resultado"
+    public String jugarConMascotaConSocketYPersistencia(MascotaDTOEscalaParaId mascotaParaId)
+            throws Exception {
 
         MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
 
         ObjectMapper mapper = new ObjectMapper();
         try {
+            // RESOLVERLO CON UN SWITCH DENTRO DE "evaluarResultadoMinijuego" 
+            //servicioMascota.evaluarResultadoMinijuego(String resultado, String interaccion)
+            // resolver dentro del servicio con "5 if"
             mascota = servicioMascota.jugar(mascota);
+            
         } catch (EnergiaInsuficiente energiaInsuficiente) {
             String error = mapper.writeValueAsString(
                     "No podés jugar, te falta energía");
@@ -132,17 +138,38 @@ public class ControladorWebSocket {
         return JSONMascota;
     }
 
+    @MessageMapping("/curarMascota")
+    @SendTo("/topic/messages")
+    // RECIBO UN JSON.stringify con el id de la mascota
+    public String curarConMascotaConSocketYPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mascota = servicioMascota.curarMascota(mascota);
+        } catch (MascotaSanaException mascotaSana) {
+            String error = mapper.writeValueAsString(
+                    "La mascota no esta enferma");
+            return error;
+        }
+
+        String JSONMascota = mapper.writeValueAsString(mascota);
+
+        return JSONMascota;
+    }
+
     @MessageMapping("/actualizar")
     @SendTo("/topic/messages")
     // RECIBO UN JSON.stringify con el id de la mascota
-    public String actualizarDatosMascotaYPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+    public String actualizarDatosMascotaYPersistencia(MascotaDTOEscalaParaId mascotaParaId)
+            throws Exception, MascotaMuertaException {
 
         MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
 
         ObjectMapper mapper = new ObjectMapper();
 
         mascota = servicioMascota.actualizarEstadisticas(mascota, LocalDateTime.now());
-
 
         String JSONMascota = mapper.writeValueAsString(mascota);
 
@@ -169,6 +196,5 @@ public class ControladorWebSocket {
 
         return JSONMascota;
     }
-
 
 }

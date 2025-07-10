@@ -2,7 +2,7 @@ let mascotaId = document.getElementById("mascota-id").value;
 
 
 //actualiza datos cada un minuto
-setInterval(actualizarDatosMascota, 60000);
+setInterval(actualizarDatosMascota, 20000);
 
 let basePath = window.location.pathname.split('/')[1];
 const brokerPath = `ws://${window.location.hostname}:8080/${basePath}/wschat`;
@@ -24,27 +24,31 @@ stompClient.onConnect = (frame) => {
         let valorActualizadoDelHambre = JSON.parse(m.body).hambre.toFixed(2);
         let valorHigieneActualizado = JSON.parse (m.body).higiene.toFixed(2);
         let valorEnergiaActualizado = JSON.parse(m.body).energia.toFixed(2);
-        let valorSaludActual = JSON.parse(m.body).salud.toFixed(2);
         let estaEnfermo = JSON.parse(m.body).estaEnfermo;
-        console.log("Mensaje recibido:",valorActualizadoDelHambre);
-        console.log("Mensaje recibido:",valorHigieneActualizado);
-        console.log("Mensaje recibido:",valorEnergiaActualizado);
-        console.log("Mensaje recibido:",valorFelicidadActualizado);
-        console.log("salud actual: ", valorSaludActual);
-        console.log("La mascota se enfermo: ", estaEnfermo);
-        /*const messagesContainer = document.getElementById("chat-messages");
-        const newMessage = document.createElement("p")
-        newMessage.textContent = JSON.parse(m.body).content;
-        messagesContainer.appendChild(newMessage);
-        */
-        const valorHambre = document.getElementById("valor-hambre");
-        const valorHigiene = document.getElementById("valor-higiene");
-        const valorEnergia = document.getElementById("valor-energia");
-        const valorFelicidad = document.getElementById("valor-felicidad");
-        valorHambre.textContent = valorActualizadoDelHambre + '%';
-        valorHigiene.textContent = valorHigieneActualizado + '%';
-        valorEnergia.textContent = valorEnergiaActualizado + '%';
-        valorFelicidad.textContent = valorFelicidadActualizado + '%';
+        let estaVivo = JSON.parse(m.body).estaVivo;
+
+        if(!estaVivo){
+            window.location.href = `/${basePath}/mascota/cementerio?id=${mascotaId}`;
+        } else {
+            const valorHambre = document.getElementById("valor-hambre");
+            const valorHigiene = document.getElementById("valor-higiene");
+            const valorEnergia = document.getElementById("valor-energia");
+            const valorFelicidad = document.getElementById("valor-felicidad");
+
+            valorHambre.textContent = valorActualizadoDelHambre + '%';
+            valorHigiene.textContent = valorHigieneActualizado + '%';
+            valorEnergia.textContent = valorEnergiaActualizado + '%';
+            valorFelicidad.textContent = valorFelicidadActualizado + '%';
+
+            const mensajeEnfermedad = document.getElementById("mensaje-enfermedad");
+            if(estaEnfermo){
+                mensajeEnfermedad.classList.remove("d-none");
+            } else {
+                mensajeEnfermedad.classList.add("d-none");
+            }
+        }
+
+
     });
 };
 
@@ -82,6 +86,13 @@ function limpiarMascota() {
 function jugar() {
     stompClient.publish({
         destination: "/app/jugar",
+        body: JSON.stringify({id: mascotaId})
+    });
+}
+
+function curarMascota() {
+    stompClient.publish({
+        destination: "/app/curarMascota",
         body: JSON.stringify({id: mascotaId})
     });
 }

@@ -144,7 +144,7 @@ public class ControladorWebSocketTest {
     }
 
     @Test
-    public void queSePuedaActualizarDatosMascotaYPersistencia() throws Exception {
+    public void queSePuedaActualizarDatosMascotaYPersistencia() throws Exception, MascotaMuertaException {
         MascotaDTO mascota = new MascotaDTO("Firulais");
         mascota.setId(1L);
 
@@ -157,4 +157,36 @@ public class ControladorWebSocketTest {
 
         assertEquals(mapper.writeValueAsString(mascota), respuesta);
     }
+
+    @Test
+    public void queSePuedaCurarMascotaYPersistencia() throws Exception, MascotaSanaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.curarMascota(eq(mascota))).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.curarConMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString(mascota), respuesta);
+    }
+
+    @Test
+    public void queNoSePuedaCurarMascotaSanaYPersistencia() throws Exception, MascotaSanaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.curarMascota(eq(mascota))).thenThrow(new MascotaSanaException(("La mascota no esta enferma")));
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.curarConMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString("La mascota no esta enferma"), respuesta);
+    }
+
+
 }

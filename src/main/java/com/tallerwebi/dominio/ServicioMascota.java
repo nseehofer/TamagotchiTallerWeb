@@ -6,6 +6,8 @@ import com.tallerwebi.dominio.excepcion.MascotaAbrigadaException;
 import com.tallerwebi.dominio.excepcion.MascotaDesabrigadaException;
 import com.tallerwebi.dominio.mapeado.Clima;
 import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
+import com.tallerwebi.dominio.excepcion.MascotaMuertaException;
+import com.tallerwebi.dominio.excepcion.MascotaSanaException;
 import com.tallerwebi.presentacion.MascotaDTO;
 
 import javax.transaction.Transactional;
@@ -27,11 +29,15 @@ public interface ServicioMascota {
 
     MascotaDTO limpiarMascota(MascotaDTO mascotaDTO) throws LimpiezaMaximaException;
 
-    MascotaDTO actualizarEstadisticas(MascotaDTO mascotaDTO, LocalDateTime horaActual);
+    MascotaDTO actualizarEstadisticas(MascotaDTO mascotaDTO, LocalDateTime horaActual) throws MascotaMuertaException;
 
     MascotaDTO dormir(MascotaDTO mascota) throws EnergiaMaxima;
 
     Boolean chequearSiLaMascotaSeEnferma(MascotaDTO mascota);
+
+    MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException;
+
+    MascotaDTO chequearSiLaMascotaSigueViva(MascotaDTO mascota) throws MascotaMuertaException;
 
     MascotaDTO abrigar (MascotaDTO mascota) throws MascotaAbrigadaException;
     MascotaDTO desabrigar (MascotaDTO mascota) throws MascotaDesabrigadaException;

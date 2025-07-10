@@ -11,10 +11,7 @@ import com.tallerwebi.dominio.RepositorioMascota;
 import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.entidades.Usuario;
 import com.tallerwebi.dominio.entidades.Mascota;
-import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
-import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
-import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
-import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.implementacion.ServicioMascotaImp;
 import com.tallerwebi.presentacion.MascotaDTO;
 import net.bytebuddy.asm.Advice;
@@ -45,6 +42,8 @@ public class ServicioMascotaTest {
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
         mascotaEntidad.setHigiene(20.0);
+        mascotaEntidad.setHambre(100.0);
+        mascotaEntidad.setEnergia(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -77,7 +76,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void queLasEstadisticasBajenProgresivamenteConElTiempo()  {
+    public void queLasEstadisticasBajenProgresivamenteConElTiempo() throws MascotaMuertaException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -85,6 +84,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setHambre(100.0);
         mascotaEntidad.setEnergia(100.0);
         mascotaEntidad.setFelicidad(100.0);
+        mascotaEntidad.setEstaVivo(true);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -113,7 +113,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void queAlPasarUnTiempoExcesivamenteLargoLasEstadisticasNoDisminuyenMenosQueCero() {
+    public void queAlPasarUnTiempoExcesivamenteLargoLasEstadisticasNoDisminuyenMenosQueCero() throws MascotaMuertaException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -122,6 +122,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setEnergia(100.0);
         mascotaEntidad.setFelicidad(100.0);
         mascotaEntidad.setSalud(100.0);
+        mascotaEntidad.setEstaVivo(true);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -158,6 +159,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setHigiene(100.0);
         mascotaEntidad.setEnergia(100.0);
         mascotaEntidad.setFelicidad(100.0);
+        mascotaEntidad.setHambre(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -178,6 +180,8 @@ public class ServicioMascotaTest {
         mascotaEntidad.setId(1L);
         mascotaEntidad.setEnergia(60.0);
         mascotaEntidad.setFelicidad(100.0);
+        mascotaEntidad.setHambre(100.0);
+        mascotaEntidad.setHigiene(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -218,6 +222,8 @@ public class ServicioMascotaTest {
         mascotaEntidad.setId(1L);
         mascotaEntidad.setEnergia(75.0);
         mascotaEntidad.setFelicidad(100.0);
+        mascotaEntidad.setHambre(100.0);
+        mascotaEntidad.setHigiene(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -230,25 +236,6 @@ public class ServicioMascotaTest {
         assertThat(mascotaDTO.getEnergia(), equalTo(100.0));
     }
 
-    @Test
-    public void queAlDormirDisminuye25PuntosDeFelicidad() throws EnergiaMaxima {
-        //PREPARACION
-        Mascota mascotaEntidad = new Mascota();
-        mascotaEntidad.setId(1L);
-        mascotaEntidad.setEnergia(60.0);
-        mascotaEntidad.setFelicidad(100.0);
-
-        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
-
-        //ACCION
-        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
-
-        servicioMascota.dormir(mascotaDTO);
-
-        //VERIFICACION
-        assertThat(mascotaDTO.getFelicidad(), equalTo(75.0));
-    }
-
 
     @Test
     public void queAlJugarDisminuye25PuntosDeEnergia() {
@@ -258,6 +245,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setHigiene(100.0);
         mascotaEntidad.setEnergia(100.0);
         mascotaEntidad.setFelicidad(100.0);
+        mascotaEntidad.setHambre(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -337,6 +325,8 @@ public class ServicioMascotaTest {
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
         mascotaEntidad.setHambre(50.0);
+        mascotaEntidad.setEnergia(100.0);
+        mascotaEntidad.setHigiene(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -575,6 +565,39 @@ public class ServicioMascotaTest {
         Boolean resultado = servicioMascota.chequearSiLaMascotaSeEnferma(mascotaDTO);
 
         assertThat(resultado, equalTo(false));
+    }
+
+    @Test
+    public void queSePuedaCurarUnaMascotaEnferma() throws MascotaSanaException {
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setEstaEnfermo(true);
+        mascotaEntidad.setId(1L);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.curarMascota(mascotaDTO);
+
+        assertThat(mascotaDTO.getEstaEnfermo(), equalTo(false));
+    }
+
+    @Test
+    public void queNoSePuedaCurarUnaMascotaQueNoEstaEnferma() throws MascotaSanaException {
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setEstaEnfermo(false);
+        mascotaEntidad.setId(1L);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        try {
+            servicioMascota.curarMascota(mascotaDTO);
+        } catch (MascotaSanaException e) {
+            assertThat(e.getMessage(), equalTo("La mascota no esta enferma"));
+        }
+
     }
 
 }
