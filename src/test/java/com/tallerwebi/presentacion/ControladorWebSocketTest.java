@@ -188,5 +188,36 @@ public class ControladorWebSocketTest {
         assertEquals(mapper.writeValueAsString("La mascota no esta enferma"), respuesta);
     }
 
+    @Test
+    public void queSePuedaDespertarMascotaYPersistencia() throws Exception, MascotaDespiertaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.despertar(eq(mascota))).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.despertarMascotaConPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString(mascota), respuesta);
+    }
+
+    @Test
+    public void queNoSePuedaDespertarMascotaSiYaEstaDespiertaYPersistencia() throws Exception, MascotaDespiertaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.despertar(eq(mascota))).thenThrow(new MascotaDespiertaException("La mascota ya esta despierta"));
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.despertarMascotaConPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString("La mascota ya esta despierta"), respuesta);
+    }
+
+
 
 }
