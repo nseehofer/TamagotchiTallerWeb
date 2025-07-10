@@ -235,4 +235,12 @@ public class Mascota {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }
