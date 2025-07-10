@@ -616,6 +616,151 @@ public class ServicioMascotaTest {
 
     }
 
+    @Test
+    public void queLaMascotaSeDespierteCuandoSuEnergiaLlegaACien() throws MascotaMuertaException, MascotaDespiertaException {
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setEnergia(60.0);
+        mascotaEntidad.setFelicidad(100.0);
+        mascotaEntidad.setHambre(100.0);
+        mascotaEntidad.setHigiene(100.0);
+        mascotaEntidad.setSalud(100.0);
+        mascotaEntidad.setUltimaSiesta(LocalDateTime.now());
+        mascotaEntidad.setUltimaHigiene(LocalDateTime.now());
+        mascotaEntidad.setUltimaAlimentacion(LocalDateTime.now());
+        mascotaEntidad.setEstaDormido(true);
+
+        LocalDateTime horaAComparar = LocalDateTime.now().plusDays(1);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        //ACCION
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+        servicioMascota.actualizarEstadisticas(mascotaDTO, horaAComparar);
+
+        //VERIFICACION
+        assertThat(mascotaDTO.getEstaDormido(), equalTo(false));
+    }
+
+    @Test
+    public void queNoSePuedaDespertarUnaMascotaQueYaEstaDespierta(){
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setEstaDormido(false);
+        mascotaEntidad.setId(1L);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        try {
+            servicioMascota.despertar(mascotaDTO);
+        } catch (MascotaDespiertaException e) {
+            assertThat(e.getMessage(), equalTo("La mascota ya esta despierta"));
+        }
+    }
+
+    @Test
+    public void queNoSePuedaMorirUnaMascotaQueYaEstaMuerta() {
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setEstaVivo(false);
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setSalud(75.0);
+
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        try {
+            servicioMascota.chequearSiLaMascotaSigueViva(mascotaDTO);
+        } catch (MascotaMuertaException e) {
+            assertThat(e.getMessage(), equalTo("La mascota ya esta muerta"));
+        }
+
+    }
+
+    @Test
+    public void queUnaMascotaQueNoEstaEnfermaNoChequeeSiSePuedeMorir() throws MascotaMuertaException {
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setEstaVivo(true);
+        mascotaEntidad.setEstaEnfermo(false);
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setSalud(75.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.chequearSiLaMascotaSigueViva(mascotaDTO);
+
+        assertThat(mascotaDTO.getEstaEnfermo(), equalTo(false));
+        assertThat(mascotaDTO.getEstaVivo(), equalTo(true));
+    }
+
+    @Test
+    public void queUnaMascotaEnfermaSeMueraCuandoNoPasaElChequeo() throws MascotaMuertaException {
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setEstaVivo(true);
+        mascotaEntidad.setEstaEnfermo(true);
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setSalud(50.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+        when(randomProvider.obtenerRandom()).thenReturn(0.0);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.chequearSiLaMascotaSigueViva(mascotaDTO);
+
+        assertThat(mascotaDTO.getEstavivo(), equalTo(false));
+
+    }
+
+    @Test
+    public void queUnaMascotaEnfermaNoSeMueraCuandoPasaElChequeo() throws MascotaMuertaException {
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setEstaVivo(true);
+        mascotaEntidad.setEstaEnfermo(true);
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setSalud(50.0);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+        when(randomProvider.obtenerRandom()).thenReturn(0.999);
+
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+
+        servicioMascota.chequearSiLaMascotaSigueViva(mascotaDTO);
+
+        assertThat(mascotaDTO.getEstavivo(), equalTo(true));
+
+    }
+
+    @Test
+    public void queLaMascotaNoSeDespierteSiLaEnergiaNoLlegoACien() throws MascotaMuertaException, MascotaDespiertaException {
+        Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setId(1L);
+        mascotaEntidad.setEnergia(20.0);
+        mascotaEntidad.setFelicidad(100.0);
+        mascotaEntidad.setHambre(100.0);
+        mascotaEntidad.setHigiene(100.0);
+        mascotaEntidad.setSalud(100.0);
+        mascotaEntidad.setUltimaSiesta(LocalDateTime.now());
+        mascotaEntidad.setUltimaHigiene(LocalDateTime.now());
+        mascotaEntidad.setUltimaAlimentacion(LocalDateTime.now());
+        mascotaEntidad.setEstaDormido(true);
+
+        LocalDateTime horaAComparar = LocalDateTime.now().plusSeconds(30);
+
+        when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
+
+        //ACCION
+        MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+        servicioMascota.actualizarEstadisticas(mascotaDTO, horaAComparar);
+
+        //VERIFICACION
+        assertThat(mascotaDTO.getEstaDormido(), equalTo(true));
+    }
+
 }
 
 

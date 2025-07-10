@@ -270,7 +270,7 @@ public class ServicioMascotaImp implements ServicioMascota {
         } else {
             if(random < probabilidadDeMuerte) {
                 //LO HARDCODEO ASI NO JODE CUANDO EDITO LOS BTN
-                mascota.setEstaVivo(true);
+                mascota.setEstaVivo(false);
                 return mascota;
             } else {
                 return mascota;
@@ -321,7 +321,7 @@ public class ServicioMascotaImp implements ServicioMascota {
             this.actualizarMascota(mascota);
             return mascota;
         } else {
-            throw new MascotaDespiertaException ("La mascota ya esta derpierta");
+            throw new MascotaDespiertaException ("La mascota ya esta despierta");
         }
     }
 }
