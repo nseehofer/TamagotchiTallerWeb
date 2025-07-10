@@ -112,11 +112,19 @@ function actualizarDatosMascota() {
 }
 
 function abrigarMascota() {
-  /*const nodeBtnToWrapUp = document.getElementById("btn-abrigar");
-  
-  nodeBtnToWrapUp.disabled = true;*/
+const btn = document.getElementById('btn-abrigar');
 
-  stompClient.publish({
+  if(btn.classList.contains('pressed')) {
+    stompClient.publish({
+    destination: "/app/desabrigar",
+    body: JSON.stringify({ id: mascotaId })
+  });
+  }
+
+  
+  btn.classList.toggle('pressed');
+
+   stompClient.publish({
     destination: "/app/abrigar",
     body: JSON.stringify({ id: mascotaId })
   });

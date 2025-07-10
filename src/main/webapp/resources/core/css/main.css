@@ -14,7 +14,7 @@ body {
     gap: 8px;
     padding: 40px 0 40px 0;
     overflow: auto;
-    margin-top:30px;
+    margin-top: 30px;
 }
 
 .bar-container {
@@ -80,7 +80,7 @@ body {
     display: flex;
     justify-content: space-around;
     gap: 1rem;
-    margin-top: 30px!important;
+    margin-top: 30px !important;
 }
 
 .icon {
@@ -128,13 +128,31 @@ body {
     background-color: #faa0a0;
 }
 
-.icon-cold{
-    height:8rem;
-    width:9rem;
-}
-
-.icon-heat{
-    height:4rem;
+.img-icon-cold-heat {
+    width: 100%;
+    height: auto;
 }
 
 
+.btn-class {
+    width: 25%;
+    background-color: #d76c82;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 0 #b6596b;
+    font-weight: bold;
+    cursor: pointer;
+    transition: none;
+}
+
+
+.btn-class.pressed {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #b6596b;
+    background-color: #944653;
+}
+
+.div-conteiner-cold{
+    width: 40%;
+}

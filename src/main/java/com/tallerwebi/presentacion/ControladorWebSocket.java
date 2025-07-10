@@ -197,4 +197,25 @@ public class ControladorWebSocket {
         return JSONMascota;
     }
 
+    @MessageMapping("/desabrigar")
+    @SendTo("/topic/messages")
+    // RECIBO UN JSON.stringify con el id de la mascota
+    public String desabrigarMascotaConPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mascota = servicioMascota.desabrigar(mascota);
+        } catch (MascotaAbrigadaException mascotaAbrigadaException) {
+            String error = mapper.writeValueAsString(
+                    "La mascota ya esta abrigada");
+            return error;
+        }
+
+        String JSONMascota = mapper.writeValueAsString(mascota);
+
+        return JSONMascota;
+    }
+
 }
