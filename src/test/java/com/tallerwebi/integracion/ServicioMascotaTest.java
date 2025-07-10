@@ -14,6 +14,7 @@ import com.tallerwebi.dominio.entidades.Mascota;
 import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.implementacion.ServicioMascotaImp;
 import com.tallerwebi.presentacion.MascotaDTO;
+import javassist.LoaderClassPath;
 import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,6 +86,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setEnergia(100.0);
         mascotaEntidad.setFelicidad(100.0);
         mascotaEntidad.setEstaVivo(true);
+        mascotaEntidad.setEstaDormido(false);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -122,6 +124,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setEnergia(100.0);
         mascotaEntidad.setFelicidad(100.0);
         mascotaEntidad.setSalud(100.0);
+        mascotaEntidad.setEstaDormido(false);
         mascotaEntidad.setEstaVivo(true);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
@@ -174,7 +177,7 @@ public class ServicioMascotaTest {
 
 
     @Test
-    public void cuandoLaMascotaSeDuermeYTieneEnergiaBajaSeLeSuma25() throws EnergiaMaxima{
+    public void cuandoLaMascotaSeAumentaEnergiaConElPasoDelTiempo() throws EnergiaMaxima, MascotaMuertaException, MascotaDespiertaException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -182,15 +185,22 @@ public class ServicioMascotaTest {
         mascotaEntidad.setFelicidad(100.0);
         mascotaEntidad.setHambre(100.0);
         mascotaEntidad.setHigiene(100.0);
+        mascotaEntidad.setSalud(100.0);
+        mascotaEntidad.setUltimaSiesta(LocalDateTime.now());
+        mascotaEntidad.setUltimaHigiene(LocalDateTime.now());
+        mascotaEntidad.setUltimaAlimentacion(LocalDateTime.now());
+
+        LocalDateTime horaAComparar = LocalDateTime.now().plusMinutes(1);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
         //ACCION
         MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
         servicioMascota.dormir(mascotaDTO);
+        servicioMascota.actualizarEstadisticas(mascotaDTO, horaAComparar);
 
         //VERIFICACION
-        assertThat(mascotaDTO.getEnergia(), equalTo(85.0));
+        assertThat(mascotaDTO.getEnergia(), greaterThan(60.0));
     }
 
     @Test
@@ -216,21 +226,27 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void cuandoDuermeYTiene75DeEnergiaSubeSoloHasta100() throws EnergiaMaxima {
+    public void queAlDormirLaEnergiaNoSubeDe100() throws EnergiaMaxima, MascotaMuertaException, MascotaDespiertaException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
-        mascotaEntidad.setEnergia(75.0);
+        mascotaEntidad.setEnergia(60.0);
         mascotaEntidad.setFelicidad(100.0);
         mascotaEntidad.setHambre(100.0);
         mascotaEntidad.setHigiene(100.0);
+        mascotaEntidad.setSalud(100.0);
+        mascotaEntidad.setUltimaSiesta(LocalDateTime.now());
+        mascotaEntidad.setUltimaHigiene(LocalDateTime.now());
+        mascotaEntidad.setUltimaAlimentacion(LocalDateTime.now());
+
+        LocalDateTime horaAComparar = LocalDateTime.now().plusDays(1);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
         //ACCION
         MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
-
         servicioMascota.dormir(mascotaDTO);
+        servicioMascota.actualizarEstadisticas(mascotaDTO, horaAComparar);
 
         //VERIFICACION
         assertThat(mascotaDTO.getEnergia(), equalTo(100.0));
