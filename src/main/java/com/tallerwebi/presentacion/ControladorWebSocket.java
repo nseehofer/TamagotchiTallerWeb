@@ -1,12 +1,6 @@
 package com.tallerwebi.presentacion;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
-import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
-import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
-import com.tallerwebi.dominio.excepcion.MascotaAbrigadaException;
-import com.tallerwebi.dominio.excepcion.MascotaDesabrigadaException;
-
 import com.tallerwebi.dominio.excepcion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -207,9 +201,9 @@ public class ControladorWebSocket {
         ObjectMapper mapper = new ObjectMapper();
         try {
             mascota = servicioMascota.desabrigar(mascota);
-        } catch (MascotaAbrigadaException mascotaAbrigadaException) {
+        } catch (MascotaDesabrigadaException mascotaAbrigadaException) {
             String error = mapper.writeValueAsString(
-                    "La mascota ya esta abrigada");
+                    "La mascota ya esta desabrigada");
             return error;
         }
 

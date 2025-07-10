@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.tallerwebi.presentacion.ControladorWebSocket.MascotaDTOEscalaParaId;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDateTime;
@@ -217,7 +219,67 @@ public class ControladorWebSocketTest {
 
         assertEquals(mapper.writeValueAsString("La mascota ya esta despierta"), respuesta);
     }
+    
+    @Test
+    public void queSePuedaAbrigarConWebSocketYPersistencia() throws Exception, MascotaAbrigadaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
 
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.abrigar(mascota)).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.abrigarMascotaConPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString(mascota), respuesta);
+    }
+
+    @Test
+    public void queSePuedaDesabrigarConWebSocketYPersistencia() throws Exception, MascotaDesabrigadaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.desabrigar(mascota)).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.desabrigarMascotaConPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString(mascota), respuesta);
+    }
+
+
+    @Test
+    public void queNoSePuedaAbrigarConWebSocketYPersistencia() throws Exception, MascotaAbrigadaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.abrigar(mascota)).thenThrow(new MascotaAbrigadaException("La mascota ya esta abrigada"));
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+
+        String respuesta = controladorWebSocket.abrigarMascotaConPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString("La mascota ya esta abrigada"), respuesta);
+    }
+
+    @Test
+    public void queNoSePuedaDesabrigarConWebSocketYPersistencia() throws Exception, MascotaDesabrigadaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.desabrigar(mascota)).thenThrow(new MascotaDesabrigadaException("La mascota ya esta desabrigada"));
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+        // REVISAR COMO QUEDO EL METODO EN EL CONTROLADOR, ESTOY LANZANDO MAL LA EXCEPCION Y POR ESO NO PASA EL TEST
+        String respuesta = controladorWebSocket.desabrigarMascotaConPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString("La mascota ya esta desabrigada"), respuesta);
+    }
 
 
 }

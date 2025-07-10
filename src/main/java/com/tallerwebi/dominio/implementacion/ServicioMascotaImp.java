@@ -320,7 +320,7 @@ public class ServicioMascotaImp implements ServicioMascota {
             this.actualizarMascota(mascota);
             return mascota;
         } else {
-            throw new MascotaDespiertaException ("La mascota ya esta derpierta");
+            throw new MascotaDespiertaException ("La mascota ya esta despierta");
         }
     }
 }

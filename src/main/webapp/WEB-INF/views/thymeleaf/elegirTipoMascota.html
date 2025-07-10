@@ -26,7 +26,7 @@
 
             <div class="d-flex justify-content-center gap-4 my-4 flex-wrap">
                 <label class="pet-option" id="option-perro">
-                    <input type="radio" name="tipoMascota" value="perro" hidden>
+                    <input type="radio" name="tipoMascota" value="perro" id="id-prueba" hidden>
                     <img th:src="@{/img/perro.png}" alt="Perro" class="pet-image"/>
                     <div>Perro</div>
                 </label>
@@ -47,7 +47,7 @@
                 </label>
             </div>
 
-            <button type="submit" class="btn btn-custom">CREAR MASCOTA</button>
+            <button type="submit" class="btn btn-custom" id="crear-mascota-tipo">CREAR MASCOTA</button>
         </form>
     </div>
 </main>

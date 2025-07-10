@@ -5,6 +5,7 @@ import com.tallerwebi.punta_a_punta.vistas.VistaHome;
 import com.tallerwebi.punta_a_punta.vistas.VistaLogin;
 import com.tallerwebi.punta_a_punta.vistas.VistaMascota;
 import com.tallerwebi.punta_a_punta.vistas.VistaPresentacion;
+import com.tallerwebi.punta_a_punta.vistas.VistaSeleccionarTipoMascota;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -24,12 +25,13 @@ public class VistaLoginE2E {
     VistaHome vistaHome;
     VistaMascota vistaMascota;
     VistaPresentacion vistaPresentacion;
+    VistaSeleccionarTipoMascota vistaSeleccionarTipoMascota;
 
     @BeforeAll
     static void abrirNavegador() {
         playwright = Playwright.create();
         browser = playwright.chromium().launch();
-        //browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(4000));
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(4000));
 
     }
 
@@ -86,6 +88,7 @@ public class VistaLoginE2E {
         Page page = context.newPage();
         vistaHome = new VistaHome(page);
         vistaMascota = new VistaMascota(page);
+        vistaSeleccionarTipoMascota = new VistaSeleccionarTipoMascota(page);
         vistaPresentacion.irAPresentacion();
         vistaPresentacion.darClickEnLogin();
         vistaLogin.irALogin();
@@ -95,7 +98,8 @@ public class VistaLoginE2E {
         vistaHome.irAHome();
         vistaHome.escribirNombreMascota("Firulero");
         vistaHome.darClickEnCrearMascota();
-
+        vistaSeleccionarTipoMascota.darClickEnSeleccionarTipoMascotaPerro();
+        vistaSeleccionarTipoMascota.darClickEnCrearMascotaConTipo();
         String urlMascota = vistaMascota.obtenerURLActual();
         assertThat(urlMascota, containsStringIgnoringCase("/spring/mascota"));
         assertThat(vistaMascota.obtenerNombreMascota(), containsStringIgnoringCase("Firulero"));
@@ -106,6 +110,8 @@ public class VistaLoginE2E {
         Page page = context.newPage();
         vistaHome = new VistaHome(page);
         vistaMascota = new VistaMascota(page);
+        vistaSeleccionarTipoMascota = new VistaSeleccionarTipoMascota(page);
+    
         vistaPresentacion.irAPresentacion();
         vistaPresentacion.darClickEnLogin();
         vistaLogin.irALogin();
@@ -115,6 +121,8 @@ public class VistaLoginE2E {
         vistaHome.irAHome();
         vistaHome.escribirNombreMascota("Firulero");
         vistaHome.darClickEnCrearMascota();
+        vistaSeleccionarTipoMascota.darClickEnSeleccionarTipoMascotaPerro();
+        vistaSeleccionarTipoMascota.darClickEnCrearMascotaConTipo();
         vistaMascota.darClickEnJugar();
 
         assertThat(vistaMascota.obtenerEnergiaMascota(), containsStringIgnoringCase("75.0"));
