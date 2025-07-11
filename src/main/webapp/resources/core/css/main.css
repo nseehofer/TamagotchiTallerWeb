@@ -128,14 +128,7 @@ body {
     background-color: #faa0a0;
 }
 
-.img-icon-cold-heat {
-    width: 100%;
-    height: auto;
-}
-
-
 .btn-class {
-    width: 25%;
     background-color: #d76c82;
     color: white;
     border: none;
@@ -144,8 +137,9 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: none;
+    height: 5rem;
+    width: 5rem;
 }
-
 
 .btn-class.pressed {
     transform: translateY(2px);
@@ -153,34 +147,23 @@ body {
     background-color: #944653;
 }
 
-.div-conteiner-cold{
-    width: 40%;
-}
-
 .modo-noche {
     filter: brightness(40%);
     transition: filter 0.5s ease;
 }
 
-/*
 .clima-info {
-      position: fixed;
-      top: 70px;
-      right: 20px;
-      padding: 12px;
-      font-size: 12px;
-      z-index: 1000;
-      text-align: center;
-  }
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    padding: 12px;
+    font-size: 12px;
+    text-align: center;
+}
 
 .clima-info p {
     margin: 4px 0;
     font-size: 12px;
-}
-
-.icon-cold {
-    height: 5rem;
-    width: 5rem;
 }
 
 .iconos-clima {
@@ -189,4 +172,8 @@ body {
     align-items: center;
     gap: 1rem;
 }
-*/
+
+.img-icon-cold-heat {
+    height: auto;
+    width: 70px;
+}
