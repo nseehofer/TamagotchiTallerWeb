@@ -5,7 +5,7 @@ let estaDormido = false;
 
 
 //actualiza datos cada un minuto
-setInterval(actualizarDatosMascota, 20000);
+setInterval(actualizarDatosMascota, 2400000);
 
 let basePath = window.location.pathname.split('/')[1];
 const brokerPath = `ws://${window.location.hostname}:8080/${basePath}/wschat`;
@@ -287,25 +287,19 @@ function actualizarDatosMascota() {
 
 function abrigarMascota() {
     const btn = document.getElementById('btn-abrigar');
-    /*const nodeBtnToWrapUp = document.getElementById("btn-abrigar");
-    
-    nodeBtnToWrapUp.disabled = true;*/
 
-    if (btn.classList.contains('pressed')) {
-        stompClient.publish({
-            destination: "/app/desabrigar",
-            body: JSON.stringify({ id: mascotaId })
-        });
-    }
-
+    const isPressed = btn.classList.contains('pressed');
 
     btn.classList.toggle('pressed');
 
+    const destino = isPressed ? "/app/desabrigar" : "/app/abrigar";
+
     stompClient.publish({
-        destination: "/app/abrigar",
+        destination: destino,
         body: JSON.stringify({ id: mascotaId })
     });
 }
+
 
 function cambiarEstadoDormidoODespierto() {
     if (estaDormido) {
