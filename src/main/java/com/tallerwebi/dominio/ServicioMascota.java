@@ -22,7 +22,7 @@ public interface ServicioMascota {
     MascotaDTO jugar(MascotaDTO mascota);////A borrar
     MascotaDTO alimentar(MascotaDTO mascota) throws MonedasInsuficientesException;
 
-    MascotaDTO limpiarMascota(MascotaDTO mascotaDTO) throws LimpiezaMaximaException;
+    MascotaDTO limpiarMascota(MascotaDTO mascotaDTO) throws LimpiezaMaximaException, MonedasInsuficientesException;
 
     MascotaDTO actualizarEstadisticas(MascotaDTO mascotaDTO, LocalDateTime horaActual) throws MascotaMuertaException, MascotaDespiertaException;
 

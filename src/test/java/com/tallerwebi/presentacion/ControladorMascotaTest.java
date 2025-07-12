@@ -274,7 +274,7 @@ public class ControladorMascotaTest {
     }
 
     @Test
-    public void queAlLimpiarLaMascotaConLimpiezaMaximaSeMuestreElMensajeDeError() throws LimpiezaMaximaException {
+    public void queAlLimpiarLaMascotaConLimpiezaMaximaSeMuestreElMensajeDeError() throws LimpiezaMaximaException, MonedasInsuficientesException {
         Long idMascota = 1L;
         MascotaDTO mascotaDePrueba = new MascotaDTO("Firulais");
         mascotaDePrueba.setId(idMascota);
@@ -290,7 +290,7 @@ public class ControladorMascotaTest {
     }
 
     @Test
-    public void queAlLimpiarLaMascotaSeMuestreLaVistaCorrecta() throws LimpiezaMaximaException {
+    public void queAlLimpiarLaMascotaSeMuestreLaVistaCorrecta() throws LimpiezaMaximaException, MonedasInsuficientesException {
         Long idMascota = 1L;
         MascotaDTO mascotaDePrueba = new MascotaDTO("Firulais");
         mascotaDePrueba.setId(idMascota);

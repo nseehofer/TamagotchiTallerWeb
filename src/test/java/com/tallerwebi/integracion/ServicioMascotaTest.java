@@ -38,7 +38,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void cuandoLimpioLaMascotaSuHigieneSeAumentaAlMaximo() throws LimpiezaMaximaException {
+    public void cuandoLimpioLaMascotaSuHigieneSeAumentaAlMaximo() throws LimpiezaMaximaException, MonedasInsuficientesException {
         //Preparación
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -49,7 +49,7 @@ public class ServicioMascotaTest {
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
         MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
-
+        mascotaDTO.setMonedas(100.00);
         //Accion
         servicioMascota.limpiarMascota(mascotaDTO);
 
@@ -70,7 +70,7 @@ public class ServicioMascotaTest {
         try {
             servicioMascota.limpiarMascota(mascotaDTO);
             fail ("Se esperaba LimpiezaMaximaException, pero no se lanzó");
-        } catch (LimpiezaMaximaException e) {
+        } catch (LimpiezaMaximaException | MonedasInsuficientesException e) {
             assertThat(e.getMessage(), containsString("La higiene ya se encuentra al máximo"));
         }
 

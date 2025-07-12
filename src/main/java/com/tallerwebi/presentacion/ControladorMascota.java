@@ -115,6 +115,8 @@ public class ControladorMascota {
             servicioMascota.limpiarMascota(mascota);
         } catch (LimpiezaMaximaException limpiezaMaxima) {
             modelo.put("error", "La higiene se encuentra al maximo");
+        }catch (MonedasInsuficientesException monedasInsuficientesException) {
+            modelo.put("error", "No te alcanzan las monedas, juga para ganar mas!");
         }
 
         modelo.put("mascota", mascota);

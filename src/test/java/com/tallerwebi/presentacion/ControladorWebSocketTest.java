@@ -56,7 +56,7 @@ public class ControladorWebSocketTest {
     }
 
     @Test
-    public void queSePuedaLimpiarConWebSocketYPersistencia() throws Exception, LimpiezaMaximaException {
+    public void queSePuedaLimpiarConWebSocketYPersistencia() throws Exception, LimpiezaMaximaException, MonedasInsuficientesException {
         MascotaDTO mascota = new MascotaDTO("Firulais");
         mascota.setId(1L);
 
@@ -71,7 +71,7 @@ public class ControladorWebSocketTest {
     }
 
     @Test
-    public void queNoSePuedaLimpiarConWebSocketYPersistenciaSiEstaLimpia() throws Exception, LimpiezaMaximaException {
+    public void queNoSePuedaLimpiarConWebSocketYPersistenciaSiEstaLimpia() throws Exception, LimpiezaMaximaException, MonedasInsuficientesException {
         MascotaDTO mascota = new MascotaDTO("Firulais");
         mascota.setId(1L);
 
