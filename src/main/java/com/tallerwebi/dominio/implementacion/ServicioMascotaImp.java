@@ -149,13 +149,17 @@ public class ServicioMascotaImp implements ServicioMascota {
     }
 
     @Override
-    public MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException {
+    public MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException, MonedasInsuficientesException {
         if (!mascota.getEstaEnfermo()) {
             throw new MascotaSanaException("La mascota no esta enferma");
-        } else {
+        }
+
+        if(this.chequearSiAlcanzanLasmonedasParaLaAccion(mascota,25.00)){
             mascota.setEstaEnfermo(false);
             this.actualizarMascota(mascota);
             return mascota;
+        }else{
+            throw new MonedasInsuficientesException("Monedas insuficientes, juga para ganar mas!");
         }
 
     }

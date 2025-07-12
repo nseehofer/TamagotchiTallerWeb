@@ -30,7 +30,7 @@ public interface ServicioMascota {
 
     Boolean chequearSiLaMascotaSeEnferma(MascotaDTO mascota);
 
-    MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException;
+    MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException, MonedasInsuficientesException;
 
     MascotaDTO chequearSiLaMascotaSigueViva(MascotaDTO mascota) throws MascotaMuertaException;
 

@@ -584,7 +584,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void queSePuedaCurarUnaMascotaEnferma() throws MascotaSanaException {
+    public void queSePuedaCurarUnaMascotaEnferma() throws MascotaSanaException, MonedasInsuficientesException {
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setEstaEnfermo(true);
         mascotaEntidad.setId(1L);
@@ -592,6 +592,7 @@ public class ServicioMascotaTest {
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
         MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+        mascotaDTO.setMonedas(100.00);
 
         servicioMascota.curarMascota(mascotaDTO);
 
@@ -610,7 +611,7 @@ public class ServicioMascotaTest {
 
         try {
             servicioMascota.curarMascota(mascotaDTO);
-        } catch (MascotaSanaException e) {
+        } catch (MascotaSanaException | MonedasInsuficientesException e) {
             assertThat(e.getMessage(), equalTo("La mascota no esta enferma"));
         }
 

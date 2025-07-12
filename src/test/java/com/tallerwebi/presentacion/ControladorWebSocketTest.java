@@ -161,7 +161,7 @@ public class ControladorWebSocketTest {
     }
 
     @Test
-    public void queSePuedaCurarMascotaYPersistencia() throws Exception, MascotaSanaException {
+    public void queSePuedaCurarMascotaYPersistencia() throws Exception, MascotaSanaException, MonedasInsuficientesException {
         MascotaDTO mascota = new MascotaDTO("Firulais");
         mascota.setId(1L);
 
@@ -176,7 +176,7 @@ public class ControladorWebSocketTest {
     }
 
     @Test
-    public void queNoSePuedaCurarMascotaSanaYPersistencia() throws Exception, MascotaSanaException {
+    public void queNoSePuedaCurarMascotaSanaYPersistencia() throws Exception, MascotaSanaException, MonedasInsuficientesException {
         MascotaDTO mascota = new MascotaDTO("Firulais");
         mascota.setId(1L);
 
