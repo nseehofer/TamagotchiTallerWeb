@@ -134,7 +134,8 @@ function limpiarMascota() {
         body: JSON.stringify({ id: mascotaId })
     });
 }
-//IMPLEMENTANDO EL PRIMER JUEGO 
+
+//IMPLEMENTANDO EL PRIMER JUEGO
 let resultado = "regular"; // valor temporal que se actualiza al finalizar
 let score = 0;
 let direction = 'right';
@@ -221,8 +222,10 @@ function jugar() {
     let juegoFinalizado = false; // BANDERA PARA CONTROLAR EL ESTADO DEL USUARIO EN EL JUEGO
 
     function endGame() {
+        if (juegoFinalizado) return;
         juegoFinalizado = true;
         resultado = score >= 50 ? "positivo" : score >= 20 ? "regular" : "negativo";
+        clearInterval(gameLoop); // DETENER EL CICLO DE JUEGO ANTES DE PUBLICAR Y SALIR
         stompClient.publish({
             destination: "/app/jugar",
             // ACA DEBO AGREGAR EL RESULTADO PARA PASARLO AL WEBSOCKET
@@ -235,6 +238,7 @@ function jugar() {
     function exitGame() {
         if (!juegoFinalizado) {
             resultado = "negativo"; // SE ADVIERTE EL ABANDONO DEL USUARIO
+            clearInterval(gameLoop); // DETENER EL CICLO DE JUEGO ANTES DE PUBLICAR Y SALIR
             stompClient.publish({
                 destination: "/app/jugar",
                 // ACA DEBO AGREGAR EL RESULTADO PARA PASARLO AL WEBSOCKET
@@ -242,10 +246,11 @@ function jugar() {
             });
             console.log(resultado);
         }
-        document.getElementById("snakeModal").remove();
+
+        const modal = document.getElementById("snakeModal"); // VERIFICAMOS EXISTENCIA DEL MODAL
+        if (modal) modal.remove(); // SOLO REMOVER SI EXISTE
         document.body.classList.remove("modal-open");
     }
-
 
     document.addEventListener("keydown", (e) => {
         if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
@@ -255,7 +260,10 @@ function jugar() {
 
     const gameLoop = setInterval(draw, 150);
 }
-//
+
+// HASTA ACA
+
+
 function curarMascota() {
     stompClient.publish({
         destination: "/app/curarMascota",
