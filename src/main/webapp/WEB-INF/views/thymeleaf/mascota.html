@@ -2,24 +2,49 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Taller Web I</title>
+  <title>Taller Web I</title>
 
-    <!-- Bootstrap core css -->
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Bootstrap core css -->
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-    <!-- Custom style -->
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <!-- Custom style -->
+  <link rel="stylesheet" th:href="@{/css/main.css}" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    #snakeCanvas {
+      background-color: #222;
+      image-rendering: pixelated;
+    }
+
+    #snakeModal .modal-dialog {
+      max-width: 80vw;
+      height: 80vh;
+      margin: auto;
+    }
+
+    #snakeModal .modal-content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  </style>
+
 </head>
 
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="../home">Tamagotchi</a>
     <div class="ms-auto">
-        <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
+      <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
     </div>
   </nav>
 
@@ -33,77 +58,77 @@
         <p th:text="'Región: ' + ${climaUrl.zonaHoraria}" style="margin-bottom:0%"> </p>
         <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}" style="margin-bottom:0%"> </p>
         <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'" style="margin-bottom:0%"></p>
-      <!-- "&lt" es igual que usar "<", es para que el editor no chille --> 
+        <!-- "&lt" es igual que usar "<", es para que el editor no chille -->
         <div th:if="${temperaturaActual &lt 25.0}" class="d-flex align-items-center justify-content-evenly">
           <div class="div-conteiner-cold">
-          <img class="icon img-icon-cold-heat " th:src="@{/img/otroCopo.png}"/>
+            <img class="icon img-icon-cold-heat " th:src="@{/img/otroCopo.png}" />
           </div>
           <button id="btn-abrigar" class="btn-class" onclick="abrigarMascota()">
-          <img class="icon img-icon-cold-heat " th:src="@{/img/calefaccion.png}"/>
+            <img class="icon img-icon-cold-heat " th:src="@{/img/calefaccion.png}" />
           </button>
         </div>
       </div>
       <!-- HASTA ACA -->
 
-    <div id="mensaje-enfermedad" class="alert alert-danger d-none text-center mt-3">
+      <div id="mensaje-enfermedad" class="alert alert-danger d-none text-center mt-3">
         ¡Oh no! ¡<span th:text="${mascota.nombre}"></span> está enfermo! Curalo antes de que sea tarde...
-    </div>
+      </div>
 
-    <div class="container">
+      <div class="container">
         <h2 id="nombre-mascota" th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
         <div class="bar-container">
-            <div class="bar energy">
-                <img class="icon" th:src="@{/img/energy.png}"/>
-                <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;"
-                     th:text=" ${mascota.energia} + '%'"></div>
-            </div>
-            <div class="bar happiness">
-                <img class="icon" th:src="@{/img/happiness.png}"/>
-                <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;"
-                     th:text=" ${mascota.felicidad} + '%'"></div>
-            </div>
+          <div class="bar energy">
+            <img class="icon" th:src="@{/img/energy.png}" />
+            <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.energia} + '%'"></div>
+          </div>
+          <div class="bar happiness">
+            <img class="icon" th:src="@{/img/happiness.png}" />
+            <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.felicidad} + '%'"></div>
+          </div>
         </div>
 
         <div class="pet-container">
-            <div class="pet">
-                <img th:src="@{'/img/' + ${mascota.tipo} + '.png'}" alt="Pet" class="pet-image"/>
-            </div>
+          <div class="pet">
+            <img th:src="@{'/img/' + ${mascota.tipo} + '.png'}" alt="Pet" class="pet-image" />
+          </div>
 
-            <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
+          <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
         </div>
 
         <div class="bar-container">
-            <div class="bar hunger">
-                <img class="icon" th:src="@{/img/hunger.png}"/>
-                <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
-                     th:text=" ${mascota.hambre} + '%'"></div>
+          <div class="bar hunger">
+            <img class="icon" th:src="@{/img/hunger.png}" />
+            <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.hambre} + '%'"></div>
 
-            </div>
-            <div class="bar cleanliness">
-                <img class="icon" th:src="@{/img/cleanliness.png}"/>
-                <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;"
-                     th:text=" ${mascota.higiene} + '%'"></div>
+          </div>
+          <div class="bar cleanliness">
+            <img class="icon" th:src="@{/img/cleanliness.png}" />
+            <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;"
+              th:text=" ${mascota.higiene} + '%'"></div>
 
-            </div>
+          </div>
         </div>
 
         <div class="button-container">
-            <input name="id" type="hidden" th:value="${mascota.id}">
-            <button class="button" id="jugar" onclick="jugar()">
-                <img class="icon" th:src="@{/img/game-black.png}"/>
-            </button>
+          <input name="id" type="hidden" th:value="${mascota.id}">
+          <button class="button" id="jugar" onclick="jugar()">
+            <img class="icon" th:src="@{/img/game-black.png}" />
+          </button>
 
 
-            <input name="id" type="hidden" th:value="${mascota.id}">
-            <button class="button" onclick="curarMascota()">
-                <img class="icon" th:src="@{/img/medicine-black.png}"/>
-            </button>
-         
+          <input name="id" type="hidden" th:value="${mascota.id}">
+          <button class="button" onclick="curarMascota()">
+            <img class="icon" th:src="@{/img/medicine-black.png}" />
+          </button>
 
-            <input name="id" type="hidden" th:value="${mascota.id}">
-            <button class="button" onclick="limpiarMascota()">
-                <img class="icon" th:src="@{/img/bath-black.png}"/>
-            </button>
+
+          <input name="id" type="hidden" th:value="${mascota.id}">
+          <button class="button" onclick="limpiarMascota()">
+            <img class="icon" th:src="@{/img/bath-black.png}" />
+          </button>
 
           <input name="id" type="hidden" th:value="${mascota.id}">
           <button class="button" onclick="cambiarEstadoDormidoODespierto()">
@@ -111,43 +136,44 @@
           </button>
 
 
-            <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
-            <button class="button" onclick="alimentarMascota()">
-                <img class="icon" th:src="@{/img/food-black.png}"/>
-            </button>
+          <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
+          <button class="button" onclick="alimentarMascota()">
+            <img class="icon" th:src="@{/img/food-black.png}" />
+          </button>
 
 
         </div>
-    </div>
-</main>
       </div>
+    </main>
+    </div>
 
-      <div id="modal-error" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content text-center"
-            style="background-color: #fefefe; font-family: 'Press Start 2P', cursive;">
-            <div class="modal-header border-0 justify-content-center">
-              <h5 class="modal-title w-100" style="color: #09a1a1;">¡Ups!</h5>
-              <button type="button" class="btn-close position-absolute end-0 me-3" data-bs-dismiss="modal"
-                aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body py-3">
-              <p id="modal-error-mensaje" class="mb-0" style="font-size: 0.6rem;">Error desconocido.</p>
-            </div>
+    <div id="modal-error" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-center"
+          style="background-color: #fefefe; font-family: 'Press Start 2P', cursive;">
+          <div class="modal-header border-0 justify-content-center">
+            <h5 class="modal-title w-100" style="color: #09a1a1;">¡Ups!</h5>
+            <button type="button" class="btn-close position-absolute end-0 me-3" data-bs-dismiss="modal"
+              aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body py-3">
+            <p id="modal-error-mensaje" class="mb-0" style="font-size: 0.6rem;">Error desconocido.</p>
           </div>
         </div>
       </div>
+    </div>
 
+    
 
     </main>
 
-<!-- Bootstrap core js -->
-<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
-<!-- WEBSOCKET -->
-<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
-<script type="text/javascript" th:src="@{/js/script.js}"></script>
+    <!-- Bootstrap core js -->
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+    <!-- WEBSOCKET -->
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/script.js}"></script>
 
 
-</body>
+  </body>
 
 </html>
