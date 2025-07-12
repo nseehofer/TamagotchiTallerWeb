@@ -26,7 +26,7 @@ public class ControladorWebSocketTest {
     ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    public void queSePuedaAlimentarConWebSocketYPersistencia() throws Exception {
+    public void queSePuedaAlimentarConWebSocketYPersistencia() throws Exception, MonedasInsuficientesException {
         MascotaDTO mascota = new MascotaDTO("Firulais");
         mascota.setId(1L);
 
@@ -41,7 +41,7 @@ public class ControladorWebSocketTest {
     }
 
     @Test
-    public void queNoSePuedaAlimentarConWebSocketYPersistenciaSiEstaSatisfecha() throws Exception {
+    public void queNoSePuedaAlimentarConWebSocketYPersistenciaSiEstaSatisfecha() throws Exception, MonedasInsuficientesException {
         MascotaDTO mascota = new MascotaDTO("Firulais");
         mascota.setId(1L);
 

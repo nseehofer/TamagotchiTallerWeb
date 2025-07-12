@@ -5,11 +5,8 @@ import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.ServicioTemperatura;
 import com.tallerwebi.dominio.entidades.Mascota;
 import com.tallerwebi.dominio.entidades.Usuario;
-import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
-import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
-import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.mapeado.Clima;
-import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -133,6 +130,8 @@ public class ControladorMascota {
             mascota = servicioMascota.alimentar(mascota);
         } catch (MascotaSatisfecha mascotaSatisfecha) {
             modelo.put("error", "Tu mascota está satisfecha");
+        } catch (MonedasInsuficientesException monedasInsuficientesException) {
+            modelo.put("error", "No te alcanzan las monedas, juga para ganar mas!");
         }
 
         modelo.put("ultimaAlimentacion", mascota.getUltimaAlimentacion());

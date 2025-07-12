@@ -55,6 +55,10 @@ public class ControladorWebSocket {
             String error = mapper.writeValueAsString(
                     "Tu mascota está satisfecha");
             return error;
+        }catch (MonedasInsuficientesException monedasInsuficientesException) {
+            String error = mapper.writeValueAsString(
+                    "No te alcanzan las monedas, juga para ganar mas!");
+            return error;
         }
 
         String JSONMascota = mapper.writeValueAsString(mascota);
