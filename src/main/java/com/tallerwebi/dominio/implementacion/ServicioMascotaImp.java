@@ -171,7 +171,7 @@ public class ServicioMascotaImp implements ServicioMascota {
 
     @Override
     public MascotaDTO actualizarEstadisticas(MascotaDTO mascota, LocalDateTime horaActual) throws MascotaMuertaException, MascotaDespiertaException {
-        if(mascota.getEstaDormido()){
+        if (mascota.getEstaDormido()) {
             double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toSeconds() * 0.10;
             double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toSeconds() * 0.12;
             double aumentoEnergia = (double) Duration.between(mascota.getUltimaSiesta(), horaActual).toSeconds() * 0.69;
@@ -191,8 +191,11 @@ public class ServicioMascotaImp implements ServicioMascota {
             mascota.setEnergia(Math.min(energiaActual, 100.0));
             mascota.setFelicidad(Math.max(felicidadActual, 0.0));
             mascota.setSalud(Math.max(saludActual, 0.0));
+            mascota.setUltimaSiesta(LocalDateTime.now());
+            mascota.setUltimaAlimentacion(LocalDateTime.now());
+            mascota.setUltimaHigiene(LocalDateTime.now());
 
-            if(mascota.getEnergia() >= 100.0){
+            if (mascota.getEnergia() >= 100.0) {
                 this.despertar(mascota);
             }
 
@@ -200,6 +203,14 @@ public class ServicioMascotaImp implements ServicioMascota {
 
             return mascota;
 
+        } else if (mascota.getEstaJugando()) {
+            mascota.setUltimaSiesta(LocalDateTime.now());
+            mascota.setUltimaAlimentacion(LocalDateTime.now());
+            mascota.setUltimaHigiene(LocalDateTime.now());
+
+            this.actualizarMascota(mascota);
+
+            return mascota;
         } else {
             double disminucionHigiene = (double) Duration.between(mascota.getUltimaHigiene(), horaActual).toSeconds() * 0.21;
             double disminucionHambre = (double) Duration.between(mascota.getUltimaAlimentacion(), horaActual).toSeconds() * 0.25;
@@ -222,6 +233,9 @@ public class ServicioMascotaImp implements ServicioMascota {
             mascota.setEnergia(Math.max(energiaActual, 0.0));
             mascota.setFelicidad(Math.max(felicidadActual, 0.0));
             mascota.setSalud(Math.max(saludActual, 0.0));
+            mascota.setUltimaSiesta(LocalDateTime.now());
+            mascota.setUltimaAlimentacion(LocalDateTime.now());
+            mascota.setUltimaHigiene(LocalDateTime.now());
             mascota.setEstaEnfermo(this.chequearSiLaMascotaSeEnferma(mascota));
 
             this.chequearSiLaMascotaSigueViva(mascota);
@@ -229,9 +243,11 @@ public class ServicioMascotaImp implements ServicioMascota {
             this.actualizarMascota(mascota);
 
             return mascota;
+
         }
 
     }
+
 
     @Override
     public Boolean chequearSiLaMascotaSeEnferma(MascotaDTO mascota) {

@@ -47,6 +47,9 @@ public class Mascota {
     @Column
     private Boolean estaDormido;
 
+    @Column
+    private Boolean estaJugando;
+
 
 
     private Long usuario_id;
@@ -71,6 +74,7 @@ public class Mascota {
         this.estaAbrigada = false;
         this.tipo = tipo;
         this.estaDormido = estaDormido;
+        this.estaJugando = false;
     }
 
     public Long getId() {
@@ -242,5 +246,13 @@ public class Mascota {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public Boolean getEstaJugando() {
+        return estaJugando;
+    }
+
+    public void setEstaJugando(Boolean estaJugando) {
+        this.estaJugando = estaJugando;
     }
 }

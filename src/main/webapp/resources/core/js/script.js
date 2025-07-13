@@ -5,7 +5,7 @@ let estaDormido = false;
 
 
 //actualiza datos cada un minuto
-setInterval(actualizarDatosMascota, 2400000);
+setInterval(actualizarDatosMascota, 20000);
 
 let basePath = window.location.pathname.split('/')[1];
 const brokerPath = `ws://${window.location.hostname}:8080/${basePath}/wschat`;
@@ -68,7 +68,7 @@ stompClient.onConnect = (frame) => {
             valorEnergia.textContent = valorEnergiaActualizado + '%';
             valorFelicidad.textContent = valorFelicidadActualizado + '%';
             valorMonedas.textContent = '$' + valorMonedasActualizado;
-           
+
             if (estaEnfermo) {
                 mensajeEnfermedad.classList.remove("d-none");
             } else {

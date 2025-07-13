@@ -22,6 +22,7 @@ public class MascotaDTO {
     private Long idUsuario;
     private Boolean estaAbrigada;
     private Boolean estaDormido;
+    private Boolean estaJugando;
 
 
     private String tipo;
@@ -55,6 +56,7 @@ public class MascotaDTO {
         this.estaAbrigada = false;
         this.tipo = "desconocido";
         this.estaDormido = false;
+        this.estaJugando = false;
 
     }
     public MascotaDTO(String nombre, Long idUsuario) {
@@ -73,6 +75,7 @@ public class MascotaDTO {
         this.idUsuario = idUsuario;
         this.estaAbrigada = false;
         this.tipo = null;
+        this.estaJugando = false;
     }
 
     public MascotaDTO(Mascota mascota) {
@@ -91,6 +94,7 @@ public class MascotaDTO {
         this.estaDormido = mascota.getEstaDormido();
         this.estaAbrigada = mascota.getEstaAbrigada();
         this.tipo = mascota.getTipo();
+        this.estaJugando = mascota.getEstaJugando();
     }
 
     public Long getId() {
@@ -164,6 +168,7 @@ public class MascotaDTO {
         mascota.setEstaAbrigada(this.estaAbrigada);
         mascota.setTipo(this.tipo);
         mascota.setEstaDormido(this.estaDormido);
+        mascota.setEstaJugando(this.estaJugando);
         return mascota;
     }
 
@@ -242,6 +247,14 @@ public class MascotaDTO {
 
     public void setEstaDormido(Boolean estaDormido) {
         this.estaDormido = estaDormido;
+    }
+
+    public Boolean getEstaJugando() {
+        return estaJugando;
+    }
+
+    public void setEstaJugando(Boolean estaJugando) {
+        this.estaJugando = estaJugando;
     }
 
     public void setMonedas(Double monedas) {

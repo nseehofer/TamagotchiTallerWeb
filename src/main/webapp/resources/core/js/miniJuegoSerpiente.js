@@ -15,6 +15,11 @@ function jugar() {
     let valor = parseFloat(nodoEnergia.textContent.replace(/[^\d.]/g, ''));
     if (valor >= "25.00") {
         if (document.getElementById("snakeModal")) return;
+        //Se envia al backend estaJugando = true
+        stompClient.publish({
+            destination: "/app/establecerSiEstaJugando",
+            body: JSON.stringify({ id: mascotaId, estaJugando: true})
+        });
         // Mostrar el modal
         // CREANDO EL MODAL SOLO CUANDO SE TOCA JUGAR
         const modalHTML = `
@@ -105,6 +110,7 @@ function jugar() {
                 body: JSON.stringify({ id: mascotaId })
             });
             console.log(resultado);
+            finalizarJuego();
             exitGame();
         }
 
@@ -117,8 +123,11 @@ function jugar() {
                     // ACA DEBO AGREGAR EL RESULTADO PARA PASARLO AL WEBSOCKET
                     body: JSON.stringify({ id: mascotaId })
                 });
+
                 console.log(resultado);
             }
+
+            finalizarJuego();
 
             const modal = document.getElementById("snakeModal"); // VERIFICAMOS EXISTENCIA DEL MODAL
             if (modal) modal.remove(); // SOLO REMOVER SI EXISTE
@@ -142,4 +151,10 @@ function jugar() {
     }
 }
 
+function finalizarJuego() {
+    stompClient.publish({
+        destination: "/app/establecerSiEstaJugando",
+        body: JSON.stringify({ id: mascotaId, estaJugando: false})
+    });
+}
 // HASTA ACA
