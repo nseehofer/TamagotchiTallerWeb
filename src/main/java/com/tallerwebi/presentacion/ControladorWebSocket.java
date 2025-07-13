@@ -24,6 +24,7 @@ public class ControladorWebSocket {
 
     public static class MascotaDTOEscalaParaId {
         private Long id;
+        private Boolean estaJugando;
 
         public MascotaDTOEscalaParaId() {
             // Constructor vacío necesario para la deserialización
@@ -39,6 +40,14 @@ public class ControladorWebSocket {
 
         public void setId(Long id) {
             this.id = id;
+        }
+
+        public Boolean getEstaJugando() {
+            return this.estaJugando;
+        }
+
+        public void setEstaJugando(Boolean estaJugando) {
+            this.estaJugando = estaJugando;
         }
     }
 
@@ -229,6 +238,24 @@ public class ControladorWebSocket {
         }
 
         String JSONMascota = mapper.writeValueAsString(mascota);
+
+        return JSONMascota;
+    }
+
+    @MessageMapping("/establecerSiEstaJugando")
+    @SendTo("/topic/messages")
+    // RECIBO UN JSON.stringify con el id de la mascota
+    public String establecerSiEstaJugandoConSocketYPersistencia(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
+
+        mascota.setEstaJugando(mascotaParaId.getEstaJugando());
+
+        servicioMascota.actualizarMascota(mascota);
+
+        String JSONMascota = mapper.writeValueAsString(mascota);
+
 
         return JSONMascota;
     }

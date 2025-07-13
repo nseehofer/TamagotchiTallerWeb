@@ -5,7 +5,7 @@ let estaDormido = false;
 
 
 //actualiza datos cada un minuto
-setInterval(actualizarDatosMascota, 2400000);
+setInterval(actualizarDatosMascota, 20000);
 
 let basePath = window.location.pathname.split('/')[1];
 const brokerPath = `ws://${window.location.hostname}:8080/${basePath}/wschat`;
@@ -144,6 +144,13 @@ let food = { x: 10, y: 10 };
 
 function jugar() {
     if (document.getElementById("snakeModal")) return;
+
+    //Se envia al backend estaJugando = true
+    stompClient.publish({
+        destination: "/app/establecerSiEstaJugando",
+        body: JSON.stringify({ id: mascotaId, estaJugando: true })
+    });
+
     // Mostrar el modal
     // CREANDO EL MODAL SOLO CUANDO SE TOCA JUGAR
     const modalHTML = `
@@ -232,6 +239,7 @@ function jugar() {
             body: JSON.stringify({ id: mascotaId })
         });
         console.log(resultado);
+        finalizarJuego();
         exitGame();
     }
 
@@ -244,8 +252,11 @@ function jugar() {
                 // ACA DEBO AGREGAR EL RESULTADO PARA PASARLO AL WEBSOCKET
                 body: JSON.stringify({ id: mascotaId })
             });
+
             console.log(resultado);
         }
+
+        finalizarJuego();
 
         const modal = document.getElementById("snakeModal"); // VERIFICAMOS EXISTENCIA DEL MODAL
         if (modal) modal.remove(); // SOLO REMOVER SI EXISTE
@@ -279,6 +290,9 @@ function dormirMascota() {
 }
 
 function actualizarDatosMascota() {
+
+    console.log("actualizando datos de la mascota");
+
     stompClient.publish({
         destination: "/app/actualizar",
         body: JSON.stringify({ id: mascotaId })
@@ -316,4 +330,10 @@ function cambiarEstadoDormidoODespierto() {
     }
 }
 
+function finalizarJuego() {
+    stompClient.publish({
+        destination: "/app/establecerSiEstaJugando",
+        body: JSON.stringify({ id: mascotaId, estaJugando: false })
+    });
+}
 
