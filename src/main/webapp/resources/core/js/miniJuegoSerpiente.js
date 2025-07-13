@@ -1,11 +1,10 @@
-//IMPLEMENTANDO EL PRIMER JUEGO
 let resultado = "regular"; // valor temporal que se actualiza al finalizar
 let score = 0;
 let direction = 'right';
 let snake = [{ x: 5, y: 5 }];
 let food = { x: 10, y: 10 };
 
-function jugarSnake() {
+function jugar() {
 
     stompClient.publish({
         destination: "/app/jugar",
@@ -26,6 +25,13 @@ function jugarSnake() {
     if (valor >= "25.00") {
         if (document.getElementById("snakeModal")) return;
         //Se envia al backend estaJugando = true
+
+        // 🔁 REINICIO DE ESTADO PARA CADA EJECUCIÓN DEL JUEGO
+        resultado = "regular";
+        score = 0;
+        direction = 'right';
+        snake = [{ x: 5, y: 5 }];
+        food = { x: 10, y: 10 };
 
         // Mostrar el modal
         // CREANDO EL MODAL SOLO CUANDO SE TOCA JUGAR
@@ -104,8 +110,6 @@ function jugarSnake() {
             }
         }
 
-        //let juegoFinalizado = false; // BANDERA PARA CONTROLAR EL ESTADO DEL USUARIO EN EL JUEGO
-
         function endGame() {
             if (juegoFinalizado) return;
             juegoFinalizado = true;
@@ -116,7 +120,7 @@ function jugarSnake() {
                 // ACA DEBO AGREGAR EL RESULTADO PARA PASARLO AL WEBSOCKET
                 body: JSON.stringify({ id: mascotaId, resultado: resultado })
             });
-            
+
             console.log(resultado);
             /*finalizarJuego();*/
             estaJugando = false;
@@ -148,14 +152,22 @@ function jugarSnake() {
             snake = [{ x: 5, y: 5 }];
             food = { x: 10, y: 10 };
             juegoFinalizado = false;
-
         }
 
         document.addEventListener("keydown", (e) => {
-            if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-                direction = e.key.replace("Arrow", "").toLowerCase();
+            const key = e.key.replace("Arrow", "").toLowerCase();
+            const opposite = {
+                up: 'down',
+                down: 'up',
+                left: 'right',
+                right: 'left'
+            };
+
+            if (["up", "down", "left", "right"].includes(key) && key !== opposite[direction]) {
+                direction = key;
             }
         });
+
 
         const gameLoop = setInterval(draw, 150);
     }
@@ -168,6 +180,5 @@ function finalizarJuego() {
         body: JSON.stringify({ id: mascotaId, estaJugando: false})
     });
 }
-
- */
+*/
 // HASTA ACA
