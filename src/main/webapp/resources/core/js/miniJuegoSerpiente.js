@@ -11,15 +11,22 @@ function jugar() {
         destination: "/app/jugar",
         body: JSON.stringify({ id: mascotaId })
     });
+    /*
+    stompClient.publish({
+        destination: "/app/establecerSiEstaJugando",
+        body: JSON.stringify({ id: mascotaId, estaJugando: true})
+    });
+
+     */
+    estaJugando = true;
+    let juegoFinalizado = false;
+
     let nodoEnergia = document.getElementById("valor-energia");
     let valor = parseFloat(nodoEnergia.textContent.replace(/[^\d.]/g, ''));
     if (valor >= "25.00") {
         if (document.getElementById("snakeModal")) return;
         //Se envia al backend estaJugando = true
-        stompClient.publish({
-            destination: "/app/establecerSiEstaJugando",
-            body: JSON.stringify({ id: mascotaId, estaJugando: true})
-        });
+
         // Mostrar el modal
         // CREANDO EL MODAL SOLO CUANDO SE TOCA JUGAR
         const modalHTML = `
@@ -97,7 +104,7 @@ function jugar() {
             }
         }
 
-        let juegoFinalizado = false; // BANDERA PARA CONTROLAR EL ESTADO DEL USUARIO EN EL JUEGO
+        //let juegoFinalizado = false; // BANDERA PARA CONTROLAR EL ESTADO DEL USUARIO EN EL JUEGO
 
         function endGame() {
             if (juegoFinalizado) return;
@@ -111,7 +118,8 @@ function jugar() {
             });
             
             console.log(resultado);
-            finalizarJuego();
+            /*finalizarJuego();*/
+            estaJugando = false;
             exitGame();
         }
 
@@ -124,11 +132,12 @@ function jugar() {
                     // ACA DEBO AGREGAR EL RESULTADO PARA PASARLO AL WEBSOCKET
                     body: JSON.stringify({ id: mascotaId, resultado: resultado })
                 });
+                estaJugando = false;
 
                 console.log(resultado);
             }
 
-            finalizarJuego();
+            /*finalizarJuego();*/
 
             const modal = document.getElementById("snakeModal"); // VERIFICAMOS EXISTENCIA DEL MODAL
             if (modal) modal.remove(); // SOLO REMOVER SI EXISTE
@@ -151,11 +160,14 @@ function jugar() {
         const gameLoop = setInterval(draw, 150);
     }
 }
-
+/*
 function finalizarJuego() {
+    estaJugando = false;
     stompClient.publish({
         destination: "/app/establecerSiEstaJugando",
         body: JSON.stringify({ id: mascotaId, estaJugando: false})
     });
 }
+
+ */
 // HASTA ACA

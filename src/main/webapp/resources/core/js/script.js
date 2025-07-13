@@ -2,6 +2,7 @@ let mascotaId = document.getElementById("mascota-id").value;
 const mensajeEnfermedad = document.getElementById("mensaje-enfermedad");
 const mainContainer = document.getElementById("main-container");
 let estaDormido = false;
+let estaJugando = false;
 
 
 //actualiza datos cada un minuto
@@ -155,10 +156,13 @@ function dormirMascota() {
 }
 
 function actualizarDatosMascota() {
+    if(!estaJugando){
+        console.log("Estoy Corriendo");
     stompClient.publish({
         destination: "/app/actualizar",
         body: JSON.stringify({ id: mascotaId })
     });
+    }
 }
 
 function abrigarMascota() {
