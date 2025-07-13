@@ -20,9 +20,9 @@ public interface ServicioMascota {
     MascotaDTO crearMascota(String nombre);
     MascotaDTO crearMascota(String nombre, Long idUsuario);
     MascotaDTO jugar(MascotaDTO mascota);////A borrar
-    MascotaDTO alimentar(MascotaDTO mascota);
+    MascotaDTO alimentar(MascotaDTO mascota) throws MonedasInsuficientesException;
 
-    MascotaDTO limpiarMascota(MascotaDTO mascotaDTO) throws LimpiezaMaximaException;
+    MascotaDTO limpiarMascota(MascotaDTO mascotaDTO) throws LimpiezaMaximaException, MonedasInsuficientesException;
 
     MascotaDTO actualizarEstadisticas(MascotaDTO mascotaDTO, LocalDateTime horaActual) throws MascotaMuertaException, MascotaDespiertaException;
 
@@ -30,7 +30,7 @@ public interface ServicioMascota {
 
     Boolean chequearSiLaMascotaSeEnferma(MascotaDTO mascota);
 
-    MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException;
+    MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException, MonedasInsuficientesException;
 
     MascotaDTO chequearSiLaMascotaSigueViva(MascotaDTO mascota) throws MascotaMuertaException;
 
@@ -40,6 +40,8 @@ public interface ServicioMascota {
     void siHaceFrioYLaMascotaEstaDesabrigadaSePuedeEnfermarConMayorProbabilidad(Clima clima, MascotaDTO mascota);
 
     MascotaDTO despertar(MascotaDTO mascota) throws MascotaDespiertaException;
+
+    Boolean chequearSiAlcanzanLasmonedasParaLaAccion(MascotaDTO mascota, Double costo) throws MonedasInsuficientesException;
 }
 
 

@@ -55,12 +55,15 @@ public class ServicioMascotaImp implements ServicioMascota {
     public MascotaDTO traerUnaMascota(Long id) {
 
         MascotaDTO mascota = new MascotaDTO(this.repositorioMascota.obtenerPor(id));
+        mascota.setMonedas(this.repositorioMascota.traerMonedasPorIDMascota(id));
         return mascota;
     }
 
     @Override
     public void actualizarMascota(MascotaDTO mascota) {
+
         this.repositorioMascota.actualizar(mascota.obtenerEntidad());
+        this.repositorioMascota.actualizarMonedas(mascota.getMonedas(),mascota.getId());
     }
 
     @Override
@@ -112,16 +115,17 @@ public class ServicioMascotaImp implements ServicioMascota {
         return mascota;
     }
 
-    public MascotaDTO alimentar(MascotaDTO mascota) {
+    public MascotaDTO alimentar(MascotaDTO mascota) throws MonedasInsuficientesException {
         Double hambreASumarPorJuego = 25.00;
         Double hambreActual = mascota.getHambre();
         Double higieneActual = mascota.getHigiene();
         Double energiaActual = mascota.getEnergia();
 
-        if (hambreActual < 100.0) {
+        if (hambreActual < 100.0 && this.chequearSiAlcanzanLasmonedasParaLaAccion(mascota,25.00)) {
             mascota.setHambre(Math.min(100.0, hambreActual + hambreASumarPorJuego));
             mascota.setUltimaAlimentacion(LocalDateTime.now());
             mascota.setFelicidad(this.acotarDecimal((hambreActual + energiaActual + higieneActual) / 3.0));
+            mascota.setMonedas(mascota.getMonedas() - 25.00);
             //actualizamos en base de datos
             this.actualizarMascota(mascota);
         } else {
@@ -132,26 +136,35 @@ public class ServicioMascotaImp implements ServicioMascota {
     }
 
     @Override
-    public MascotaDTO limpiarMascota(MascotaDTO mascota) throws LimpiezaMaximaException {
+    public MascotaDTO limpiarMascota(MascotaDTO mascota) throws LimpiezaMaximaException, MonedasInsuficientesException {
         if(mascota.getHigiene() == 100.0) {
             throw new LimpiezaMaximaException("La higiene ya se encuentra al máximo");
-        } else {
+        }
+        if(this.chequearSiAlcanzanLasmonedasParaLaAccion(mascota,25.00)){
             mascota.setHigiene(100.0);
             mascota.setFelicidad(this.acotarDecimal((mascota.getHambre() + mascota.getEnergia() + mascota.getHigiene()) / 3.0));
             mascota.setUltimaHigiene(LocalDateTime.now());
+            mascota.setMonedas(mascota.getMonedas() - 25.00);
             this.actualizarMascota(mascota);
             return mascota;
+        }else{
+            throw new MonedasInsuficientesException("Monedas insuficientes, juga para ganar mas!");
         }
     }
 
     @Override
-    public MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException {
+    public MascotaDTO curarMascota(MascotaDTO mascota) throws MascotaSanaException, MonedasInsuficientesException {
         if (!mascota.getEstaEnfermo()) {
             throw new MascotaSanaException("La mascota no esta enferma");
-        } else {
+        }
+
+        if(this.chequearSiAlcanzanLasmonedasParaLaAccion(mascota,25.00)){
             mascota.setEstaEnfermo(false);
+            mascota.setMonedas(mascota.getMonedas() - 25.00);
             this.actualizarMascota(mascota);
             return mascota;
+        }else{
+            throw new MonedasInsuficientesException("Monedas insuficientes, juga para ganar mas!");
         }
 
     }
@@ -321,6 +334,16 @@ public class ServicioMascotaImp implements ServicioMascota {
             return mascota;
         } else {
             throw new MascotaDespiertaException ("La mascota ya esta despierta");
+        }
+    }
+
+    @Override
+    public Boolean chequearSiAlcanzanLasmonedasParaLaAccion(MascotaDTO mascota, Double costo) throws MonedasInsuficientesException {
+
+        if (mascota.getMonedas() >= costo) {
+            return true;
+        } else {
+            throw new MonedasInsuficientesException("Monedas insuficientes, juga para ganar mas!");
         }
     }
 }

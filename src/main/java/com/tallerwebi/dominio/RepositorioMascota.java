@@ -14,4 +14,7 @@ public interface RepositorioMascota {
     void actualizar(Mascota mascota);
 
 
+    Double traerMonedasPorIDMascota(Long id);
+
+    void actualizarMonedas(Double monedas, Long id);
 }

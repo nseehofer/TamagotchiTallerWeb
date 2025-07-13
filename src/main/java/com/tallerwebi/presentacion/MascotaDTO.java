@@ -25,7 +25,7 @@ public class MascotaDTO {
 
 
     private String tipo;
-
+    private Double monedas;
 
 
     public void setEnergia(Double energia) {
@@ -242,5 +242,13 @@ public class MascotaDTO {
 
     public void setEstaDormido(Boolean estaDormido) {
         this.estaDormido = estaDormido;
+    }
+
+    public void setMonedas(Double monedas) {
+        this.monedas = monedas;
+    }
+
+    public Double getMonedas() {
+        return monedas;
     }
 }

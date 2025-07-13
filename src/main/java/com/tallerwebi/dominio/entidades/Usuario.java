@@ -16,8 +16,18 @@ public class Usuario {
     private String password;
     private String rol;
     private Boolean activo = false;
+
+    public Double getMonedas() {
+        return monedas;
+    }
+
+    public void setMonedas(Double monedas) {
+        this.monedas = monedas;
+    }
+
     private String pais;
     private String provincia;
+    private Double monedas;
 
     public Long getId() {
         return id;

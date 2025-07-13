@@ -62,31 +62,33 @@
     <div class="ms-auto">
       <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
     </div>
-  </nav>
+</nav>
 
-  <body>
-    <main id="main-container" role="main" class="container">
-      <div th:if="${error}">
-        <p th:text="${error}" style="color:red;"></p>
-      </div>
-
-      <div th:if="${climaUrl}" class="d-flex flex-row align-items-center justify-content-center gap-3">
-        <p th:text="'Región: ' + ${climaUrl.zonaHoraria}" style="margin-bottom:0%"> </p>
-        <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}" style="margin-bottom:0%"> </p>
-        <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'" style="margin-bottom:0%"></p>
-        <!-- "&lt" es igual que usar "<", es para que el editor no chille -->
-        <div th:if="${temperaturaActual &lt 25.0}" class="d-flex align-items-center justify-content-evenly">
-          <div class="div-conteiner-cold">
-            <img class="icon img-icon-cold-heat " th:src="@{/img/otroCopo.png}" />
-          </div>
-          <button id="btn-abrigar" class="btn-class" onclick="abrigarMascota()">
-            <img class="icon img-icon-cold-heat " th:src="@{/img/calefaccion.png}" />
-          </button>
+<div th:if="${climaUrl}" class="clima-info">
+    <p th:text="'Región: ' + ${climaUrl.zonaHoraria}" class="mb-1"></p>
+    <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}" class="mb-1"></p>
+    <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'" class="mb-1"></p>
+    <!-- "&lt" es igual que usar "<", es para que el editor no chille -->
+    <div th:if="${temperaturaActual &lt 25.0}" class="iconos-clima">
+        <div class="div-conteiner-cold">
+            <img class="icon img-icon-cold-heat " th:src="@{/img/otroCopo.png}"/>
         </div>
-      </div>
-      <!-- HASTA ACA -->
+        <button id="btn-abrigar" class="btn-class" onclick="abrigarMascota()">
+            <img class="icon img-icon-cold-heat " th:src="@{/img/calefaccion.png}"/>
+        </button>
+    </div>
+</div>
 
-      <div id="mensaje-enfermedad" class="alert alert-danger d-none text-center mt-3">
+<main id="main-container" role="main" class="container">
+    <div th:if="${error}">
+        <p th:text="${error}" style="color:red;"></p>
+    </div>
+
+    <div class="text-center mb-4 mt-5">
+        <h3 class="titulo" >MIS TAMA-COINS: <span id="valor-monedas" th:text="${mascota.monedas}">monedas</span></h3>
+    </div>
+    <!--FIN TAMA-COINS -->
+    <div id="mensaje-enfermedad" class="alert alert-danger d-none text-center mt-3">
         ¡Oh no! ¡<span th:text="${mascota.nombre}"></span> está enfermo! Curalo antes de que sea tarde...
       </div>
 
@@ -135,10 +137,10 @@
           </button>
 
 
-          <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button" onclick="curarMascota()">
-            <img class="icon" th:src="@{/img/medicine-black.png}" />
-          </button>
+            <input name="id" type="hidden" th:value="${mascota.id}">
+            <button class="button" onclick="curarMascota()">
+                <img class="icon" th:src="@{/img/medicine-black.png}"/>
+            </button>
 
 
           <input name="id" type="hidden" th:value="${mascota.id}">
@@ -146,10 +148,10 @@
             <img class="icon" th:src="@{/img/bath-black.png}" />
           </button>
 
-          <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button" onclick="cambiarEstadoDormidoODespierto()">
-            <img class="icon" th:src="@{/img/lightOn-black.png}" />
-          </button>
+            <input name="id" type="hidden" th:value="${mascota.id}">
+            <button class="button" onclick="cambiarEstadoDormidoODespierto()">
+                <img class="icon" th:src="@{/img/lightOn-black.png}"/>
+            </button>
 
 
           <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
@@ -159,29 +161,28 @@
 
 
         </div>
-      </div>
-    </main>
     </div>
+</main>
+</div>
 
-    <div id="modal-error" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-dialog-centered" role="document">
+<div id="modal-error" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content text-center"
-          style="background-color: #fefefe; font-family: 'Press Start 2P', cursive;">
-          <div class="modal-header border-0 justify-content-center">
-            <h5 class="modal-title w-100" style="color: #09a1a1;">¡Ups!</h5>
-            <button type="button" class="btn-close position-absolute end-0 me-3" data-bs-dismiss="modal"
-              aria-label="Cerrar"></button>
-          </div>
-          <div class="modal-body py-3">
-            <p id="modal-error-mensaje" class="mb-0" style="font-size: 0.6rem;">Error desconocido.</p>
-          </div>
+             style="background-color: #fefefe; font-family: 'Press Start 2P', cursive;">
+            <div class="modal-header border-0 justify-content-center">
+                <h5 class="modal-title w-100" style="color: #09a1a1;">¡Ups!</h5>
+                <button type="button" class="btn-close position-absolute end-0 me-3" data-bs-dismiss="modal"
+                        aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body py-3">
+                <p id="modal-error-mensaje" class="mb-0" style="font-size: 0.6rem;">Error desconocido.</p>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
-    
 
-    </main>
+</main>
 
     <!-- Bootstrap core js -->
     <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>

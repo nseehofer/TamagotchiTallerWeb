@@ -48,6 +48,7 @@ stompClient.onConnect = (frame) => {
         let estaEnfermo = contenido.estaEnfermo;
         let estaVivo = contenido.estaVivo;
         estaDormido = contenido.estaDormido;
+        let valorMonedasActualizado = contenido.monedas;
 
 
 
@@ -60,13 +61,14 @@ stompClient.onConnect = (frame) => {
             const valorHigiene = document.getElementById("valor-higiene");
             const valorEnergia = document.getElementById("valor-energia");
             const valorFelicidad = document.getElementById("valor-felicidad");
+            const valorMonedas = document.getElementById("valor-monedas");
 
             valorHambre.textContent = valorActualizadoDelHambre + '%';
             valorHigiene.textContent = valorHigieneActualizado + '%';
             valorEnergia.textContent = valorEnergiaActualizado + '%';
             valorFelicidad.textContent = valorFelicidadActualizado + '%';
-
-
+            valorMonedas.textContent = '$' + valorMonedasActualizado;
+           
             if (estaEnfermo) {
                 mensajeEnfermedad.classList.remove("d-none");
             } else {

@@ -55,6 +55,10 @@ public class ControladorWebSocket {
             String error = mapper.writeValueAsString(
                     "Tu mascota está satisfecha");
             return error;
+        }catch (MonedasInsuficientesException monedasInsuficientesException) {
+            String error = mapper.writeValueAsString(
+                    "No te alcanzan las monedas, juga para ganar mas!");
+            return error;
         }
 
         String JSONMascota = mapper.writeValueAsString(mascota);
@@ -75,6 +79,10 @@ public class ControladorWebSocket {
         } catch (LimpiezaMaximaException limpiezaMaxima) {
             String error = mapper.writeValueAsString(
                     "La higiene ya se encuentra al máximo");
+            return error;
+        }catch (MonedasInsuficientesException monedasInsuficientesException) {
+            String error = mapper.writeValueAsString(
+                    "No te alcanzan las monedas, juga para ganar mas!");
             return error;
         }
 
@@ -145,6 +153,10 @@ public class ControladorWebSocket {
         } catch (MascotaSanaException mascotaSana) {
             String error = mapper.writeValueAsString(
                     "La mascota no esta enferma");
+            return error;
+        }catch (MonedasInsuficientesException monedasInsuficientesException) {
+            String error = mapper.writeValueAsString(
+                    "No te alcanzan las monedas, juga para ganar mas!");
             return error;
         }
 
