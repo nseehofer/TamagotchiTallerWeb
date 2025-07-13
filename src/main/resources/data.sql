@@ -1,4 +1,4 @@
-INSERT INTO Usuario(id, email, password, rol, activo,nombre, pais, provincia)
+INSERT INTO Usuario(id, email, password, rol, activo,nombre, pais, provincia,monedas)
 VALUES
     (null, 'test@unlam.edu.ar', '$2a$10$Qfr6YND2AHuFcAWeJyvtDOWC2l1PANiwfEbgaQ64Sj/vnU1wEQMES', 'ADMIN', true,'SR administrador','Argentina','Buenos Aires', 100.00),
     (null, 'user@unlam.edu.ar', '$2a$10$1XP36WR.QWSJwRqI2LYCr.1ETya9bNSUFT6UzqbKkFqGNAguLxOv.', 'USER', true,'User','Bolivia','Sucre', 0.00);

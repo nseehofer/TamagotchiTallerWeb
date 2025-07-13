@@ -105,10 +105,11 @@ function jugar() {
             resultado = score >= 50 ? "positivo" : score >= 20 ? "regular" : "negativo";
             clearInterval(gameLoop); // DETENER EL CICLO DE JUEGO ANTES DE PUBLICAR Y SALIR
             stompClient.publish({
-                destination: "/app/evaluarResulado",
+                destination: "/app/evaluarResultado",
                 // ACA DEBO AGREGAR EL RESULTADO PARA PASARLO AL WEBSOCKET
-                body: JSON.stringify({ id: mascotaId })
+                body: JSON.stringify({ id: mascotaId, resultado: resultado })
             });
+            
             console.log(resultado);
             finalizarJuego();
             exitGame();
@@ -119,9 +120,9 @@ function jugar() {
                 resultado = "negativo"; // SE ADVIERTE EL ABANDONO DEL USUARIO
                 clearInterval(gameLoop); // DETENER EL CICLO DE JUEGO ANTES DE PUBLICAR Y SALIR
                 stompClient.publish({
-                    destination: "/app/evaluarResulado",
+                    destination: "/app/evaluarResultado",
                     // ACA DEBO AGREGAR EL RESULTADO PARA PASARLO AL WEBSOCKET
-                    body: JSON.stringify({ id: mascotaId })
+                    body: JSON.stringify({ id: mascotaId, resultado: resultado })
                 });
 
                 console.log(resultado);

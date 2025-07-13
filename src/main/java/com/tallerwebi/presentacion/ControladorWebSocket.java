@@ -25,6 +25,7 @@ public class ControladorWebSocket {
     public static class MascotaDTOEscalaParaId {
         private Long id;
         private Boolean estaJugando;
+        private String resultado;
 
         public MascotaDTOEscalaParaId() {
             // Constructor vacío necesario para la deserialización
@@ -49,6 +50,13 @@ public class ControladorWebSocket {
         public void setEstaJugando(Boolean estaJugando) {
             this.estaJugando = estaJugando;
         }
+
+        public String getResultado() {
+            return this.resultado;
+        }
+        public void setResultado(String resultado) {
+            this.resultado = resultado;
+        }
     }
 
     @MessageMapping("/alimentar")
@@ -64,7 +72,7 @@ public class ControladorWebSocket {
             String error = mapper.writeValueAsString(
                     "Tu mascota está satisfecha");
             return error;
-        }catch (MonedasInsuficientesException monedasInsuficientesException) {
+        } catch (MonedasInsuficientesException monedasInsuficientesException) {
             String error = mapper.writeValueAsString(
                     "No te alcanzan las monedas, juga para ganar mas!");
             return error;
@@ -89,7 +97,7 @@ public class ControladorWebSocket {
             String error = mapper.writeValueAsString(
                     "La higiene ya se encuentra al máximo");
             return error;
-        }catch (MonedasInsuficientesException monedasInsuficientesException) {
+        } catch (MonedasInsuficientesException monedasInsuficientesException) {
             String error = mapper.writeValueAsString(
                     "No te alcanzan las monedas, juga para ganar mas!");
             return error;
@@ -112,11 +120,12 @@ public class ControladorWebSocket {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            // RESOLVERLO CON UN SWITCH DENTRO DE "evaluarResultadoMinijuego" 
-            //servicioMascota.evaluarResultadoMinijuego(String resultado, String interaccion)
+            // RESOLVERLO CON UN SWITCH DENTRO DE "evaluarResultadoMinijuego"
+            // servicioMascota.evaluarResultadoMinijuego(String resultado, String
+            // interaccion)
             // resolver dentro del servicio con "5 if"
             mascota = servicioMascota.jugar(mascota);
-            
+
         } catch (EnergiaInsuficiente energiaInsuficiente) {
             String error = mapper.writeValueAsString(
                     "No podés jugar, te falta energía");
@@ -163,7 +172,7 @@ public class ControladorWebSocket {
             String error = mapper.writeValueAsString(
                     "La mascota no esta enferma");
             return error;
-        }catch (MonedasInsuficientesException monedasInsuficientesException) {
+        } catch (MonedasInsuficientesException monedasInsuficientesException) {
             String error = mapper.writeValueAsString(
                     "No te alcanzan las monedas, juga para ganar mas!");
             return error;
@@ -268,6 +277,28 @@ public class ControladorWebSocket {
 
         String JSONMascota = mapper.writeValueAsString(mascota);
 
+        return JSONMascota;
+    }
+
+    /* METODO QUE EVALUA RESULTADO */
+
+    @MessageMapping("/evaluarResultado")
+    @SendTo("/topic/messages")
+    // RECIBO UN JSON.stringify con el id de la mascota
+    public String evaluarResultado(MascotaDTOEscalaParaId mascotaParaId) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+
+        MascotaDTO mascota = servicioMascota.traerUnaMascota(mascotaParaId.getId());
+        String resultado = mascotaParaId.getResultado();
+       
+        if ("positivo".equals(resultado)) {
+            mascota.setMonedas(mascota.getMonedas() + 50.0);
+        } else if ("regular".equals(resultado)) {
+            mascota.setMonedas(mascota.getMonedas() + 25.0);
+        }
+        servicioMascota.actualizarMascota(mascota);
+
+        String JSONMascota = mapper.writeValueAsString(mascota);
 
         return JSONMascota;
     }
