@@ -5,7 +5,7 @@ let direction = 'right';
 let snake = [{ x: 5, y: 5 }];
 let food = { x: 10, y: 10 };
 
-function jugar() {
+function jugarSnake() {
 
     stompClient.publish({
         destination: "/app/jugar",

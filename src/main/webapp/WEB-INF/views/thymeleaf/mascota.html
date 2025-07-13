@@ -77,6 +77,8 @@
             <img class="icon img-icon-cold-heat " th:src="@{/img/calefaccion.png}"/>
         </button>
     </div>
+    <!-- Se que aca va el clima pero me sirve para debuggear -->
+    <p>MIS TAMA-COINS: <span id="valor-monedas" th:text="${mascota.monedas}">monedas</span></p>
 </div>
 
 <main id="main-container" role="main" class="container">
@@ -84,9 +86,6 @@
         <p th:text="${error}" style="color:red;"></p>
     </div>
 
-    <div class="text-center mb-4 mt-5">
-        <h3 class="titulo" >MIS TAMA-COINS: <span id="valor-monedas" th:text="${mascota.monedas}">monedas</span></h3>
-    </div>
     <!--FIN TAMA-COINS -->
     <div id="mensaje-enfermedad" class="alert alert-danger d-none text-center mt-3">
         ¡Oh no! ¡<span th:text="${mascota.nombre}"></span> está enfermo! Curalo antes de que sea tarde...
@@ -189,6 +188,7 @@
     <!-- WEBSOCKET -->
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
     <script type="text/javascript" th:src="@{/js/script.js}"></script>
+    <script type="text/javascript" th:src="@{/js/menuJuego.js}"></script>
     <script type="text/javascript" th:src="@{/js/miniJuegoSerpiente.js}"></script>
 
 
