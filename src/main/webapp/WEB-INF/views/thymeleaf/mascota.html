@@ -43,6 +43,10 @@
         <p th:text="${error}" style="color:red;"></p>
     </div>
 
+    <div class="text-center mb-4 mt-5">
+        <h3 class="titulo" >MIS TAMA-COINS: <span id="valor-monedas" th:text="${mascota.monedas}">monedas</span></h3>
+    </div>
+    <!--FIN TAMA-COINS -->
     <div id="mensaje-enfermedad" class="alert alert-danger d-none text-center mt-3">
         ¡Oh no! ¡<span th:text="${mascota.nombre}"></span> está enfermo! Curalo antes de que sea tarde...
     </div>

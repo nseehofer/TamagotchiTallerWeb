@@ -5,10 +5,7 @@ import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.ServicioTemperatura;
 import com.tallerwebi.dominio.entidades.Mascota;
 import com.tallerwebi.dominio.entidades.Usuario;
-import com.tallerwebi.dominio.excepcion.EnergiaInsuficiente;
-import com.tallerwebi.dominio.excepcion.EnergiaMaxima;
-import com.tallerwebi.dominio.excepcion.LimpiezaMaximaException;
-import com.tallerwebi.dominio.excepcion.MascotaSatisfecha;
+import com.tallerwebi.dominio.excepcion.*;
 import com.tallerwebi.dominio.mapeado.Clima;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -157,7 +154,7 @@ public class ControladorMascotaTest {
     }
 
     @Test
-    public void queUnUsuarioPresionaAlimentarYLaMascotaDisminuyaSuHambreYRegistreSuHorarioDeAlimentacion() {
+    public void queUnUsuarioPresionaAlimentarYLaMascotaDisminuyaSuHambreYRegistreSuHorarioDeAlimentacion() throws MonedasInsuficientesException {
         String nombreMascota = "Firulais";
         MascotaDTO mascotaDTOPrueba = new MascotaDTO(nombreMascota);
         mascotaDTOPrueba.setId(1L);
@@ -180,7 +177,7 @@ public class ControladorMascotaTest {
     }
 
     @Test
-    public void queAlAlimentarLaMascotaConHambreSuficienteSeMuestreElMensajeDeError() {
+    public void queAlAlimentarLaMascotaConHambreSuficienteSeMuestreElMensajeDeError() throws MonedasInsuficientesException {
         String nombreMascota = "Firulais";
         MascotaDTO mascotaDTOPrueba = new MascotaDTO(nombreMascota);
         mascotaDTOPrueba.setId(1L);
@@ -277,7 +274,7 @@ public class ControladorMascotaTest {
     }
 
     @Test
-    public void queAlLimpiarLaMascotaConLimpiezaMaximaSeMuestreElMensajeDeError() throws LimpiezaMaximaException {
+    public void queAlLimpiarLaMascotaConLimpiezaMaximaSeMuestreElMensajeDeError() throws LimpiezaMaximaException, MonedasInsuficientesException {
         Long idMascota = 1L;
         MascotaDTO mascotaDePrueba = new MascotaDTO("Firulais");
         mascotaDePrueba.setId(idMascota);
@@ -293,7 +290,7 @@ public class ControladorMascotaTest {
     }
 
     @Test
-    public void queAlLimpiarLaMascotaSeMuestreLaVistaCorrecta() throws LimpiezaMaximaException {
+    public void queAlLimpiarLaMascotaSeMuestreLaVistaCorrecta() throws LimpiezaMaximaException, MonedasInsuficientesException {
         Long idMascota = 1L;
         MascotaDTO mascotaDePrueba = new MascotaDTO("Firulais");
         mascotaDePrueba.setId(idMascota);

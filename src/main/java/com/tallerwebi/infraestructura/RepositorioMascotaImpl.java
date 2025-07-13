@@ -76,4 +76,34 @@ public class RepositorioMascotaImpl implements RepositorioMascota {
             // throw new MuchosRegistrosAfectados("Actualizo mas de uno");
         }
     }
+
+    @Override
+    public Double traerMonedasPorIDMascota(Long id) {
+        Long idUsuario =this.traerUsuarioPorMascotaId(id);
+
+        String hql = "SELECT monedas FROM Usuario WHERE id = :idUsuario";
+        Query queryParaUsuario = this.sessionFactory.getCurrentSession().createQuery(hql);
+        queryParaUsuario.setParameter("idUsuario", idUsuario);
+
+        return (Double)queryParaUsuario.getSingleResult();
+    }
+
+    @Override
+    public void actualizarMonedas(Double monedas, Long id) {
+        Long idUsuario =this.traerUsuarioPorMascotaId(id);
+
+        String hql = "UPDATE Usuario SET monedas = :monedas WHERE id = :idUsuario ";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("idUsuario", idUsuario);
+        query.setParameter("monedas", monedas);
+        query.executeUpdate();
+
+    }
+
+    private Long traerUsuarioPorMascotaId(long idmascota){
+        String hql = "SELECT usuario_id FROM Mascota WHERE id = :id";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("id", idmascota);
+        return (Long) query.getSingleResult();
+    }
 }

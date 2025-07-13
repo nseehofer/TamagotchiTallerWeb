@@ -38,7 +38,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void cuandoLimpioLaMascotaSuHigieneSeAumentaAlMaximo() throws LimpiezaMaximaException {
+    public void cuandoLimpioLaMascotaSuHigieneSeAumentaAlMaximo() throws LimpiezaMaximaException, MonedasInsuficientesException {
         //Preparación
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -49,7 +49,7 @@ public class ServicioMascotaTest {
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
         MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
-
+        mascotaDTO.setMonedas(100.00);
         //Accion
         servicioMascota.limpiarMascota(mascotaDTO);
 
@@ -70,7 +70,7 @@ public class ServicioMascotaTest {
         try {
             servicioMascota.limpiarMascota(mascotaDTO);
             fail ("Se esperaba LimpiezaMaximaException, pero no se lanzó");
-        } catch (LimpiezaMaximaException e) {
+        } catch (LimpiezaMaximaException | MonedasInsuficientesException e) {
             assertThat(e.getMessage(), containsString("La higiene ya se encuentra al máximo"));
         }
 
@@ -336,7 +336,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void queAlAlimentarseSeAumenteElNivelDeHambreYSeGuardeHoraDeUltimaAlimentacion() {
+    public void queAlAlimentarseSeAumenteElNivelDeHambreYSeGuardeHoraDeUltimaAlimentacion() throws MonedasInsuficientesException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setId(1L);
@@ -345,8 +345,8 @@ public class ServicioMascotaTest {
         mascotaEntidad.setHigiene(100.0);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
-
         MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+        mascotaDTO.setMonedas(100.00);
 
         servicioMascota.alimentar(mascotaDTO);
 
@@ -368,7 +368,7 @@ public class ServicioMascotaTest {
 
         try {
             servicioMascota.alimentar(mascotaDTO);
-        } catch (MascotaSatisfecha e){
+        } catch (MascotaSatisfecha | MonedasInsuficientesException e){
             assertThat(e.getMessage(), equalTo("Tu mascota está satisfecha"));
         }
     }
@@ -584,7 +584,7 @@ public class ServicioMascotaTest {
     }
 
     @Test
-    public void queSePuedaCurarUnaMascotaEnferma() throws MascotaSanaException {
+    public void queSePuedaCurarUnaMascotaEnferma() throws MascotaSanaException, MonedasInsuficientesException {
         Mascota mascotaEntidad = new Mascota();
         mascotaEntidad.setEstaEnfermo(true);
         mascotaEntidad.setId(1L);
@@ -592,6 +592,7 @@ public class ServicioMascotaTest {
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
         MascotaDTO mascotaDTO = servicioMascota.traerUnaMascota(mascotaEntidad.getId());
+        mascotaDTO.setMonedas(100.00);
 
         servicioMascota.curarMascota(mascotaDTO);
 
@@ -610,7 +611,7 @@ public class ServicioMascotaTest {
 
         try {
             servicioMascota.curarMascota(mascotaDTO);
-        } catch (MascotaSanaException e) {
+        } catch (MascotaSanaException | MonedasInsuficientesException e) {
             assertThat(e.getMessage(), equalTo("La mascota no esta enferma"));
         }
 

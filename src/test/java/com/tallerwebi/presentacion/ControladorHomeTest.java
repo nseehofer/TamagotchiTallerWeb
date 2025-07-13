@@ -1,5 +1,6 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.ServicioLogin;
 import com.tallerwebi.dominio.ServicioMascota;
 import com.tallerwebi.dominio.entidades.Mascota;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,13 +25,15 @@ public class ControladorHomeTest {
     private ServicioMascota servicioMascotaMock;
     private HttpServletRequest requestMock;
     private HttpSession sessionMock;
+    private ServicioLogin servicioLoginMock;
 
     @BeforeEach
     public void init(){
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
         servicioMascotaMock = mock(ServicioMascota.class);
-        controladorHome = new ControladorHome(servicioMascotaMock);
+        servicioLoginMock = mock(ServicioLogin.class);
+        controladorHome = new ControladorHome(servicioMascotaMock,servicioLoginMock);
     }
 
     @Test
