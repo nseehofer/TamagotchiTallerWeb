@@ -51,9 +51,9 @@ button:hover {
     display: block;
     margin-top: 20px;
     text-align: center;
-    font-size: 10px;
+    font-size: 12px;
     color: #000;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .alert {

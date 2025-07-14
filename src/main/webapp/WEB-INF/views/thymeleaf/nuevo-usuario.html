@@ -29,7 +29,7 @@
             <h3>REGISTRARSE</h3>
             <hr>
 
-            <input th:field="*{email}" id="email" class="form-control" placeholder="email" required/>
+            <input th:field="*{email}" id="email" class="form-control" placeholder="correo electronico" required/>
             <input th:field="*{password}" type="password" id="password" class="form-control" placeholder="contraseña"
                    required/>
             <input th:field="*{nombre}" type="text" id="nombre" class="form-control" placeholder="nombre" required/>
@@ -40,7 +40,7 @@
             <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
             </p>
         </form>
-        <a id="ir-a-loguearse" href="login">LOGIN</a>
+        <a id="ir-a-loguearse" href="login">¿Ya tienes una cuenta?</a>
     </div>
 </main>
 <!-- /.container -->
