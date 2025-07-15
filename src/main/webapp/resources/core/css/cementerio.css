@@ -69,4 +69,5 @@ h3 {
     left: 50%;
     transform: translateX(-50%);
     width: 100px;
+    filter: grayscale(100%);
 }
