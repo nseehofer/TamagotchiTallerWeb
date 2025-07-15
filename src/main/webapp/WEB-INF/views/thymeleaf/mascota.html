@@ -134,7 +134,7 @@
           <button class="button" id="jugar" onclick="jugar()">
             <img class="icon" th:src="@{/img/game-black.png}" />
           </button>
-
+            <input name="tetrismusic" id="tetrisMusic"type="hidden" th:value="@{/audio/Tetris.mp3}">
 
             <input name="id" type="hidden" th:value="${mascota.id}">
             <button class="button" onclick="curarMascota()">
@@ -190,6 +190,7 @@
     <script type="text/javascript" th:src="@{/js/script.js}"></script>
     <script type="text/javascript" th:src="@{/js/menuJuego.js}"></script>
     <script type="text/javascript" th:src="@{/js/miniJuegoSerpiente.js}"></script>
+    <script type="text/javascript" th:src="@{/js/tetris.js}"></script>
 
 
   </body>

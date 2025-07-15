@@ -177,3 +177,12 @@ body {
     height: auto;
     width: 70px;
 }
+
+/*Estilo para tetris*/
+.playground {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+/*Fin estilo para tetris*/
