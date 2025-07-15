@@ -12,7 +12,7 @@ const modalHTML = `
         <p class="leyenda-juego">Selecciona el juego</p>
 	<button type="button" onClick="jugarSnake()"> Viborita </button>
 	<button type="button" id="tetris" onClick="jugarTetris()"> Tetris</button>
-	<button type="button" onClick="jugarMemeTest()"> MemeTest </button>
+	<button type="button" id="memotest" onClick="jugarMemoTest()"> MemoTest </button>
 	<button type="button" onClick="jugarTateti()"> TaTeTi</button>
 	<button type="button" onClick="jugarAhorcado()"> Ahorcado</button>
 	<button type="button" onClick="jugarSimon()"> Simon Dice</button>

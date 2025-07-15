@@ -186,3 +186,47 @@ body {
 }
 
 /*Fin estilo para tetris*/
+
+/*Estilo para memotest*/
+.memotest-board {
+    display: grid;
+    grid-template-columns: repeat(4, 160px);
+    grid-gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.memotest-card {
+    width: 160px;
+    height: 160px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 20px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.memotest-card.flipped img.img-memo,
+.memotest-card.matched img.img-memo {
+    background-color: #00cc99;
+    border-radius: 6px;
+}
+
+.leyenda-juego {
+    font-size: 10px;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.memotest-card img.img-memo {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    border-radius: 4px;
+    display: block;
+}
+
+/*Fin de estilo para memotest*/

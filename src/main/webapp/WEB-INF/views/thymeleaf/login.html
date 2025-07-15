@@ -24,10 +24,10 @@
 <main role="main" class="container">
     <div id="loginbox">
         <form action="#" th:action="@{/validar-login}" method="POST" th:object="${datosLogin}">
-            <h3>LOGIN</h3>
+            <h3>INICIAR SESION</h3>
             <hr>
 
-            <input th:field="*{email}" id="email" type="email" class="form-control" placeholder="Email" required/>
+            <input th:field="*{email}" id="email" type="email" class="form-control" placeholder="Correo electronico" required/>
             <input th:field="*{password}" type="password" id="password" class="form-control" placeholder="Contraseña"
                    required/>
 
@@ -36,7 +36,7 @@
             <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
             </p>
         </form>
-        <a id="ir-a-registrarme" href="nuevo-usuario">REGISTRARME</a>
+        <a id="ir-a-registrarme" href="nuevo-usuario">¿No tenes cuenta? Registrate</a>
     </div>
 
 </main>
