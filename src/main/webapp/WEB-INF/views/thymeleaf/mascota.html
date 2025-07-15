@@ -2,65 +2,65 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Taller Web I</title>
+    <title>Taller Web I</title>
 
-  <!-- Bootstrap core css -->
-  <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <!-- Bootstrap core css -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.2.0/css/bootstrap.min.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
-  <!-- Custom style -->
-  <link rel="stylesheet" th:href="@{/css/main.css}" />
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    body.modal-open {
-      overflow: hidden;
-    }
+    <!-- Custom style -->
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body.modal-open {
+            overflow: hidden;
+        }
 
-    #snakeCanvas {
-      background-color: #222;
-      image-rendering: pixelated;
-    }
+        #snakeCanvas {
+            background-color: #222;
+            image-rendering: pixelated;
+        }
 
-    #snakeModal .modal-dialog {
-      max-width: 60vw;
-      height: 60vh;
-      margin: auto;
-    }
+        #snakeModal .modal-dialog {
+            max-width: 60vw;
+            height: 60vh;
+            margin: 20px auto 0 auto;
+        }
 
-    #snakeModal .modal-content {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
+        #snakeModal .modal-content {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
-    .leyenda-juego {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 14px;
-      color: #fff;
-      margin-bottom: 20px;
-    }
+        .leyenda-juego {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 14px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
 
-    .btn-exit-custom {
-      background-color: #09a1a1;
-      border: none;
-      color: white;
-      padding: 5px 10px;
-      font-weight: bold;
-      font-family: 'Press Start 2P', monospace;
-    }
-  </style>
+        .btn-exit-custom {
+            background-color: #09a1a1;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            font-weight: bold;
+            font-family: 'Press Start 2P', monospace;
+        }
+    </style>
 
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="../home">Tamagotchi</a>
     <div class="ms-auto">
-      <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
+        <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
     </div>
 </nav>
 
@@ -89,52 +89,52 @@
     <!--FIN TAMA-COINS -->
     <div id="mensaje-enfermedad" class="alert alert-danger d-none text-center mt-3">
         ¡Oh no! ¡<span th:text="${mascota.nombre}"></span> está enfermo! Curalo antes de que sea tarde...
-      </div>
+    </div>
 
-      <div class="container">
+    <div class="container">
         <h2 id="nombre-mascota" th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
         <div class="bar-container">
-          <div class="bar energy">
-            <img class="icon" th:src="@{/img/energy.png}" />
-            <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;"
-              th:text=" ${mascota.energia} + '%'"></div>
-          </div>
-          <div class="bar happiness">
-            <img class="icon" th:src="@{/img/happiness.png}" />
-            <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;"
-              th:text=" ${mascota.felicidad} + '%'"></div>
-          </div>
+            <div class="bar energy">
+                <img class="icon" th:src="@{/img/energy.png}"/>
+                <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;"
+                     th:text=" ${mascota.energia} + '%'"></div>
+            </div>
+            <div class="bar happiness">
+                <img class="icon" th:src="@{/img/happiness.png}"/>
+                <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;"
+                     th:text=" ${mascota.felicidad} + '%'"></div>
+            </div>
         </div>
 
         <div class="pet-container">
-          <div class="pet">
-            <img th:src="@{'/img/' + ${mascota.tipo} + '.png'}" alt="Pet" class="pet-image" />
-          </div>
+            <div class="pet">
+                <img th:src="@{'/img/' + ${mascota.tipo} + '.png'}" alt="Pet" class="pet-image"/>
+            </div>
 
-          <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
+            <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
         </div>
 
         <div class="bar-container">
-          <div class="bar hunger">
-            <img class="icon" th:src="@{/img/hunger.png}" />
-            <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
-              th:text=" ${mascota.hambre} + '%'"></div>
+            <div class="bar hunger">
+                <img class="icon" th:src="@{/img/hunger.png}"/>
+                <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
+                     th:text=" ${mascota.hambre} + '%'"></div>
 
-          </div>
-          <div class="bar cleanliness">
-            <img class="icon" th:src="@{/img/cleanliness.png}" />
-            <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;"
-              th:text=" ${mascota.higiene} + '%'"></div>
+            </div>
+            <div class="bar cleanliness">
+                <img class="icon" th:src="@{/img/cleanliness.png}"/>
+                <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;"
+                     th:text=" ${mascota.higiene} + '%'"></div>
 
-          </div>
+            </div>
         </div>
 
         <div class="button-container">
-          <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button" id="jugar" onclick="jugar()">
-            <img class="icon" th:src="@{/img/game-black.png}" />
-          </button>
-            <input name="tetrismusic" id="tetrisMusic"type="hidden" th:value="@{/audio/Tetris.mp3}">
+            <input name="id" type="hidden" th:value="${mascota.id}">
+            <button class="button" id="jugar" onclick="jugar()">
+                <img class="icon" th:src="@{/img/game-black.png}"/>
+            </button>
+            <input name="tetrismusic" id="tetrisMusic" type="hidden" th:value="@{/audio/Tetris.mp3}">
 
             <input name="id" type="hidden" th:value="${mascota.id}">
             <button class="button" onclick="curarMascota()">
@@ -142,10 +142,10 @@
             </button>
 
 
-          <input name="id" type="hidden" th:value="${mascota.id}">
-          <button class="button" onclick="limpiarMascota()">
-            <img class="icon" th:src="@{/img/bath-black.png}" />
-          </button>
+            <input name="id" type="hidden" th:value="${mascota.id}">
+            <button class="button" onclick="limpiarMascota()">
+                <img class="icon" th:src="@{/img/bath-black.png}"/>
+            </button>
 
             <input name="id" type="hidden" th:value="${mascota.id}">
             <button class="button" onclick="cambiarEstadoDormidoODespierto()">
@@ -153,10 +153,10 @@
             </button>
 
 
-          <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
-          <button class="button" onclick="alimentarMascota()">
-            <img class="icon" th:src="@{/img/food-black.png}" />
-          </button>
+            <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
+            <button class="button" onclick="alimentarMascota()">
+                <img class="icon" th:src="@{/img/food-black.png}"/>
+            </button>
 
 
         </div>
@@ -183,16 +183,16 @@
 
 </main>
 
-    <!-- Bootstrap core js -->
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
-    <!-- WEBSOCKET -->
-    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
-    <script type="text/javascript" th:src="@{/js/script.js}"></script>
-    <script type="text/javascript" th:src="@{/js/menuJuego.js}"></script>
-    <script type="text/javascript" th:src="@{/js/miniJuegoSerpiente.js}"></script>
-    <script type="text/javascript" th:src="@{/js/tetris.js}"></script>
+<!-- Bootstrap core js -->
+<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
+<!-- WEBSOCKET -->
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+<script type="text/javascript" th:src="@{/js/script.js}"></script>
+<script type="text/javascript" th:src="@{/js/menuJuego.js}"></script>
+<script type="text/javascript" th:src="@{/js/miniJuegoSerpiente.js}"></script>
+<script type="text/javascript" th:src="@{/js/tetris.js}"></script>
+<script type="text/javascript" th:src="@{/js/memotest.js}"></script>
 
-
-  </body>
+</body>
 
 </html>
