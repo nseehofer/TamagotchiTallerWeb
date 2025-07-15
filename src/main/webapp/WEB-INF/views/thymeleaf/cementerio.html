@@ -20,18 +20,31 @@
         <a class="navbar-brand" href="../cerrar-sesion">Cerrar sesión!</a>
     </div>
 </nav>
-<main role="main" class="container">
+<audio id="audio-player" autoplay loop>
+    <source th:src="@{/audio/cementerio.mp3}" type="audio/mpeg">
+</audio>
+<main role="main" class="container text-center">
     <div id="cementerio-box">
-        <h1>Este es el cementerio pero, si estas leyendo esto, estas vivo</h1>
-        <h2 th:text="'Aqui yace: ' + ${mascota.nombre}"></h2><br>
+        <h1 class="titulo">Aquí descansa tu mascota</h1>
+
+        <div class="tumba-container">
+            <img src="../img/tumba.png" alt="Tumba" class="tumba-img">
+            <div class="nombre-tumba" th:text="${mascota.nombre}"></div>
+            <img th:src="@{'/img/' + ${mascota.tipo} + '.png'}" alt="Pet" class="pet-image"/>
+        </div>
+
         <h3>"Genio y figura hasta la sepultura."</h3>
+
         <form action="../home">
-            <button type="submit">VOLVER AL HOGAR</button>
+            <button type="submit" class="btn-custom">VOLVER AL HOGAR</button>
         </form>
     </div>
 </main>
+
 <!-- Boostrap core js -->
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/js/musica.js}"></script>
+
 </body>
 </html>
