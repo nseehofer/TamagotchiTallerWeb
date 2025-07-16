@@ -65,29 +65,11 @@
         </div>
     </nav>
 
-    <div th:if="${climaUrl}" class="clima-info">
-        <div>
-        <p th:text="'Región: ' + ${climaUrl.zonaHoraria}" class="mb-1 desaparecer-clima-region"></p>
-        <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}" class="mb-1 desaparecer-clima"></p>
-        <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'" class="mb-1"></p>
-        </div>
-        <!-- "&lt" es igual que usar "<", es para que el editor no chille -->
-        <div th:if="${temperaturaActual &lt 25.0}" class="iconos-clima">
-            <div class="div-conteiner-cold">
-                <img class="icon img-icon-cold-heat " th:src="@{/img/otroCopo.png}" />
-            </div>
-            <button id="btn-abrigar" class="btn-class" th:classappend="${mascota.estaAbrigada} ? 'pressed' : ''"
-                onclick="abrigarMascota()">
 
-                <img class="icon img-icon-cold-heat " th:src="@{/img/calefaccion.png}" />
-            </button>
-        </div>
-        <!-- Se que aca va el clima pero me sirve para debuggear -->
-        <p>TAMA-COINS: <span id="valor-monedas" th:text="${mascota.monedas}">monedas</span></p>
-    </div>
     <!-- CHEQUEAR QUE ESTA PASANDO CUANDO VOY AL HOME Y VUEVLO, DEBO APRETAR DOS VECES PARA QUE SE DESPIERTE
         th:classappend="${mascota.estaDormido} == true ? 'modo-noche' : ''"-->
-    <main id="main-container" role="main" class="container" th:classappend="${mascota.estaDormido} == true ? 'modo-noche' : ''">
+    <main id="main-container" style="align-content: center; height: 90vh;  width: 100%;" role="main"
+        th:classappend="${mascota.estaDormido} == true ? 'modo-noche' : ''">
 
         <div th:if="${error}">
             <p th:text="${error}" style="color:red;"></p>
@@ -98,76 +80,102 @@
             ¡Oh no! ¡<span th:text="${mascota.nombre}"></span> está enfermo! Curalo antes de que sea tarde...
         </div>
 
-        <div class="container">
-            <h2 id="nombre-mascota" th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
-            <div class="bar-container">
-                <div class="bar energy">
-                    <img class="icon" th:src="@{/img/energy.png}" />
-                    <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;"
-                        th:text=" ${mascota.energia} + '%'"></div>
+        <div class="d-flex justify-content-center " style="width: 100%;gap: 10rem;">
+            <div class="contenedor-mascota margin-pading-cero" style="width: 40%;">
+                <h2 id="nombre-mascota" th:text="'Nombre: ' + ${mascota.nombre}"></h2><br>
+                <div class="bar-container">
+                    <div class="bar energy">
+                        <img class="icon" th:src="@{/img/energy.png}" />
+                        <div class="bar-fill" id="valor-energia" style="color: #000000; font-weight: bold;"
+                            th:text=" ${mascota.energia} + '%'"></div>
+                    </div>
+                    <div class="bar happiness">
+                        <img class="icon" th:src="@{/img/happiness.png}" />
+                        <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;"
+                            th:text=" ${mascota.felicidad} + '%'"></div>
+                    </div>
                 </div>
-                <div class="bar happiness">
-                    <img class="icon" th:src="@{/img/happiness.png}" />
-                    <div class="bar-fill" id="valor-felicidad" style="color: #000000; font-weight: bold;"
-                        th:text=" ${mascota.felicidad} + '%'"></div>
+
+                <div class="pet-container">
+                    <div class="pet">
+                        <img th:src="@{'/img/' + ${mascota.tipo} + '.png'}" alt="Pet" class="pet-image" />
+                    </div>
+
+                    <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
+                </div>
+
+                <div class="bar-container">
+                    <div class="bar hunger">
+                        <img class="icon" th:src="@{/img/hunger.png}" />
+                        <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
+                            th:text=" ${mascota.hambre} + '%'"></div>
+
+                    </div>
+                    <div class="bar cleanliness">
+                        <img class="icon" th:src="@{/img/cleanliness.png}" />
+                        <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;"
+                            th:text=" ${mascota.higiene} + '%'"></div>
+
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <input name="id" type="hidden" th:value="${mascota.id}">
+                    <button class="button" id="jugar" onclick="jugar()">
+                        <img class="icon" th:src="@{/img/game-black.png}" />
+                    </button>
+                    <input name="tetrismusic" id="tetrisMusic" type="hidden" th:value="@{/audio/Tetris.mp3}">
+
+                    <input name="id" type="hidden" th:value="${mascota.id}">
+                    <button class="button" onclick="curarMascota()">
+                        <img class="icon" th:src="@{/img/medicine-black.png}" />
+                    </button>
+
+
+                    <input name="id" type="hidden" th:value="${mascota.id}">
+                    <button class="button" onclick="limpiarMascota()">
+                        <img class="icon" th:src="@{/img/bath-black.png}" />
+                    </button>
+                    
+                    <input name="id" type="hidden" th:value="${mascota.id}">
+                    <button class="button" onclick="cambiarEstadoDormidoODespierto()">
+                        <img class="icon" th:src="@{/img/lightOn-black.png}" />
+                    </button>
+
+
+                    <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
+                    <button class="button" onclick="alimentarMascota()">
+                        <img class="icon" th:src="@{/img/food-black.png}" />
+                    </button>
+
+
                 </div>
             </div>
-
-            <div class="pet-container">
-                <div class="pet">
-                    <img th:src="@{'/img/' + ${mascota.tipo} + '.png'}" alt="Pet" class="pet-image" />
+            <div th:if="${climaUrl}" class="clima-info">
+                <!-- Se que aca va el clima pero me sirve para debuggear -->
+                <p style="white-space: nowrap;">TAMA-COINS: <span id="valor-monedas" th:text="${mascota.monedas}"
+                        style="color:#fff000; background-color: black; padding:1%;">monedas</span></p>
+                <div>
+                    <p th:text="'Región: ' + ${climaUrl.zonaHoraria}" class="mb-1 desaparecer-clima-region"></p>
+                    <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}" class="mb-1 desaparecer-clima"></p>
+                    <p th:text="'Temperatura: ' + ${temperaturaActual} + ' °C'" class="mb-1"></p>
                 </div>
-
-                <p th:if="${error != null}" class="alert alert-danger" th:text="'Error ' + ${error}">
-            </div>
-
-            <div class="bar-container">
-                <div class="bar hunger">
-                    <img class="icon" th:src="@{/img/hunger.png}" />
-                    <div class="bar-fill" id=valor-hambre style="color: #000000; font-weight: bold;"
-                        th:text=" ${mascota.hambre} + '%'"></div>
-
+                <!-- "&lt" es igual que usar "<", es para que el editor no chille -->
+                <div th:if="${temperaturaActual &lt 25.0}" class="iconos-clima">
+                    <div class="div-conteiner-cold">
+                        <img class="icon img-icon-cold-heat " th:src="@{/img/otroCopo.png}" />
+                    </div>
+                    <button id="btn-abrigar" class="btn-class"
+                        style="height: 3rem; width: 3rem; display: flex; justify-content: center;"
+                        th:classappend="${mascota.estaAbrigada} ? 'pressed' : ''" onclick="abrigarMascota()">
+                        <img class="icon img-icon-cold-heat " th:src="@{/img/calefaccion.png}" />
+                    </button>
                 </div>
-                <div class="bar cleanliness">
-                    <img class="icon" th:src="@{/img/cleanliness.png}" />
-                    <div class="bar-fill" id="valor-higiene" style="color: #000000; font-weight: bold;"
-                        th:text=" ${mascota.higiene} + '%'"></div>
-
-                </div>
-            </div>
-
-            <div class="button-container">
-                <input name="id" type="hidden" th:value="${mascota.id}">
-                <button class="button" id="jugar" onclick="jugar()">
-                    <img class="icon" th:src="@{/img/game-black.png}" />
-                </button>
-                <input name="tetrismusic" id="tetrisMusic" type="hidden" th:value="@{/audio/Tetris.mp3}">
-
-                <input name="id" type="hidden" th:value="${mascota.id}">
-                <button class="button" onclick="curarMascota()">
-                    <img class="icon" th:src="@{/img/medicine-black.png}" />
-                </button>
-
-
-                <input name="id" type="hidden" th:value="${mascota.id}">
-                <button class="button" onclick="limpiarMascota()">
-                    <img class="icon" th:src="@{/img/bath-black.png}" />
-                </button>
-
-                <input name="id" type="hidden" th:value="${mascota.id}">
-                <button class="button" onclick="cambiarEstadoDormidoODespierto()">
-                    <img class="icon" th:src="@{/img/lightOn-black.png}" />
-                </button>
-
-
-                <input name="id" type="hidden" id="mascota-id" th:value="${mascota.id}">
-                <button class="button" onclick="alimentarMascota()">
-                    <img class="icon" th:src="@{/img/food-black.png}" />
-                </button>
-
 
             </div>
         </div>
+
+
     </main>
     </div>
 

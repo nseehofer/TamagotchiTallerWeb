@@ -171,12 +171,11 @@ body {
 }
 
 .clima-info {
-    margin-top: 1%;
     DISPLAY: FLEX;
     ALIGN-ITEMS: CENTER;
-    justify-content: center;
-    width: 100%;
-    gap: 4rem;
+    width: 15%;
+    gap: 1rem;
+    flex-direction: column;
 }
 
 .clima-info p {
@@ -184,7 +183,18 @@ body {
     font-size: 12px;
 }
 
+.margin-pading-cero {
+    margin: 0%;
+    padding: 0%;
+}
 
+.contenedor-mascota {
+    width: 45%;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
 
 .iconos-clima {
     display: flex;
@@ -204,29 +214,14 @@ body {
     .desaparecer-clima-region {
         display: none;
     }
+
+    .desaparecer-clima {
+        display: none;
+    }
 }
 
 /* MEDIA QUERY */
 @media (max-width: 1100px) {
-
-    .container {
-        width: 75%;
-        height: 900px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        overflow: auto;
-        margin-top: 30px;
-    }
-
-    .clima-info {
-        margin-top: 1%;
-        FLEX-DIRECTION: ROW;
-        justify-content: center;
-        gap: 4rem;
-        ALIGN-ITEMS: CENTER;
-        WIDTH: 100%;
-    }
 
     .desaparecer-clima-region {
         display: none;
