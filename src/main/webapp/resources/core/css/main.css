@@ -63,6 +63,19 @@ body {
     width: 300px;
 }
 
+@keyframes rebotar8bit {
+    0%   { transform: translateY(0); }
+    20%  { transform: translateY(-8px); }
+    40%  { transform: translateY(0); }
+    60%  { transform: translateY(-6px); }
+    80%  { transform: translateY(0); }
+    100% { transform: translateY(0); }
+}
+
+.pet-image {
+    animation: rebotar8bit 1.2s steps(1, end) infinite;
+}
+
 .button {
     background-color: #d76c82;
     height: 72px;
