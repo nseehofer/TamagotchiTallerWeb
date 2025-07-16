@@ -75,3 +75,18 @@ h3 {
 .navbar-brand {
     padding-left: 10px;
 }
+
+.fade-in {
+    opacity: 0;
+    animation: fadeInAnimation 2.5s ease forwards;
+}
+
+@keyframes fadeInAnimation {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+

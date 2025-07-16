@@ -190,6 +190,12 @@
 
     </main>
 
+    <!-- Fadeout de muerte -->
+    <div id="fadeout-muerte" class="d-none">
+        <div class="overlay-fade"></div>
+        <img th:src="@{'/img/' + ${mascota.tipo} + '.png'}" alt="Mascota" class="mascota-final-fade">
+    </div>
+
     <!-- Bootstrap core js -->
     <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
     <!-- WEBSOCKET -->

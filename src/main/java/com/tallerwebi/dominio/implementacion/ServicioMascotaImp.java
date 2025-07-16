@@ -299,7 +299,7 @@ public class ServicioMascotaImp implements ServicioMascota {
         } else {
             if(random < probabilidadDeMuerte) {
                 // HARDCODEO PARA TEST 
-                mascota.setEstaVivo(true);
+                mascota.setEstaVivo(false);
                 return mascota;
             } else {
                 return mascota;

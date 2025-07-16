@@ -276,3 +276,64 @@ body {
 }
 
 /*Fin de estilo para memotest*/
+
+/*Estilo para la animacion de muerte*/
+/* Contenedor general del fadeout */
+#fadeout-muerte {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Oculto por defecto */
+#fadeout-muerte.d-none {
+    display: none;
+}
+
+/* Capa negra que se va oscureciendo suavemente */
+.overlay-fade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0;
+    animation: darken 3s ease-in forwards;
+    z-index: 1;
+}
+
+/* Imagen de la mascota durante el fade, flotando y desvaneciéndose */
+.mascota-final-fade {
+    z-index: 2;
+    width: 150px;
+    animation: fadeMascota 3s ease-in forwards;
+}
+
+/* Fondo negro que se oscurece progresivamente */
+@keyframes darken {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Mascota se eleva y desvanece suavemente */
+@keyframes fadeMascota {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/*Fin estilo de animacion de muerte*/
+

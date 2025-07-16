@@ -56,7 +56,16 @@ stompClient.onConnect = (frame) => {
 
 
         if (!estaVivo) {
-            window.location.href = `/${basePath}/mascota/cementerio?id=${mascotaId}`;
+            const fadeout = document.getElementById('fadeout-muerte');
+            const mainContainer = document.getElementById('main-container');
+
+            mainContainer.style.display = 'none';
+            fadeout.classList.remove('d-none');
+
+            setTimeout(() => {
+                window.location.href = `/${basePath}/mascota/cementerio?id=${mascotaId}`;
+            }, 2500);
+
         } else {
             const valorHambre = document.getElementById("valor-hambre");
             const valorHigiene = document.getElementById("valor-higiene");
