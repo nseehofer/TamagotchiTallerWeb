@@ -56,3 +56,7 @@ body {
 .btn-custom:hover {
     background-color: #009977;
 }
+
+.navbar-brand {
+    padding-left: 10px;
+}

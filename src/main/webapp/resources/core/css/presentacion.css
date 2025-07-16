@@ -59,10 +59,36 @@ a:hover {
 }
 
 .botones-inicio {
-    margin-top: 50px!important;
+    margin-top: 20px!important;
 }
 
 .pet-image {
     width: 300px;
     margin: 50px 10px;
+}
+
+.botones-musica {
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+    display: flex;
+    gap: 20px;
+    z-index: 999;
+}
+
+.botones-musica button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.botones-musica img {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.1s ease;
+}
+
+.botones-musica img:active {
+    transform: scale(0.9);
 }

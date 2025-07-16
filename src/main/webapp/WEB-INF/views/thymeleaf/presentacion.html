@@ -23,12 +23,17 @@
         <a th:href="@{/login}" id="btn-login" class="btn-login">INICIAR SESION</a>
         <a th:href="@{/nuevo-usuario}" class="btn-registrar">REGISTRARME</a>
     </div>
-
-    <div class="container text-center" style="padding-top: 1em;">
-        <button id="play-btn" class="botones btn">Play</button>
-        <button id="pause-btn" class="botones btn">Pause</button>
-    </div>
 </main>
+
+<div class="botones-musica">
+    <button id="play-btn" class="botones btn">
+        <img th:src="@{/img/play.png}" alt="Play"/>
+    </button>
+    <button id="pause-btn" class="botones btn">
+        <img th:src="@{/img/pause.png}" alt="Pause"/>
+    </button>
+</div>
+
 <script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.0/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/musica.js}"></script>
 </body>

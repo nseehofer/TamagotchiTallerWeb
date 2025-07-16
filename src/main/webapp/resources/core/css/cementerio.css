@@ -71,3 +71,7 @@ h3 {
     width: 100px;
     filter: grayscale(100%);
 }
+
+.navbar-brand {
+    padding-left: 10px;
+}

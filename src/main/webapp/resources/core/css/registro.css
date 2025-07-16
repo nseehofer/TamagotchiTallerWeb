@@ -60,3 +60,7 @@ button:hover {
     font-size: 10px;
     margin-top: 10px;
 }
+
+.navbar-brand {
+    padding-left: 10px;
+}

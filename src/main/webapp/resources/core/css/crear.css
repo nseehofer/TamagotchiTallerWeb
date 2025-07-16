@@ -33,7 +33,7 @@ body {
 
 .form-control {
     font-family: 'Press Start 2P', cursive;
-    font-size: 10px;
+    font-size: 13px;
     border: 2px solid #000;
     border-radius: 0;
     padding: 10px;
@@ -53,4 +53,8 @@ body {
 
 .btn-custom:hover {
     background-color: #009977;
+}
+
+.navbar-brand {
+    padding-left: 10px;
 }
