@@ -1,7 +1,7 @@
 let mascotaId = document.getElementById("mascota-id").value;
 const mensajeEnfermedad = document.getElementById("mensaje-enfermedad");
 const mainContainer = document.getElementById("main-container");
-let estaDormido = false;
+let estaDormido = true;
 let estaJugando = false;
 
 

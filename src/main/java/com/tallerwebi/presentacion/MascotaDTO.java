@@ -24,10 +24,8 @@ public class MascotaDTO {
     private Boolean estaDormido;
     private Boolean estaJugando;
 
-
     private String tipo;
     private Double monedas;
-
 
     public void setEnergia(Double energia) {
         this.energia = energia;
@@ -59,6 +57,7 @@ public class MascotaDTO {
         this.estaJugando = false;
 
     }
+
     public MascotaDTO(String nombre, Long idUsuario) {
         this.nombre = nombre;
         this.energia = 100.00;
@@ -141,7 +140,8 @@ public class MascotaDTO {
         this.ultimaHigiene = ultimaHigiene;
     }
 
-    public LocalDateTime getUltimaSiesta() {return ultimaSiesta;
+    public LocalDateTime getUltimaSiesta() {
+        return ultimaSiesta;
     }
 
     public Mascota obtenerEntidad() {
@@ -154,11 +154,11 @@ public class MascotaDTO {
             mascota.setId(this.id);
         }
         mascota.setNombre(this.nombre);
-        mascota.setEnergia(this.energia);
-        mascota.setHigiene(this.higiene);
-        mascota.setSalud(this.salud);
-        mascota.setFelicidad(this.felicidad);
-        mascota.setHambre(this.hambre);
+        mascota.setEnergia(redondearDosDecimales(this.energia));
+        mascota.setHigiene(redondearDosDecimales(this.higiene));
+        mascota.setSalud(redondearDosDecimales(this.salud));
+        mascota.setFelicidad(redondearDosDecimales(this.felicidad));
+        mascota.setHambre(redondearDosDecimales(this.hambre));
         mascota.setEstaVivo(this.estaVivo);
         mascota.setEstaEnfermo(this.estaEnfermo);
         mascota.setUltimaSiesta(this.ultimaSiesta);
@@ -211,6 +211,7 @@ public class MascotaDTO {
     public Boolean getEstaAbrigada() {
         return estaAbrigada;
     }
+
     public void setEstaAbrigada(Boolean estaAbrigada) {
         this.estaAbrigada = estaAbrigada;
     }
@@ -218,7 +219,6 @@ public class MascotaDTO {
     public boolean getEstavivo() {
         return this.estaVivo;
     }
-
 
     public void setEstaVivo(boolean estaVivo) {
         this.estaVivo = estaVivo;
@@ -231,7 +231,6 @@ public class MascotaDTO {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -264,4 +263,9 @@ public class MascotaDTO {
     public Double getMonedas() {
         return monedas;
     }
+
+    private Double redondearDosDecimales(Double valor) {
+        return valor != null ? Math.round(valor * 100.0) / 100.0 : null;
+    }
+
 }

@@ -40,7 +40,7 @@ function jugarSnake() {
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-dark text-white border border-warning" style="font-family: 'Press Start 2P', monospace;">
       <div class="modal-header justify-content-between align-items-center">
-        <h5 class="modal-title">🐍 Snake Game</h5>
+        <h5 class="modal-title">Viborita</h5>
         <button type="button" class="btn-exit-custom" onclick="exitGame()">SALIR</button>
       </div>
       <div class="modal-body text-center">
@@ -110,14 +110,87 @@ function jugarSnake() {
             }
         }
 
+        function mostrarTamaCoinsModal(resultado) {
+            let cantidad = 0;
+            if (resultado === "positivo") cantidad = 50;
+            else if (resultado === "regular") cantidad = 25;
+            else cantidad = 0;
+
+            // 🔲 Fondo opaco detrás
+            const overlay = document.createElement("div");
+            overlay.style.position = "fixed";
+            overlay.style.top = 0;
+            overlay.style.left = 0;
+            overlay.style.width = "100vw";
+            overlay.style.height = "100vh";
+            overlay.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+            overlay.style.zIndex = "9998";
+            overlay.id = "tama-overlay";
+
+            // 🏆 Modal 8-bit
+            const modal = document.createElement("div");
+            modal.style.position = "fixed";
+            modal.style.top = "40%";
+            modal.style.left = "50%";
+            modal.style.transform = "translate(-50%, -50%)";
+            modal.style.padding = "2rem";
+            modal.style.backgroundColor = "#000";
+            modal.style.color = "#fff";
+            modal.style.border = "3px solid #09a1a1";
+            modal.style.fontFamily = "'Press Start 2P', cursive";
+            modal.style.fontSize = "14px";
+            modal.style.textAlign = "center";
+            modal.style.zIndex = "9999";
+            modal.style.borderRadius = "8px";
+            modal.style.boxShadow = "0 0 15px #09a1a1";
+            modal.id = "tama-coins-modal";
+
+            // 💰 Animación dorada del número
+            modal.innerHTML = `
+        GANASTE <span class="tama-gold-bounce">${cantidad}</span> TAMA COINS
+    `;
+
+            // 🧩 Insertar estilos dinámicamente
+            const style = document.createElement("style");
+            style.textContent = `
+        @keyframes bounce {
+            0%   { transform: scale(1); }
+            30%  { transform: scale(1.3); }
+            50%  { transform: scale(0.9); }
+            70%  { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .tama-gold-bounce {
+            color: #ffd700;
+            animation: bounce 1.2s ease;
+            display: inline-block;
+            text-shadow: 0 0 3px #fff000;
+        }
+    `;
+            document.head.appendChild(style);
+
+            document.body.appendChild(overlay);
+            document.body.appendChild(modal);
+
+            setTimeout(() => {
+                modal.remove();
+                overlay.remove();
+                style.remove();
+            }, 3000);
+        }
+
+
+
         function endGame() {
             if (juegoFinalizado) return;
             juegoFinalizado = true;
             resultado = score >= 50 ? "positivo" : score >= 20 ? "regular" : "negativo";
+
+            mostrarTamaCoinsModal(resultado); // 🎉 MOSTRAR MODAL ANTES DE PUBLICAR
+
             clearInterval(gameLoop); // DETENER EL CICLO DE JUEGO ANTES DE PUBLICAR Y SALIR
             stompClient.publish({
                 destination: "/app/evaluarResultado",
-                // ACA DEBO AGREGAR EL RESULTADO PARA PASARLO AL WEBSOCKET
                 body: JSON.stringify({ id: mascotaId, resultado: resultado })
             });
 
@@ -130,10 +203,12 @@ function jugarSnake() {
         function exitGame() {
             if (!juegoFinalizado) {
                 resultado = "negativo"; // SE ADVIERTE EL ABANDONO DEL USUARIO
+
+                mostrarTamaCoinsModal(resultado); // 🎉 MOSTRAR MODAL ANTES DE PUBLICAR
+
                 clearInterval(gameLoop); // DETENER EL CICLO DE JUEGO ANTES DE PUBLICAR Y SALIR
                 stompClient.publish({
                     destination: "/app/evaluarResultado",
-                    // ACA DEBO AGREGAR EL RESULTADO PARA PASARLO AL WEBSOCKET
                     body: JSON.stringify({ id: mascotaId, resultado: resultado })
                 });
                 estaJugando = false;
@@ -142,10 +217,10 @@ function jugarSnake() {
             }
 
             /*finalizarJuego();*/
-
-            const modal = document.getElementById("snakeModal"); // VERIFICAMOS EXISTENCIA DEL MODAL
-            if (modal) modal.remove(); // SOLO REMOVER SI EXISTE
+            const modal = document.getElementById("snakeModal");
+            if (modal) modal.remove();
             document.body.classList.remove("modal-open");
+
             resultado = "regular";
             score = 0;
             direction = 'right';
@@ -153,6 +228,7 @@ function jugarSnake() {
             food = { x: 10, y: 10 };
             juegoFinalizado = false;
         }
+
 
         document.addEventListener("keydown", (e) => {
             const key = e.key.replace("Arrow", "").toLowerCase();

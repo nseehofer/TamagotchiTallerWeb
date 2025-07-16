@@ -63,6 +63,7 @@ public class ControladorLogin {
         try {
             // Por defecto el rol es user
             usuario.setRol("USER");
+            usuario.setMonedas(100.00);
             servicioLogin.registrar(usuario);
         } catch (UsuarioExistente e) {
             model.put("error", "El usuario ya existe");
