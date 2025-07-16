@@ -38,8 +38,7 @@ public class ControladorTemperatura {
     public String mostrarTemperatura(HttpServletRequest sessionUsuario,
             Model model) {
         Clima climaUrl = this.servicioTemperatura.getTemperatura(sessionUsuario);
-        // HARDCODEO EL ID PARA TEST
-        // DEBO GUARDAR EL ID DE MASCOTA EN SESSION Y PASAR EL HTTP POR PARAMETRO 
+
         MascotaDTO mascota= this.servicioMascota.traerUnaMascota(1L);
         
         if(climaUrl != null) {
