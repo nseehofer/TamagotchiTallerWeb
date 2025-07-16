@@ -37,20 +37,28 @@ function jugarSnake() {
         // CREANDO EL MODAL SOLO CUANDO SE TOCA JUGAR
         const modalHTML = `
 <div class="modal fade show" id="snakeModal" tabindex="-1" aria-modal="true" role="dialog" style="display: block; background-color: rgba(0,0,0,0.8);">
-  <div class="modal-dialog modal-dialog-centered">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content bg-dark text-white border border-warning" style="font-family: 'Press Start 2P', monospace;">
       <div class="modal-header justify-content-between align-items-center">
         <h5 class="modal-title">Viborita</h5>
         <button type="button" class="btn-exit-custom" onclick="exitGame()">SALIR</button>
       </div>
-      <div class="modal-body text-center">
-        <p class="leyenda-juego">Usa las flechas del teclado para jugar</p>
-        <canvas id="snakeCanvas" width="300" height="300" class="img-fluid border border-light"></canvas>
-        <p class="mt-3" id="gameStatus">Usá las flechas para jugar</p>
+      <div class="modal-body p-0">
+        <div class="d-flex justify-content-center align-items-center flex-column w-100" style="min-height: 60vh;">
+          <p class="leyenda-juego text-center mb-3 pt-3">Usa las flechas del teclado para jugar</p>
+          <div class="d-flex justify-content-center align-items-center w-100" style="flex-grow:1;">
+            <canvas id="snakeCanvas" width="300" height="300"
+              class="border border-light img-fluid mb-3"
+              style="max-width: 130vw; height: auto;"></canvas>
+          </div>
+          <p id="gameStatus" class="text-center">Usá las flechas para jugar</p>
+        </div>
       </div>
     </div>
   </div>
-</div>`;
+</div>
+`;
+
 
         document.body.insertAdjacentHTML('beforeend', modalHTML);
 

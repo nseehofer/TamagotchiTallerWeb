@@ -21,45 +21,46 @@ function jugarTetris() {
 	});
 
 	document.getElementById('tetris').blur();
-	const modalHTML = `
-<div class="modal fade show" id="snakeModal" tabindex="-1" aria-modal="true" role="dialog" style="display: block; background-color: rgba(0,0,0,0.8);">
-  <div class="modal-dialog modal-dialog-centered">
+const modalHTML = `
+<div class="modal fade show" id="snakeModal" tabindex="-1" aria-modal="true" role="dialog"
+  style="display: block; background-color: rgba(0,0,0,0.8);">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content bg-dark text-white border border-warning" style="font-family: 'Press Start 2P', monospace;">
       <div class="modal-header justify-content-between align-items-center">
         <h5 class="modal-title">Tetris</h5>
         <button type="button" class="btn-exit-custom" id="cerrar">SALIR</button>
       </div>
-      <div class="modal-body text-center">
-	  <p class="leyenda-juego">  'C':cambiar pieza, 'espacio': fastDrop!</p>
-    <div>
-        <button class="btn btn-danger" id="start" onClick="startGame()">Start</button>
-        <button class="btn btn-success" id="pause" onclick="pauseGame()">Pause</button>
-        <button class="btn btn-success" id="soundOnOff">Sound off/on</button>
-    </div>        
-    <section class="playground">
-        <div id="gameInfo">
-            <canvas id="holdPieceCanvas" width="200" height="100" style="border: solid 1px;">
-            </canvas>
-            <br>
-            <strong>Score: <span id="score"></span></strong>
-            <br>
-            <strong>Line Counter <span id="lineCounter"></span></strong>
-            <h2 id="level">Level: </h2>
+      <div class="modal-body p-0">
+        <div class="d-flex flex-column justify-content-center align-items-center w-100"
+             style="min-height: 70vh; padding: 2vh;">
+          <p class="leyenda-juego text-center mb-3">
+            'C': cambiar pieza, 'espacio': fastDrop!
+          </p>
+          <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
+            <button class="btn btn-danger" id="start" onClick="startGame()">Start</button>
+            <button class="btn btn-success" id="pause" onclick="pauseGame()">Pause</button>
+            <button class="btn btn-success" id="soundOnOff">Sonido encender/apagar</button>
+          </div>
+          <section class="playground d-flex flex-wrap justify-content-center gap-4 text-center">
+            <div id="gameInfo">
+              <canvas id="holdPieceCanvas" width="200" height="100" class="mb-2 border"></canvas><br>
+              <strong>Score: <span id="score"></span></strong><br>
+              <strong>Line Counter: <span id="lineCounter"></span></strong>
+              <p id="level" style="font-size:medium">Level: </p>
+            </div>
+            <div>
+              <canvas id="canvas" width="200" height="100" class="mb-2 border"></canvas>
+            </div>
+            <div>
+              <canvas id="nextPiecesCanvas" width="200" height="100" class="mb-2 border"></canvas>
+            </div>
+          </section>
         </div>
-        <div>
-
-            <canvas id="canvas" width="200" height="100">
-            </canvas>
-        </div>
-        <div>
-            <canvas id="nextPiecesCanvas" width="200" height="100" style="border:1px solid #000000;">
-            </canvas>
-        </div>
-    </section>
       </div>
     </div>
   </div>
 </div>`;
+
 	document.body.insertAdjacentHTML('beforeend', modalHTML);
 
 	document.getElementById("snakeModal").classList.add("show");
