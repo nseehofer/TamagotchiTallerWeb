@@ -7,6 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import com.tallerwebi.presentacion.ControladorWebSocket.MascotaDTOEscalaParaId;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -281,5 +283,72 @@ public class ControladorWebSocketTest {
         assertEquals(mapper.writeValueAsString("La mascota ya esta desabrigada"), respuesta);
     }
 
+    @Test
+    public void queCuandoSeLanceLaExcepcionDeMonedasInsuficientesElMensajeSeEnvieComoError() throws Exception, MonedasInsuficientesException, MascotaSanaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+        when(servicioMascotaMock.alimentar(mascota)).thenThrow(new MonedasInsuficientesException("No te alcanzan las monedas, juga para ganar mas!"));
+        when(servicioMascotaMock.curarMascota(mascota)).thenThrow(new MonedasInsuficientesException("No te alcanzan las monedas, juga para ganar mas!"));
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+        // REVISAR COMO QUEDO EL METODO EN EL CONTROLADOR, ESTOY LANZANDO MAL LA EXCEPCION Y POR ESO NO PASA EL TEST
+        String respuestaAlimentar = controladorWebSocket.alimentarMascotaConSocketYPersistencia(dto);
+        String respuestaCurar = controladorWebSocket.curarConMascotaConSocketYPersistencia(dto);
+
+        assertEquals(mapper.writeValueAsString("No te alcanzan las monedas, juga para ganar mas!"), respuestaAlimentar);
+        assertEquals(mapper.writeValueAsString("No te alcanzan las monedas, juga para ganar mas!"), respuestaCurar);
+    }
+
+    @Test
+    public void evaluarResultadoSuma50MonedasConResultadoPositivo() throws Exception, MascotaDesabrigadaException {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+        mascota.setMonedas(100.00);
+        Double monedasEsperadas = 150.00;
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+        dto.setResultado("positivo");
+
+        controladorWebSocket.evaluarResultado(dto);
+
+        assertThat(mascota.getMonedas() , equalTo(monedasEsperadas));
+    }
+    @Test
+    public void evaluarResultadoSuma25MonedasConResultadoRegular() throws Exception {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+        mascota.setMonedas(100.00);
+        Double monedasEsperadas = 125.00;
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+        dto.setResultado("regular");
+
+        controladorWebSocket.evaluarResultado(dto);
+
+        assertThat(mascota.getMonedas() , equalTo(monedasEsperadas));
+    }
+
+    @Test
+    public void evaluarResultadoNoCambiaCantidadDeMonedasConResultadoNegativo() throws Exception {
+        MascotaDTO mascota = new MascotaDTO("Firulais");
+        mascota.setId(1L);
+        mascota.setMonedas(100.00);
+        Double monedasEsperadas = 100.00;
+
+        when(servicioMascotaMock.traerUnaMascota(1L)).thenReturn(mascota);
+
+        MascotaDTOEscalaParaId dto = new MascotaDTOEscalaParaId(1L);
+        dto.setResultado("negativo");
+
+        controladorWebSocket.evaluarResultado(dto);
+
+        assertThat(mascota.getMonedas() , equalTo(monedasEsperadas));
+    }
 
 }

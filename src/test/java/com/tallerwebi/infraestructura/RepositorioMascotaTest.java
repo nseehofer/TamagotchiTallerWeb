@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.isNotNull;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -183,4 +185,45 @@ public class RepositorioMascotaTest {
         return mascotaDTOAEntidad;
     }
 
-}
+    @Test
+    @Rollback
+    public void cuandoBuscoLasMonedasRelacionadasALaMascotaLasObtengo() {
+        Usuario usuario = obtenerUsuarioParaTest();
+        usuario.setMonedas(100.00);
+        this.repositorioUsuario.guardar(usuario);
+
+        String nombreMascotaUno = "Firulais";
+        Mascota mascotaUno = crearMascotaParaTest(usuario, nombreMascotaUno);
+        mascotaUno.setEstaVivo(true);
+        Long idMascota = this.repositorioMascota.crear(mascotaUno);;
+
+        Double monedasObtenidas = this.repositorioMascota.traerMonedasPorIDMascota(idMascota);
+
+        assertThat(monedasObtenidas, equalTo(100.00));
+    }
+
+    @Test
+    @Rollback
+    public void actualizarMonedasCambiaLaCantidaDeMonedasExistentes() {
+        Usuario usuario = obtenerUsuarioParaTest();
+        usuario.setMonedas(100.00);
+        this.repositorioUsuario.guardar(usuario);
+
+        String nombreMascotaUno = "Firulais";
+        Mascota mascotaUno = crearMascotaParaTest(usuario, nombreMascotaUno);
+        mascotaUno.setEstaVivo(true);
+        Long idMascota = this.repositorioMascota.crear(mascotaUno);;
+
+        this.repositorioMascota.traerMonedasPorIDMascota(idMascota);
+        Double nuevoMontoMonedas = 200.00;
+
+        this.repositorioMascota.actualizarMonedas(nuevoMontoMonedas,idMascota);
+        Double monedasObtenidas = this.repositorioMascota.traerMonedasPorIDMascota(idMascota);
+        assertThat(monedasObtenidas, equalTo(nuevoMontoMonedas));
+
+
+
+    }
+
+
+    }

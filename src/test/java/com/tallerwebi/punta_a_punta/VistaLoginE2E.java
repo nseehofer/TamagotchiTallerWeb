@@ -125,6 +125,7 @@ public class VistaLoginE2E {
         vistaSeleccionarTipoMascota.darClickEnCrearMascotaConTipo();
         vistaMascota.darClickEnJugar();
 
-        assertThat(vistaMascota.obtenerEnergiaMascota(), containsStringIgnoringCase("75.0"));
+
+        assertThat(vistaMascota.obtenerNombreJuegoTetris(), containsStringIgnoringCase("tetris"));
     }
 }

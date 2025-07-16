@@ -24,4 +24,8 @@ public class VistaMascota extends VistaWeb {
     public void darClickEnJugar(){
         this.darClickEnElElemento("#jugar");
     }
+
+    public String obtenerNombreJuegoTetris() {
+        return this.obtenerTextoDelElemento("#tetris");
+    }
 }
