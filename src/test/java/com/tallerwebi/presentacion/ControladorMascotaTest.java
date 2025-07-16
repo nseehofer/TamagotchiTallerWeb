@@ -420,4 +420,20 @@ public class ControladorMascotaTest {
         assertThat(modelAndView.getViewName(), equalTo("mascota"));
         assertThat(modelAndView.getModel().get("mascota"), equalTo(mascotaDTOPrueba));
     }
+
+    @Test
+    public void queAlLimpiarLaMascotaSinMonedasSeMuestreElMensajeDeError() throws LimpiezaMaximaException, MonedasInsuficientesException {
+        Long idMascota = 1L;
+        MascotaDTO mascotaDePrueba = new MascotaDTO("Firulais");
+        mascotaDePrueba.setId(idMascota);
+        mascotaDePrueba.setHigiene(100.0);
+
+        when(this.servicioMascotaMock.traerUnaMascota(anyLong())).thenReturn(mascotaDePrueba);
+        when(this.servicioMascotaMock.limpiarMascota(any())).thenThrow(new MonedasInsuficientesException("No te alcanzan las monedas, juga para ganar mas!"));
+
+        ModelAndView modelAndView = controladorMascota.limpiarMascota(idMascota);
+
+        assertThat(modelAndView.getViewName(), equalTo("mascota"));
+        assertThat(modelAndView.getModel().get("error"), equalTo("No te alcanzan las monedas, juga para ganar mas!"));
+    }
 }

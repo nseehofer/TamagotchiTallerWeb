@@ -87,6 +87,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setFelicidad(100.0);
         mascotaEntidad.setEstaVivo(true);
         mascotaEntidad.setEstaDormido(false);
+        mascotaEntidad.setEstaJugando(false);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -126,6 +127,7 @@ public class ServicioMascotaTest {
         mascotaEntidad.setSalud(100.0);
         mascotaEntidad.setEstaDormido(false);
         mascotaEntidad.setEstaVivo(true);
+        mascotaEntidad.setEstaJugando(false);
 
         when(repositorioMascota.obtenerPor(mascotaEntidad.getId())).thenReturn(mascotaEntidad);
 
@@ -762,6 +764,30 @@ public class ServicioMascotaTest {
         assertThat(mascotaDTO.getEstaDormido(), equalTo(true));
     }
 
+    @Test
+    public void chequearSiAlcanzanLasmonedasParaLaAccionDevuelveTrueSiAlcanzanLasMonedas() throws MonedasInsuficientesException {
+        MascotaDTO mascotaDTO = new MascotaDTO("Tgtcha");
+        mascotaDTO.setMonedas(150.00);
+
+        Boolean resultadoObtenido= servicioMascota.chequearSiAlcanzanLasmonedasParaLaAccion(mascotaDTO,150.00);
+
+        assertThat(resultadoObtenido, equalTo(true));
+    }
+
+    @Test
+    public void chequearSiAlcanzanLasmonedasParaLaAccionLanzaExcepcionSiNoSonSuficientes() throws MonedasInsuficientesException {
+        MascotaDTO mascotaDTO = new MascotaDTO("Tgtcha");
+        mascotaDTO.setMonedas(150.00);
+
+        //Boolean resultadoObtenido= servicioMascota.chequearSiAlcanzanLasmonedasParaLaAccion(mascotaDTO,200.00);
+
+        try {
+            servicioMascota.chequearSiAlcanzanLasmonedasParaLaAccion(mascotaDTO,200.00);
+            fail ("Se esperaba MonedasInsuficientesException, pero no se lanzó");
+        } catch (MonedasInsuficientesException e) {
+            assertThat(e.getMessage(), containsString("Monedas insuficientes, juga para ganar mas!"));
+        }
+    }
 }
 
 
