@@ -44,8 +44,8 @@ const modalHTML = `
           <section class="playground d-flex flex-wrap justify-content-center gap-4 text-center">
             <div id="gameInfo">
               <canvas id="holdPieceCanvas" width="200" height="100" class="mb-2 border"></canvas><br>
-              <strong>Score: <span id="score"></span></strong><br>
-              <strong>Line Counter: <span id="lineCounter"></span></strong>
+              <strong>Puntaje: <span id="score"></span></strong><br>
+              <strong>Lineas: <span id="lineCounter"></span></strong>
               <p id="level" style="font-size:medium">Level: </p>
             </div>
             <div>
