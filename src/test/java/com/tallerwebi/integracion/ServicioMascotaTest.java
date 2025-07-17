@@ -80,6 +80,7 @@ public class ServicioMascotaTest {
     public void queLasEstadisticasBajenProgresivamenteConElTiempo() throws MascotaMuertaException, MascotaDespiertaException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setEstaEnfermo(false);
         mascotaEntidad.setId(1L);
         mascotaEntidad.setHigiene(100.0);
         mascotaEntidad.setHambre(100.0);
@@ -119,6 +120,7 @@ public class ServicioMascotaTest {
     public void queAlPasarUnTiempoExcesivamenteLargoLasEstadisticasNoDisminuyenMenosQueCero() throws MascotaMuertaException, MascotaDespiertaException {
         //PREPARACION
         Mascota mascotaEntidad = new Mascota();
+        mascotaEntidad.setEstaEnfermo(false);
         mascotaEntidad.setId(1L);
         mascotaEntidad.setHigiene(100.0);
         mascotaEntidad.setHambre(100.0);
