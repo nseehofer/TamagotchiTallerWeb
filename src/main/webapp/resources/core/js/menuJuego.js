@@ -1,6 +1,19 @@
 function jugar() {
+  let nodoEnergia = document.getElementById("valor-energia");
+  let valor = parseFloat(nodoEnergia.textContent.replace(/[^\d.]/g, ''));
+  console.log(valor);
+  if (valor >= 25.00) { ejecutarJuego(); } else {
+    stompClient.publish({
+      destination: "/app/jugar",
+      body: JSON.stringify({ id: mascotaId })
+    });
+  }
+}
 
-const modalHTML = `
+function ejecutarJuego() {
+
+
+  const modalHTML = `
 <div class="modal fade show" id="menuJuegoModal" tabindex="-1" aria-modal="true" role="dialog" style="display: block; background-color: rgba(0,0,0,0.8);">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-dark text-white border border-warning" style="font-family: 'Press Start 2P', monospace;">
@@ -18,13 +31,13 @@ const modalHTML = `
   </div>
 </div>`;
 
-document.body.insertAdjacentHTML('beforeend', modalHTML);
-document.getElementById("snakeModal").classList.add("show");
-document.body.classList.add("modal-open");
+  document.body.insertAdjacentHTML('beforeend', modalHTML);
+  document.getElementById("snakeModal").classList.add("show");
+  document.body.classList.add("modal-open");
 }
 
-function cerrarMenuDeJuego(){
-    const modal = document.getElementById("menuJuegoModal"); // VERIFICAMOS EXISTENCIA DEL MODAL
-    if (modal) modal.remove(); // SOLO REMOVER SI EXISTE
-document.body.classList.remove("modal-open");
+function cerrarMenuDeJuego() {
+  const modal = document.getElementById("menuJuegoModal"); // VERIFICAMOS EXISTENCIA DEL MODAL
+  if (modal) modal.remove(); // SOLO REMOVER SI EXISTE
+  document.body.classList.remove("modal-open");
 }
