@@ -236,9 +236,9 @@ public class ServicioMascotaImp implements ServicioMascota {
             mascota.setUltimaSiesta(LocalDateTime.now());
             mascota.setUltimaAlimentacion(LocalDateTime.now());
             mascota.setUltimaHigiene(LocalDateTime.now());
-            mascota.setEstaEnfermo(this.chequearSiLaMascotaSeEnferma(mascota));
 
             this.chequearSiLaMascotaSigueViva(mascota);
+            mascota.setEstaEnfermo(this.chequearSiLaMascotaSeEnferma(mascota));
 
             this.actualizarMascota(mascota);
 

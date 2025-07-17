@@ -13,13 +13,6 @@ const modalHTML = `
 	<button type="button" onClick="jugarSnake()"> Viborita </button>
 	<button type="button" id="tetris" onClick="jugarTetris()"> Tetris</button>
 	<button type="button" id="memotest" onClick="jugarMemoTest()"> MemoTest </button>
-	<button type="button" onClick="jugarTateti()"> TaTeTi</button>
-	<button type="button" onClick="jugarAhorcado()"> Ahorcado</button>
-	<button type="button" onClick="jugarSimon()"> Simon Dice</button>
-	<button type="button" onClick="jugarPiedra()"> Piedra Papel Tijera</button>
-	<button type="button" onClick="jugarSopa()"> Sopa de Letras</button>
-	<button type="button" onClick="jugarPalabras()"> Palabras Desordenadas</button>
-	<button type="button" onClick="jugarNumeros()"> Adivina el numero</button>
       </div>
     </div>
   </div>
