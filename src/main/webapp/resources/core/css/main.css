@@ -211,25 +211,19 @@ body {
 /* MEDIA QUERY */
 @media (max-width: 1800px) {
 
-    .desaparecer-clima-region {
+    .desaparecer-clima-region,.desaparecer-clima {
         display: none;
     }
 
-    .desaparecer-clima {
-        display: none;
-    }
 }
 
 /* MEDIA QUERY */
 @media (max-width: 1100px) {
 
-    .desaparecer-clima-region {
+    .desaparecer-clima-region,.desaparecer-clima,.ocultar-query {
         display: none;
     }
 
-    .desaparecer-clima {
-        display: none;
-    }
 }
 
 /*Estilo para tetris*/

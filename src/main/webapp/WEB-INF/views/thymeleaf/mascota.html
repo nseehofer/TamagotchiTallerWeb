@@ -154,8 +154,11 @@
             </div>
             <div th:if="${climaUrl}" class="clima-info">
                 <!-- Se que aca va el clima pero me sirve para debuggear -->
-                <p style="white-space: nowrap;">TAMA-COINS: <span id="valor-monedas" th:text="${mascota.monedas}"
+                <div class="d-flex align-items-center">
+                    <figure style="width: 25%; margin: 0%;"><img style="height: auto;width: 100%;" th:src="@{/img/monedita.jpg}"></figure>
+                <p style="white-space: nowrap;width: 70%;"><span class="ocultar-query">TAMA-COINS:</span> <span id="valor-monedas" th:text="${mascota.monedas}"
                         style="color:#fff000; background-color: black; padding:1%;">monedas</span></p>
+                </div>
                 <div>
                     <p th:text="'Región: ' + ${climaUrl.zonaHoraria}" class="mb-1 desaparecer-clima-region"></p>
                     <p th:text="'Zona horaria: ' + ${climaUrl.zonaHorariaAbreviada}" class="mb-1 desaparecer-clima"></p>
